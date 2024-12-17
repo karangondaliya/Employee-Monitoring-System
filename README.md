@@ -31,7 +31,3 @@
             <li><strong>Tools & Libraries</strong>: Entity Framework Core, Npgsql, HttpClient</li>
         </ul>
     </section>
-
-  <footer>
-        <p>Project maintained by Karan Gondaliya
-    </footer>
