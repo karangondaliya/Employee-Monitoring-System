@@ -11,8 +11,7 @@ namespace Employee_Monitoring_System
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
                 {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                    fonts.AddFont("SegoeUIVariable.ttf", "SegoeUI");
                 });
 
 #if DEBUG

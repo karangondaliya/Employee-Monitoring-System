@@ -1,0 +1,59 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Employee_Monitoring_System.DashboardPage"
+             Title="Dashboard"
+             BackgroundColor="#F4F7FC">
+    <!--xmlns:microcharts="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"-->
+    <Grid RowDefinitions="*, Auto" ColumnDefinitions="200, *">
+        <!-- Sidebar -->
+        <StackLayout Grid.RowSpan="2" Grid.Column="0" BackgroundColor="#2C3E50" Padding="10">
+            <!--<Image Source="logo.png" WidthRequest="150" HeightRequest="50" HorizontalOptions="Center" />-->
+            <Label Text="WorkHub" FontSize="22" TextColor="White" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
+            <StackLayout Spacing="15" VerticalOptions="StartAndExpand">
+                <Button Text="Reports" TextColor="White" HorizontalOptions="Start" BackgroundColor="#2C3E50" FontAttributes="Bold" />
+                <Button Text="Projects" TextColor="White" HorizontalOptions="Start" BackgroundColor="#2C3E50" FontAttributes="Bold" />
+                <Button Text="Tasks" TextColor="White" HorizontalOptions="Start" BackgroundColor="#2C3E50" FontAttributes="Bold" />
+                <Button Text="Settings" TextColor="White" HorizontalOptions="Start" BackgroundColor="#2C3E50" FontAttributes="Bold" />
+                <Button Text="Attendance" TextColor="White" HorizontalOptions="Start" BackgroundColor="#2C3E50" FontAttributes="Bold" />
+                <Button Text="Leave" TextColor="White" HorizontalOptions="Start" BackgroundColor="#2C3E50" FontAttributes="Bold" />
+            </StackLayout>
+            <Button Text="Logout" TextColor="White" BackgroundColor="#E74C3C" CornerRadius="20" VerticalOptions="End" Clicked="OnLogoutClicked" />
+        </StackLayout>
+
+        <!-- Main Content -->
+        <ScrollView Grid.Row="0" Grid.Column="1" Padding="20">
+            <StackLayout Spacing="20">
+                <!-- Header -->
+                <Grid ColumnDefinitions="*, Auto, Auto" Padding="10">
+                    <Label Text="Dashboard" FontSize="24" FontAttributes="Bold" TextColor="#34495E" />
+                    <Image Source="notification_icon.png" WidthRequest="30" HeightRequest="30" />
+                    <Image Source="user_profile_icon.png" WidthRequest="40" HeightRequest="40" Margin="10,0,0,0" />
+                </Grid>
+
+                <!-- Cards -->
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Fill" Spacing="10">
+                    <Frame BackgroundColor="#3498DB" Padding="10" CornerRadius="15" WidthRequest="150" HasShadow="True">
+                        <StackLayout>
+                            <Label Text="Projects" FontSize="16" TextColor="White" />
+                            <Label Text="10" FontSize="22" FontAttributes="Bold" TextColor="White" />
+                        </StackLayout>
+                    </Frame>
+                    <Frame BackgroundColor="#E74C3C" Padding="10" CornerRadius="15" WidthRequest="150" HasShadow="True">
+                        <StackLayout>
+                            <Label Text="Tasks Remaining" FontSize="16" TextColor="White" />
+                            <Label Text="5" FontSize="22" FontAttributes="Bold" TextColor="White" />
+                        </StackLayout>
+                    </Frame>
+                </StackLayout>
+
+                <!-- Charts -->
+                <Label Text="Productivity Chart" FontAttributes="Bold" FontSize="18" TextColor="Black" />
+                <!--<microcharts:ChartView HeightRequest="200" Chart="{Binding ProductivityChart}" />-->
+            </StackLayout>
+        </ScrollView>
+
+        <!-- Footer -->
+        <Label Grid.Row="1" Grid.Column="1" Text="© 2025 Employee Monitoring System"
+               HorizontalTextAlignment="Center" FontSize="14" TextColor="#7F8C8D" Margin="10" />
+    </Grid>
+</ContentPage>
