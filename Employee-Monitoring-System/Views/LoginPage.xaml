@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Employee_Monitoring_System.LoginPage"
+             x:Class="Employee_Monitoring_System.Views.LoginPage"
              Shell.NavBarIsVisible="False">
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <!-- Light Theme -->
-            <Color x:Key="WindowBackground">White</Color>
-            <Color x:Key="SurfaceBackground">#FAFAFA</Color>
-            <Color x:Key="PrimaryText">#202020</Color>
-            <Color x:Key="SecondaryText">#5F6C7B</Color>
-            <Color x:Key="AccentColorLight">#0078D4</Color>
-            <Color x:Key="AccentColorDark">#60CDFF</Color>
-            <Color x:Key="BorderColor">#E1E1E1</Color>
+            <!-- Dark Theme Colors -->
+            <Color x:Key="WindowBackground">#121212</Color>
+            <Color x:Key="SurfaceBackground">#1E1E1E</Color>
+            <Color x:Key="PrimaryText">#FFFFFF</Color>
+            <Color x:Key="SecondaryText">#B0B0B0</Color>
+            <Color x:Key="AccentColor">#4CAF50</Color>
+            <Color x:Key="BorderColor">#333333</Color>
 
             <Style x:Key="CardStyle" TargetType="Border">
                 <Setter Property="Stroke" Value="{StaticResource BorderColor}" />
@@ -21,7 +20,7 @@
                 <Setter Property="StrokeShape" Value="RoundRectangle 8" />
                 <Setter Property="BackgroundColor" Value="{StaticResource SurfaceBackground}" />
                 <Setter Property="Shadow">
-                    <Shadow Brush="#20000000"
+                    <Shadow Brush="#22000000"
                             Offset="0,4"
                             Radius="12" />
                 </Setter>
@@ -29,61 +28,58 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <ContentPage.Triggers>
-        <DataTrigger TargetType="ContentPage" Binding="{AppThemeBinding Light=True, Dark=False}" Value="True">
-            <Setter Property="BackgroundColor" Value="{StaticResource AccentColorLight}" />
-        </DataTrigger>
-        <DataTrigger TargetType="ContentPage" Binding="{AppThemeBinding Light=False, Dark=True}" Value="True">
-            <Setter Property="BackgroundColor" Value="{StaticResource AccentColorDark}" />
-        </DataTrigger>
-    </ContentPage.Triggers>
+    <Grid BackgroundColor="{StaticResource WindowBackground}" Padding="20">
+        <Grid ColumnDefinitions="1.2*, 1.8*" VerticalOptions="Center">
 
-    <Grid BackgroundColor="{StaticResource WindowBackground}">
-        <Grid ColumnDefinitions="*, *" Padding="20">
             <!-- Left Side - Image and Text -->
             <VerticalStackLayout Grid.Column="0" 
-                                Spacing="20" 
-                                VerticalOptions="Center">
+                                 Spacing="20" 
+                                 VerticalOptions="Center"
+                                 HorizontalOptions="Center">
                 <Image Source="image1.png"
-                       HeightRequest="300"
-                       WidthRequest="500"
+                       HeightRequest="320"
+                       WidthRequest="490"
                        Aspect="AspectFit"/>
-                <VerticalStackLayout Spacing="10">
+
+                <!-- Added text after the image -->
+                <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
                     <Label Text="WorkHub Boosts Employee Efficiency"
                            TextColor="{StaticResource PrimaryText}"
-                           FontSize="24"
+                           FontSize="22"
                            FontAttributes="Bold"
-                           HorizontalOptions="Center"/>
+                           HorizontalTextAlignment="Center"/>
+
                     <Label Text="Track Tasks, Projects, and Leave Seamlessly."
                            TextColor="{StaticResource SecondaryText}"
                            FontSize="16"
-                           HorizontalOptions="Center"/>
+                           HorizontalTextAlignment="Center"/>
                 </VerticalStackLayout>
             </VerticalStackLayout>
 
             <!-- Right Side - Login Form -->
             <Border Grid.Column="1"
                     Style="{StaticResource CardStyle}"
-                    Margin="20,0,0,0"
+                    Margin="90,0,20,0"
                     Padding="32">
-                <VerticalStackLayout Spacing="24" VerticalOptions="Center">
-                    <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+
+                <VerticalStackLayout Spacing="50" VerticalOptions="Center">
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
                         <Label Text="WorkHub Login"
                                TextColor="{StaticResource PrimaryText}"
-                               FontSize="28"
+                               FontSize="26"
                                FontAttributes="Bold"/>
-                        <BoxView Color="{DynamicResource AccentColor}"
-                                HeightRequest="2"
-                                WidthRequest="80"
-                                HorizontalOptions="Center"/>
+                        <BoxView Color="{StaticResource AccentColor}"
+                                 HeightRequest="2"
+                                 WidthRequest="80"
+                                 HorizontalOptions="Center"/>
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="16">
                         <VerticalStackLayout Spacing="4">
-                            <Label Text="User ID"
+                            <Label Text="Email"
                                    TextColor="{StaticResource SecondaryText}"
                                    FontSize="14"/>
-                            <Entry Placeholder="Enter Employee ID"
+                            <Entry Placeholder="Enter Email"
                                    PlaceholderColor="{StaticResource SecondaryText}"
                                    TextColor="{StaticResource PrimaryText}"
                                    BackgroundColor="Transparent"/>
@@ -102,30 +98,31 @@
                     </VerticalStackLayout>
 
                     <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
-                        <CheckBox Grid.Column="0" 
-                                 Color="{DynamicResource AccentColor}"/>
-                        <Label Grid.Column="1" 
-                               Text="Remember me"
+                        <CheckBox Grid.Column="0" Color="{StaticResource AccentColor}"/>
+                        <Label Grid.Column="1" Text="Remember me"
                                TextColor="{StaticResource SecondaryText}"
                                VerticalOptions="Center"/>
                     </Grid>
 
                     <Button Text="Log In"
-                            BackgroundColor="{DynamicResource AccentColor}"
+                            BackgroundColor="{StaticResource AccentColor}"
                             TextColor="White"
-                            HeightRequest="40"
-                            CornerRadius="4"
+                            HeightRequest="45"
+                            CornerRadius="6"
+                            FontSize="16"
                             Clicked="OnLoginClicked"/>
 
                     <Label Text="Forgot your password?"
-                           TextColor="Black"
-                           HorizontalOptions="Center">
+                           TextColor="{StaticResource AccentColor}"
+                           HorizontalOptions="Center"
+                           FontAttributes="Italic">
                         <Label.GestureRecognizers>
                             <TapGestureRecognizer Tapped="OnForgotPasswordTapped"/>
                         </Label.GestureRecognizers>
                     </Label>
                 </VerticalStackLayout>
             </Border>
+
         </Grid>
     </Grid>
 </ContentPage>

@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using Employee_Monitoring_System.Views;
 
 namespace Employee_Monitoring_System;
 

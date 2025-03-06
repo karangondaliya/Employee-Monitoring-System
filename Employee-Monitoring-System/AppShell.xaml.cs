@@ -1,4 +1,5 @@
 ﻿using Employee_Monitoring_System;
+using Employee_Monitoring_System.Views;
 
 namespace Employee_Monitoring_System;
 

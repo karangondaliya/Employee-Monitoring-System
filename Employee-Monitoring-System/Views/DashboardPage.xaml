@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Employee_Monitoring_System.Views.Components"
+             x:Class="Employee_Monitoring_System.Views.DashboardPage"
+             BackgroundColor="{DynamicResource PageBackgroundColor}">
+
+    <Grid RowDefinitions="Auto, *" ColumnDefinitions="250, *">
+        <!-- Navbar -->
+        <ContentView Grid.Row="0" Grid.ColumnSpan="2">
+            <local:Navbar />
+        </ContentView>
+
+        <!-- Sidebar -->
+        <ContentView Grid.Row="1" Grid.Column="0" BackgroundColor="{DynamicResource SidebarBackgroundColor}" WidthRequest="250">
+            <local:Sidebar />
+        </ContentView>
+
+        <!-- Main Content -->
+        <ScrollView Grid.Row="1" Grid.Column="1" Padding="20">
+            <VerticalStackLayout Spacing="20">
+                <!-- Role-Based Dashboard Heading -->
+                <!--<Label x:Name="DashboardTitle" Text="Dashboard" FontSize="24" FontAttributes="Bold" TextColor="{DynamicResource PrimaryTextColor}" />-->
+
+                <!-- Admin Dashboard View -->
+                <StackLayout x:Name="AdminView" IsVisible="False">
+                    <Label Text="Total Employees: 100" TextColor="{DynamicResource PrimaryTextColor}"/>
+                    <Label Text="Total Projects: 10" TextColor="{DynamicResource PrimaryTextColor}"/>
+                    <Button Text="Manage Employees" BackgroundColor="{DynamicResource ButtonBackgroundColor}"/>
+                    <Button Text="Generate Reports" BackgroundColor="{DynamicResource ButtonBackgroundColor}"/>
+                </StackLayout>
+
+                <!-- Team Leader Dashboard View -->
+                <StackLayout x:Name="TeamLeaderView" IsVisible="False">
+                    <Label Text="Team Members: 5" TextColor="{DynamicResource PrimaryTextColor}"/>
+                    <Label Text="Pending Tasks: 2" TextColor="{DynamicResource PrimaryTextColor}"/>
+                    <Button Text="View Team Progress" BackgroundColor="{DynamicResource ButtonBackgroundColor}"/>
+                    <Button Text="Approve Leave Requests" BackgroundColor="{DynamicResource ButtonBackgroundColor}"/>
+                </StackLayout>
+
+                <!-- Employee Dashboard View -->
+                <StackLayout x:Name="EmployeeView" IsVisible="False">
+                    <Label Text="Assigned Tasks: 3" TextColor="{DynamicResource PrimaryTextColor}"/>
+                    <Label Text="Attendance: Present" TextColor="{DynamicResource PrimaryTextColor}"/>
+                    <Button Text="View Tasks" BackgroundColor="{DynamicResource ButtonBackgroundColor}"/>
+                    <Button Text="Request Leave" BackgroundColor="{DynamicResource ButtonBackgroundColor}"/>
+                </StackLayout>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

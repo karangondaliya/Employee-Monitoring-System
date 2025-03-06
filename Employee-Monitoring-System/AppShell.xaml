@@ -3,18 +3,17 @@
     x:Class="Employee_Monitoring_System.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:Employee_Monitoring_System"
+    xmlns:local="clr-namespace:Employee_Monitoring_System.Views"
     Shell.FlyoutBehavior="Disabled"
     Title="Employee_Monitoring_System">
 
-    <ShellContent
+    <!--<ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        Route="MainPage" />-->
 
-    <ShellContent Title="Login" ContentTemplate="{DataTemplate local:LoginPage}" />
-
-    <ShellContent Title="Dashboard" ContentTemplate="{DataTemplate local:DashboardPage}" />
+    <ShellContent Title="Login" ContentTemplate="{DataTemplate local:LoginPage}" Route="LoginPage"/>
+    <ShellContent ContentTemplate="{DataTemplate local:DashboardPage}" Route="dashboard"/>
 
 </Shell>
     
