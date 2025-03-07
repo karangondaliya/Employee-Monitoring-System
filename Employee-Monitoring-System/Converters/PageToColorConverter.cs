@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Microsoft.Maui.Controls;
+using System;
 using System.Globalization;
-using Microsoft.Maui.Controls;
+using Employee_Monitoring_System.ViewModels;
 
 namespace Employee_Monitoring_System.Converters
 {
@@ -8,13 +9,10 @@ namespace Employee_Monitoring_System.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null || parameter == null)
-                return "#2C3E50"; // Default button color
+            string pageName = parameter as string;
+            string activePage = SidebarViewModel.Instance.ActivePage;
 
-            string activePage = value.ToString();
-            string buttonPage = parameter.ToString();
-
-            return activePage.Equals(buttonPage, StringComparison.OrdinalIgnoreCase) ? "#1ABC9C" : "#2C3E50";
+            return (pageName != null && pageName.ToLower() == activePage.ToLower()) ? Color.FromArgb("#1ABC9C") : Color.FromArgb("#34495E");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

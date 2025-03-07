@@ -1,6 +1,8 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using Microsoft.Maui.Storage;
 using Microsoft.Maui.Controls;
 
 namespace Employee_Monitoring_System.ViewModels
@@ -21,16 +23,50 @@ namespace Employee_Monitoring_System.ViewModels
             }
         }
 
+        public ObservableCollection<string> SidebarItems { get; set; }
         public ICommand NavigateCommand { get; }
 
         public SidebarViewModel()
         {
+            SidebarItems = new ObservableCollection<string>();
             NavigateCommand = new Command<string>(Navigate);
+            LoadSidebarItems(); // Ensure sidebar loads on startup
+        }
+
+        public void LoadSidebarItems()
+        {
+            SidebarItems.Clear();
+            SidebarItems.Add("Dashboard");
+
+            string userRole = Preferences.Get("UserRole", "Employee"); // Use Preferences instead of SecureStorage
+
+            if (userRole == "Admin")
+            {
+                SidebarItems.Add("Manage Employees");
+                SidebarItems.Add("Manage Projects");
+                SidebarItems.Add("Notifications");
+                SidebarItems.Add("Manage Branches");
+                SidebarItems.Add("App Settings");
+                SidebarItems.Add("View Screenshots");
+            }
+            else if (userRole == "TeamLead")
+            {
+                SidebarItems.Add("Manage Tasks");
+                SidebarItems.Add("Approve Leave Requests");
+            }
+            else if (userRole == "Employee")
+            {
+                SidebarItems.Add("My Tasks");
+                SidebarItems.Add("My Attendance");
+                SidebarItems.Add("My Leaves");
+            }
+
+            OnPropertyChanged(nameof(SidebarItems)); // Notify UI of updates
         }
 
         private async void Navigate(string pageName)
         {
-            ActivePage = pageName.ToLower(); // Ensure lowercase to match routes
+            ActivePage = pageName.ToLower();
             await Shell.Current.GoToAsync($"//{ActivePage}");
         }
 

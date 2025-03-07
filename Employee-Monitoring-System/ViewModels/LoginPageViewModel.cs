@@ -1,10 +1,12 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Maui.Controls;
 using Employee_Monitoring_System.Models;
 using Employee_Monitoring_System.Views;
+using Microsoft.Maui.Storage;
 
 namespace Employee_Monitoring_System
 {
@@ -14,12 +16,12 @@ namespace Employee_Monitoring_System
 
         public LoginPageViewModel()
         {
-            _httpClient = new HttpClient { BaseAddress = new Uri("https://localhost:7227/api/Users/login") };
+            _httpClient = new HttpClient { BaseAddress = new Uri("https://localhost:7227/api/Users/") };
             LoginCommand = new Command(async () => await LoginAsync());
         }
 
         private string _email;
-        public string email
+        public string Email
         {
             get => _email;
             set
@@ -44,27 +46,35 @@ namespace Employee_Monitoring_System
 
         private async Task LoginAsync()
         {
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(Password))
+            if (string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Password))
             {
                 await Application.Current.MainPage.DisplayAlert("Error", "Please enter both Email and Password.", "OK");
                 return;
             }
 
-            var loginRequest = new LoginRequest { email = email, Password = Password };
+            var loginRequest = new LoginRequest { email = Email, Password = Password };
 
             try
             {
-                var response = await _httpClient.PostAsJsonAsync("api/Users/login", loginRequest);
+                var response = await _httpClient.PostAsJsonAsync("login", loginRequest);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    string token = await response.Content.ReadAsStringAsync();
+                    var loginResponse = await response.Content.ReadFromJsonAsync<LoginResponse>();
 
-                    // Save token for future API requests (e.g., Secure Storage)
-                    await SecureStorage.SetAsync("auth_token", token);
+                    if (loginResponse != null)
+                    {
+                        // Save token and user role securely
+                        await SecureStorage.SetAsync("auth_token", loginResponse.Token);
+                        Preferences.Set("UserRole", loginResponse.Role);
 
-                    // Navigate to Dashboard
-                    await Application.Current.MainPage.Navigation.PushAsync(new DashboardPage());
+                        // Navigate to DashboardPage
+                        await Shell.Current.GoToAsync(nameof(DashboardPage));
+                    }
+                    else
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Error", "Invalid response from server.", "OK");
+                    }
                 }
                 else
                 {
@@ -77,4 +87,5 @@ namespace Employee_Monitoring_System
             }
         }
     }
+
 }

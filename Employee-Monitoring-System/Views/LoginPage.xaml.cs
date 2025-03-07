@@ -5,12 +5,9 @@ public partial class LoginPage : ContentPage
     public LoginPage()
     {
         InitializeComponent();
+        BindingContext = new LoginPageViewModel();
     }
 
-    private async void OnLoginClicked(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new DashboardPage());
-    }
     private async void OnForgotPasswordTapped(object sender, EventArgs e)
     {
         // TODO: Implement forgot password logic

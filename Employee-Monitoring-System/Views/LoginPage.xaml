@@ -79,7 +79,8 @@
                             <Label Text="Email"
                                    TextColor="{StaticResource SecondaryText}"
                                    FontSize="14"/>
-                            <Entry Placeholder="Enter Email"
+                            <Entry Text="{Binding Email, Mode=TwoWay}"
+                                   Placeholder="Enter Email"
                                    PlaceholderColor="{StaticResource SecondaryText}"
                                    TextColor="{StaticResource PrimaryText}"
                                    BackgroundColor="Transparent"/>
@@ -89,7 +90,8 @@
                             <Label Text="Password"
                                    TextColor="{StaticResource SecondaryText}"
                                    FontSize="14"/>
-                            <Entry Placeholder="Enter Password"
+                            <Entry Text="{Binding Password, Mode=TwoWay}"
+                                   Placeholder="Enter Password"
                                    PlaceholderColor="{StaticResource SecondaryText}"
                                    TextColor="{StaticResource PrimaryText}"
                                    IsPassword="True"
@@ -106,11 +108,11 @@
 
                     <Button Text="Log In"
                             BackgroundColor="{StaticResource AccentColor}"
+                            Command="{Binding LoginCommand}"
                             TextColor="White"
                             HeightRequest="45"
                             CornerRadius="6"
-                            FontSize="16"
-                            Clicked="OnLoginClicked"/>
+                            FontSize="16" />
 
                     <Label Text="Forgot your password?"
                            TextColor="{StaticResource AccentColor}"

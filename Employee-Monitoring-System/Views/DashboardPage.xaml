@@ -20,30 +20,51 @@
         <ScrollView Grid.Row="1" Grid.Column="1" Padding="20">
             <VerticalStackLayout Spacing="20">
                 <!-- Role-Based Dashboard Heading -->
-                <!--<Label x:Name="DashboardTitle" Text="Dashboard" FontSize="24" FontAttributes="Bold" TextColor="{DynamicResource PrimaryTextColor}" />-->
+                <Label x:Name="DashboardTitle" FontSize="24" FontAttributes="Bold" TextColor="{DynamicResource PrimaryTextColor}" />
+
+                <!-- Loading Indicator -->
+                <ActivityIndicator x:Name="LoadingIndicator" IsVisible="False" IsRunning="{Binding IsVisible, Source={x:Reference LoadingIndicator}}" />
 
                 <!-- Admin Dashboard View -->
                 <StackLayout x:Name="AdminView" IsVisible="False">
-                    <Label Text="Total Employees: 100" TextColor="{DynamicResource PrimaryTextColor}"/>
-                    <Label Text="Total Projects: 10" TextColor="{DynamicResource PrimaryTextColor}"/>
-                    <Button Text="Manage Employees" BackgroundColor="{DynamicResource ButtonBackgroundColor}"/>
-                    <Button Text="Generate Reports" BackgroundColor="{DynamicResource ButtonBackgroundColor}"/>
+                    <Frame BackgroundColor="#f0f0f0" CornerRadius="10" Padding="20" Margin="10">
+                        <Label x:Name="TotalEmployeesLabel" FontSize="20" FontAttributes="Bold" TextColor="{DynamicResource PrimaryTextColor}"/>
+                    </Frame>
+                    <Frame BackgroundColor="#f0f0f0" CornerRadius="10" Padding="20" Margin="10">
+                        <Label x:Name="TotalProjectsLabel" FontSize="20" FontAttributes="Bold" TextColor="{DynamicResource PrimaryTextColor}"/>
+                    </Frame>
+                    <Frame BackgroundColor="#f0f0f0" CornerRadius="10" Padding="20" Margin="10">
+                        <Label x:Name="TotalTasksLabel" FontSize="20" FontAttributes="Bold" TextColor="{DynamicResource PrimaryTextColor}"/>
+                    </Frame>
+                    <Frame BackgroundColor="#f0f0f0" CornerRadius="10" Padding="20" Margin="10">
+                        <Label x:Name="LeavesTakenLabel" FontSize="20" FontAttributes="Bold" TextColor="{DynamicResource PrimaryTextColor}"/>
+                    </Frame>
                 </StackLayout>
 
                 <!-- Team Leader Dashboard View -->
                 <StackLayout x:Name="TeamLeaderView" IsVisible="False">
-                    <Label Text="Team Members: 5" TextColor="{DynamicResource PrimaryTextColor}"/>
-                    <Label Text="Pending Tasks: 2" TextColor="{DynamicResource PrimaryTextColor}"/>
-                    <Button Text="View Team Progress" BackgroundColor="{DynamicResource ButtonBackgroundColor}"/>
-                    <Button Text="Approve Leave Requests" BackgroundColor="{DynamicResource ButtonBackgroundColor}"/>
+                    <Frame BackgroundColor="#e0e0e0" CornerRadius="10" Padding="20" Margin="10">
+                        <Label x:Name="TLTotalProjectsLabel" FontSize="20" FontAttributes="Bold" TextColor="{DynamicResource PrimaryTextColor}"/>
+                    </Frame>
+                    <Frame BackgroundColor="#e0e0e0" CornerRadius="10" Padding="20" Margin="10">
+                        <Label x:Name="PendingTasksLabel" FontSize="20" FontAttributes="Bold" TextColor="{DynamicResource PrimaryTextColor}"/>
+                    </Frame>
                 </StackLayout>
 
-                <!-- Employee Dashboard View -->
+                <!-- Employee Dashboard View (FIXED) -->
                 <StackLayout x:Name="EmployeeView" IsVisible="False">
-                    <Label Text="Assigned Tasks: 3" TextColor="{DynamicResource PrimaryTextColor}"/>
-                    <Label Text="Attendance: Present" TextColor="{DynamicResource PrimaryTextColor}"/>
-                    <Button Text="View Tasks" BackgroundColor="{DynamicResource ButtonBackgroundColor}"/>
-                    <Button Text="Request Leave" BackgroundColor="{DynamicResource ButtonBackgroundColor}"/>
+                    <Frame BackgroundColor="#d0d0d0" CornerRadius="10" Padding="20" Margin="10">
+                        <Label x:Name="EmpTotalProjectsLabel" FontSize="20" FontAttributes="Bold" TextColor="{DynamicResource PrimaryTextColor}"/>
+                    </Frame>
+                    <Frame BackgroundColor="#d0d0d0" CornerRadius="10" Padding="20" Margin="10">
+                        <Label x:Name="AssignedTasksLabel" FontSize="20" FontAttributes="Bold" TextColor="{DynamicResource PrimaryTextColor}"/>
+                    </Frame>
+                    <Frame BackgroundColor="#d0d0d0" CornerRadius="10" Padding="20" Margin="10">
+                        <Label x:Name="AttendanceLabel" FontSize="20" FontAttributes="Bold" TextColor="{DynamicResource PrimaryTextColor}"/>
+                    </Frame>
+                    <Frame BackgroundColor="#d0d0d0" CornerRadius="10" Padding="20" Margin="10">
+                        <Label x:Name="EmpLeavesTakenLabel" FontSize="20" FontAttributes="Bold" TextColor="{DynamicResource PrimaryTextColor}"/>
+                    </Frame>
                 </StackLayout>
 
             </VerticalStackLayout>

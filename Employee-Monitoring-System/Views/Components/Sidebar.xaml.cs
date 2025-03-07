@@ -1,15 +1,22 @@
-namespace Employee_Monitoring_System.Views.Components;
+using Employee_Monitoring_System.ViewModels;
 
-public partial class Sidebar : ContentView
+namespace Employee_Monitoring_System.Views.Components
 {
-    public Sidebar()
+    public partial class Sidebar : ContentView
     {
-        InitializeComponent();
+        public Sidebar()
+        {
+            InitializeComponent();
+            SidebarViewModel.Instance.LoadSidebarItems();
+        }
+
+        private async void OnLogoutClicked(object sender, EventArgs e)
+        {
+            Preferences.Remove("UserRole"); // Use Preferences instead of SecureStorage
+            SecureStorage.Remove("auth_token");
+
+            await Shell.Current.GoToAsync("//LoginPage");
+        }
     }
 
-    private async void OnLogoutClicked(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync("///LoginPage");
-
-    }
 }

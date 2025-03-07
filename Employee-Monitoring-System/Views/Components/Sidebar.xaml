@@ -1,43 +1,30 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Employee_Monitoring_System.Views.Components.Sidebar"
              xmlns:local="clr-namespace:Employee_Monitoring_System.ViewModels"
+             x:Class="Employee_Monitoring_System.Views.Components.Sidebar"
              BindingContext="{x:Static local:SidebarViewModel.Instance}">
 
-    <StackLayout BackgroundColor="#2C3E50" Padding="10" VerticalOptions="FillAndExpand">
+    <StackLayout BackgroundColor="#2C3E50" Padding="20" VerticalOptions="FillAndExpand">
 
-        <StackLayout Spacing="15">
-            <Button Text="Dashboard" TextColor="White" FontAttributes="Bold"
-                    BackgroundColor="{Binding ActivePage, Converter={StaticResource PageToColorConverter}, ConverterParameter=Dashboard}"
-                    Command="{Binding NavigateCommand}" CommandParameter="Dashboard"/>
-
-            <Button Text="Reports" TextColor="White" FontAttributes="Bold"
-                    BackgroundColor="{Binding ActivePage, Converter={StaticResource PageToColorConverter}, ConverterParameter=Reports}"
-                    Command="{Binding NavigateCommand}" CommandParameter="Reports"/>
-
-            <Button Text="Projects" TextColor="White" FontAttributes="Bold"
-                    BackgroundColor="{Binding ActivePage, Converter={StaticResource PageToColorConverter}, ConverterParameter=Projects}"
-                    Command="{Binding NavigateCommand}" CommandParameter="Projects"/>
-
-            <Button Text="Tasks" TextColor="White" FontAttributes="Bold"
-                    BackgroundColor="{Binding ActivePage, Converter={StaticResource PageToColorConverter}, ConverterParameter=Tasks}"
-                    Command="{Binding NavigateCommand}" CommandParameter="Tasks"/>
-
-            <Button Text="Settings" TextColor="White" FontAttributes="Bold"
-                    BackgroundColor="{Binding ActivePage, Converter={StaticResource PageToColorConverter}, ConverterParameter=Settings}"
-                    Command="{Binding NavigateCommand}" CommandParameter="Settings"/>
-
-            <Button Text="Attendance" TextColor="White" FontAttributes="Bold"
-                    BackgroundColor="{Binding ActivePage, Converter={StaticResource PageToColorConverter}, ConverterParameter=Attendance}"
-                    Command="{Binding NavigateCommand}" CommandParameter="Attendance"/>
-
-            <Button Text="Leave" TextColor="White" FontAttributes="Bold"
-                    BackgroundColor="{Binding ActivePage, Converter={StaticResource PageToColorConverter}, ConverterParameter=Leave}"
-                    Command="{Binding NavigateCommand}" CommandParameter="Leave"/>
+        <!-- Dynamic Sidebar Buttons -->
+        <StackLayout BindableLayout.ItemsSource="{Binding SidebarItems}" Margin="10,20,10,20">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate>
+                    <Button Text="{Binding .}" 
+                            TextColor="White"
+                            BackgroundColor="{Binding ., Converter={StaticResource PageToColorConverter}}"
+                            FontAttributes="Bold"
+                            Padding="12"
+                            Margin="0,5"
+                            Command="{Binding NavigateCommand, Source={x:Static local:SidebarViewModel.Instance}}"
+                            CommandParameter="{Binding .}"/>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
         </StackLayout>
 
+        <!-- Logout Button -->
         <StackLayout VerticalOptions="EndAndExpand">
-            <Button Text="Logout" TextColor="White" BackgroundColor="#E74C3C" CornerRadius="20" Clicked="OnLogoutClicked"/>
+            <Button Text="Logout" TextColor="White" BackgroundColor="#E74C3C" CornerRadius="20" Margin="20" Padding="12" Clicked="OnLogoutClicked"/>
         </StackLayout>
 
     </StackLayout>

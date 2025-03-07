@@ -5,7 +5,7 @@
 
         <!-- Dashboard Title (Aligned Left) -->
         <Label Text="WorkHub" FontSize="24" FontAttributes="Bold" TextColor="White" 
-               Grid.Column="0" VerticalOptions="Center" Margin="40,0,0,0"/>
+               Grid.Column="0" VerticalOptions="Center" Margin="65,0,0,0"/>
 
         <!-- Dark Mode Toggle (Aligned Right) -->
         <Label x:Name="DarkModeLabel" Text="Dark Mode" TextColor="White"
