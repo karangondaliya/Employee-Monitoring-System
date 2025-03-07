@@ -8,9 +8,9 @@ public partial class LoginPage : ContentPage
         BindingContext = new LoginPageViewModel();
     }
 
-    private async void OnForgotPasswordTapped(object sender, EventArgs e)
+    private async void OnUpdatePasswordTapped(object sender, EventArgs e)
     {
         // TODO: Implement forgot password logic
-        await DisplayAlert("Forgot Password", "Forgot password tapped", "OK");
+        await Navigation.PushAsync(new UpdatePasswordPage());
     }
 }

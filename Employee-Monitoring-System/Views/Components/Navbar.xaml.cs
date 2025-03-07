@@ -1,24 +1,36 @@
-namespace Employee_Monitoring_System.Views.Components;
 
-public partial class Navbar : ContentView
+
+namespace Employee_Monitoring_System.Views.Components
 {
-	public Navbar()
-	{
-		InitializeComponent();
-	}
-
-    private void OnDarkModeToggled(object sender, EventArgs e)
+    public partial class Navbar : ContentView
     {
-        
-        if (Application.Current.UserAppTheme == AppTheme.Dark)
+        public Navbar()
         {
-            Application.Current.UserAppTheme = AppTheme.Light;
-            DarkModeLabel.Text = "Light Mode";
+            InitializeComponent();
         }
-        else
+
+        private void OnDarkModeToggled(object sender, EventArgs e)
         {
-            Application.Current.UserAppTheme = AppTheme.Dark;
-            DarkModeLabel.Text = "Dark Mode";
+
+            if (Application.Current.UserAppTheme == AppTheme.Dark)
+            {
+                Application.Current.UserAppTheme = AppTheme.Light;
+                DarkModeLabel.Text = "Light Mode";
+            }
+            else
+            {
+                Application.Current.UserAppTheme = AppTheme.Dark;
+                DarkModeLabel.Text = "Dark Mode";
+            }
+
+        }
+        private async void OnProfileImageTapped(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync(nameof(UserProfilePage));
+        }
+        private async void OnNotificationIconTapped(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new NotificationsPage());
         }
 
     }

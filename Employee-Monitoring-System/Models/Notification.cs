@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace Employee_Monitoring_System.Models
 {
-    public class LoginResponse
+    public class Notification
     {
-        public string Token { get; set; }
-        public string Role { get; set; }
         public int Id { get; set; }
+        public string Message { get; set; }
+        public bool IsRead { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
+
 }

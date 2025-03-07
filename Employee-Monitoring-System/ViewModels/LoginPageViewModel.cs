@@ -67,6 +67,7 @@ namespace Employee_Monitoring_System
                         // Save token and user role securely
                         await SecureStorage.SetAsync("auth_token", loginResponse.Token);
                         Preferences.Set("UserRole", loginResponse.Role);
+                        await SecureStorage.SetAsync("UserId", loginResponse.Id.ToString());
 
                         // Navigate to DashboardPage
                         await Shell.Current.GoToAsync(nameof(DashboardPage));

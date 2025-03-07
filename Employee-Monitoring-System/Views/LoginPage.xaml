@@ -114,12 +114,12 @@
                             CornerRadius="6"
                             FontSize="16" />
 
-                    <Label Text="Forgot your password?"
+                    <Label Text="Want to Update your password?"
                            TextColor="{StaticResource AccentColor}"
                            HorizontalOptions="Center"
                            FontAttributes="Italic">
                         <Label.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnForgotPasswordTapped"/>
+                            <TapGestureRecognizer Tapped="OnUpdatePasswordTapped"/>
                         </Label.GestureRecognizers>
                     </Label>
                 </VerticalStackLayout>

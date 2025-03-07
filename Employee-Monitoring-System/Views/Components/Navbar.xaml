@@ -16,11 +16,19 @@
         </Grid>
         <!-- Notification Icon -->
         <Image Source="notification_icon.png" WidthRequest="20" HeightRequest="20" 
-               Grid.Column="3" VerticalOptions="Center" Margin="40,0,0,0"/>
+               Grid.Column="3" VerticalOptions="Center" Margin="40,0,0,0">
+            <Image.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnNotificationIconTapped" />
+            </Image.GestureRecognizers>
+        </Image>
 
         <!-- User Profile Icon -->
         <Image Source="user_profile_icon.png" WidthRequest="20" HeightRequest="20" 
-               Grid.Column="4" VerticalOptions="Center" Margin="40,0,20,0"/>
+               Grid.Column="4" VerticalOptions="Center" Margin="40,0,20,0">
+            <Image.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnProfileImageTapped" />
+            </Image.GestureRecognizers>
+        </Image>
 
     </Grid>
 </ContentView>
