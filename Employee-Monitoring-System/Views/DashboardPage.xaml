@@ -22,6 +22,19 @@
                 <!-- Role-Based Dashboard Heading -->
                 <Label x:Name="DashboardTitle" FontSize="24" FontAttributes="Bold" TextColor="{DynamicResource PrimaryTextColor}" />
 
+                <!-- Screenshot Mode Label -->
+                <Label x:Name="ScreenshotModeLabel" Text="Start Monitoring" FontSize="18" TextColor="{DynamicResource PrimaryTextColor}" 
+                       HorizontalOptions="Center" />
+
+                <!-- Start Screenshot Button (Visible only in Timer Mode) -->
+                <Button x:Name="StartButton"
+                        Text="Start"
+                        BackgroundColor="Green"
+                        TextColor="White"
+                        FontSize="18"
+                        IsVisible="False"
+                        Clicked="StartButton_Clicked"/>
+
                 <!-- Loading Indicator -->
                 <ActivityIndicator x:Name="LoadingIndicator" IsVisible="False" IsRunning="{Binding IsVisible, Source={x:Reference LoadingIndicator}}" />
 

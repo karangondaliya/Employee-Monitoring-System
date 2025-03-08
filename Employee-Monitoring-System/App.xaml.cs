@@ -1,4 +1,6 @@
-﻿namespace Employee_Monitoring_System
+﻿using Employee_Monitoring_System.Services;
+
+namespace Employee_Monitoring_System
 {
     public partial class App : Application
     {

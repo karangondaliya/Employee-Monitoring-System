@@ -11,8 +11,12 @@ namespace Employee_Monitoring_System.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (targetType != typeof(Color))
+                throw new InvalidOperationException("Target must be a Color");
+
             return (bool)value ? Color.FromArgb("#D3D3D3") : Color.FromArgb("#FFFFFF");
         }
+
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();

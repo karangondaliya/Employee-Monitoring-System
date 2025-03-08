@@ -14,6 +14,7 @@ namespace Employee_Monitoring_System.ViewModels
     public class NotificationsViewModel : BaseViewModel
     {
         private readonly HttpClient _httpClient;
+        public Command<Notification> MarkAsReadCommand { get; }
         public ObservableCollection<Notification> Notifications { get; set; } = new ObservableCollection<Notification>();
 
         public NotificationsViewModel()
@@ -72,12 +73,12 @@ namespace Employee_Monitoring_System.ViewModels
             var patchDoc = new JsonPatchDocument<Notification>();
             patchDoc.Replace(n => n.IsRead, true);
 
-            var json = JsonConvert.SerializeObject(patchDoc);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var json = JsonConvert.SerializeObject(patchDoc);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             await _httpClient.PatchAsync($"https://localhost:7227/api/Notifications/{notification.Id}", content);
-            notification.IsRead = true;
-        }
+                    notification.IsRead = true;
+                }
     }
 
 }

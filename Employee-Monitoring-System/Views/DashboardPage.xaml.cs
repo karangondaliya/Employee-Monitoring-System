@@ -4,19 +4,73 @@ using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using Employee_Monitoring_System.Models;
+using Employee_Monitoring_System.Services;
 
 namespace Employee_Monitoring_System.Views
 {
     public partial class DashboardPage : ContentPage
     {
         private readonly HttpClient _httpClient;
+        private ScreenshotService _screenshotService;
 
         public DashboardPage()
         {
             InitializeComponent();
             _httpClient = new HttpClient { BaseAddress = new Uri("https://localhost:7227/api/") };
-
+            _screenshotService = new ScreenshotService();
             LoadDashboardDataAsync();
+        }
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+
+            var appSettings = await FetchAppSettings(); // Fetch settings from API
+
+            if (appSettings.SettingValue == "ZeroClick")
+            {
+                ScreenshotModeLabel.IsVisible = false;
+                _screenshotService.StartCapturingAsync(); // Auto-start in Zero Click 
+            }
+            else
+            {
+                StartButton.IsVisible = true; // Show button in Timer Mode
+            }
+        }
+        public async Task<AppSettings> FetchAppSettings()
+        {
+            try
+            {
+                string token = await SecureStorage.GetAsync("auth_token");
+
+                if (string.IsNullOrEmpty(token))
+                {
+                    await DisplayAlert("Error", "Authentication token is missing. Please log in again.", "OK");
+                    return null;
+                }
+
+                _httpClient.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+                string id = "TrackingMode";
+
+                var response = await _httpClient.GetFromJsonAsync<AppSettings>($"AppSettings/{id}");
+
+                if (response == null)
+                {
+                    await DisplayAlert("Error", "AppSettings not found.", "OK");
+                    return null;
+                }
+
+                return response;
+            }
+            catch (HttpRequestException ex)
+            {
+                await DisplayAlert("Error", $"Failed to fetch AppSettings: {ex.Message}", "OK");
+                return null;
+            }
         }
 
         private async Task LoadDashboardDataAsync()
@@ -102,6 +156,11 @@ namespace Employee_Monitoring_System.Views
             AssignedTasksLabel.Text = $"Assigned Tasks: {tasks?.Count ?? 0}";
             AttendanceLabel.Text = $"Attendance: Present"; // Modify this if you have an attendance API
             EmpLeavesTakenLabel.Text = $"Leaves Taken: {leaves?.Count ?? 0}";
+        }
+
+        private void StartButton_Clicked(object sender, EventArgs e)
+        {
+            _screenshotService.StartCapturingAsync();
         }
     }
 }

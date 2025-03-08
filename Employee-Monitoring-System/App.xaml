@@ -10,6 +10,8 @@
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <local:PageToColorConverter x:Key="PageToColorConverter"/>
+            <local:BooleanToColorConverter x:Key="BooleanToColorConverter"/>
+            <local:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
