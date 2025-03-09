@@ -44,21 +44,24 @@ namespace Employee_Monitoring_System.ViewModels
             {
                 SidebarItems.Add("Manage Employees");
                 SidebarItems.Add("Manage Projects");
-                SidebarItems.Add("Notifications");
+                SidebarItems.Add("Manage Notifications");
                 SidebarItems.Add("Manage Branches");
-                SidebarItems.Add("App Settings");
+                SidebarItems.Add("Settings");
                 SidebarItems.Add("View Screenshots");
+                SidebarItems.Add("Track Activity");
+                SidebarItems.Add("View Leaves");
             }
             else if (userRole == "TeamLead")
             {
                 SidebarItems.Add("Manage Tasks");
-                SidebarItems.Add("Approve Leave Requests");
+                SidebarItems.Add("Manage Leaves");
+                SidebarItems.Add("Projects");
             }
             else if (userRole == "Employee")
             {
                 SidebarItems.Add("My Tasks");
-                SidebarItems.Add("My Attendance");
                 SidebarItems.Add("My Leaves");
+                SidebarItems.Add("My Projects");
             }
 
             OnPropertyChanged(nameof(SidebarItems)); // Notify UI of updates
@@ -67,7 +70,14 @@ namespace Employee_Monitoring_System.ViewModels
         private async void Navigate(string pageName)
         {
             ActivePage = pageName.ToLower();
-            await Shell.Current.GoToAsync($"//{ActivePage}");
+            if (pageName == "My Leaves" || pageName == "View Leaves" || pageName == "Manage Leaves")
+            {
+                await Shell.Current.GoToAsync("//LeaveRequestPage");
+            }
+            else
+            {
+                await Shell.Current.GoToAsync($"//{ActivePage}");
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -17,5 +17,7 @@
     <ShellContent ContentTemplate="{DataTemplate local:UserProfilePage}" Route="UserProfilePage" />
     <ShellContent ContentTemplate="{DataTemplate local:UpdatePasswordPage}" Route="UpdatePasswordPage" />
     <ShellContent ContentTemplate="{DataTemplate local:NotificationsPage}" Route="NotificationsPage" />
+    <ShellContent ContentTemplate="{DataTemplate local:LeaveRequestPage}" Route="LeaveRequestPage" />
+    <ShellContent ContentTemplate="{DataTemplate local:AddLeaveRequestPage}" Route="AddLeaveRequestPage" />
 </Shell>
     

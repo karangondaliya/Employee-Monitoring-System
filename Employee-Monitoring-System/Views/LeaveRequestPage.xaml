@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:Employee_Monitoring_System.Views.Components"
+             x:Class="Employee_Monitoring_System.Views.LeaveRequestPage"
+             BackgroundColor="{DynamicResource PageBackgroundColor}">
+
+    <Grid RowDefinitions="Auto, *" ColumnDefinitions="250, *">
+        <!-- Navbar -->
+        <ContentView Grid.Row="0" Grid.ColumnSpan="2">
+            <controls:Navbar />
+        </ContentView>
+
+        <!-- Sidebar -->
+        <ContentView Grid.Row="1" Grid.Column="0" BackgroundColor="{DynamicResource SidebarBackgroundColor}" WidthRequest="250">
+            <controls:Sidebar />
+        </ContentView>
+
+        <!-- Main Content -->
+        <ScrollView Grid.Row="1" Grid.Column="1" Padding="20">
+            <VerticalStackLayout Spacing="15">
+                <Label Text="My Leave Requests" FontSize="22" FontAttributes="Bold"/>
+
+                <Button Text="Add Leave Request"
+                        BackgroundColor="Green"
+                        TextColor="White"
+                        CornerRadius="10"
+                        Clicked="OnAddLeaveRequestClicked"/>
+
+                <CollectionView ItemsSource="{Binding LeaveRequests}">
+                    <CollectionView.Header>
+                        <Grid ColumnDefinitions="*,*,*,*,*,Auto" Padding="5">
+                            <Label Text="Leave Type" FontAttributes="Bold" Grid.Column="0"/>
+                            <Label Text="Start Date" FontAttributes="Bold" Grid.Column="1"/>
+                            <Label Text="End Date" FontAttributes="Bold" Grid.Column="2"/>
+                            <Label Text="Status" FontAttributes="Bold" Grid.Column="3"/>
+                            <Label Text="Approved By" FontAttributes="Bold" Grid.Column="4"/>
+                            <Label Text="Actions" FontAttributes="Bold" Grid.Column="5"/>
+                        </Grid>
+                    </CollectionView.Header>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="*,*,*,*,*,Auto" Padding="5">
+                                <Label Text="{Binding LeaveType}" Grid.Column="0"/>
+                                <Label Text="{Binding StartDate, StringFormat='{0:MMM dd, yyyy}'}" Grid.Column="1"/>
+                                <Label Text="{Binding EndDate, StringFormat='{0:MMM dd, yyyy}'}" Grid.Column="2"/>
+                                <Label Text="{Binding Status}" TextColor="Orange" FontAttributes="Bold" Grid.Column="3"/>
+                                <Label Text="{Binding ApprovedBy}" Grid.Column="4"/>
+
+                                <HorizontalStackLayout Grid.Column="5" Spacing="5">
+                                    <Button Text="Edit" BackgroundColor="Blue" TextColor="White" Clicked="OnEditClicked"/>
+                                    <Button Text="Delete" BackgroundColor="Red" TextColor="White" Clicked="OnDeleteClicked"/>
+                                </HorizontalStackLayout>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>
