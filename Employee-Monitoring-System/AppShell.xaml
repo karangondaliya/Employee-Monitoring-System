@@ -5,7 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:Employee_Monitoring_System.Views"
     Shell.FlyoutBehavior="Disabled"
-    Title="Employee_Monitoring_System">
+    Title="WorkHub">
 
     <!--<ShellContent
         Title="Home"

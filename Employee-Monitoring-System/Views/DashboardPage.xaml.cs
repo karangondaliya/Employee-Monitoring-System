@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Employee_Monitoring_System.Models;
 using Employee_Monitoring_System.Services;
+using Employee_Monitoring_System.Views.Components; // Import for CardComponent
 
 namespace Employee_Monitoring_System.Views
 {
@@ -14,6 +15,10 @@ namespace Employee_Monitoring_System.Views
     {
         private readonly HttpClient _httpClient;
         private ScreenshotService _screenshotService;
+
+        public bool IsZeroClickMode { get; set; }
+        public bool IsTimerMode { get; set; }
+        public bool IsStartButtonVisible { get; set; }
 
         public DashboardPage()
         {
@@ -26,19 +31,33 @@ namespace Employee_Monitoring_System.Views
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-
-            var appSettings = await FetchAppSettings(); // Fetch settings from API
-
-            if (appSettings.SettingValue == "ZeroClick")
-            {
-                ScreenshotModeLabel.IsVisible = false;
-                _screenshotService.StartCapturingAsync(); // Auto-start in Zero Click 
-            }
-            else
-            {
-                StartButton.IsVisible = true; // Show button in Timer Mode
-            }
+            await UpdateTrackingModeAsync();
         }
+
+        private async Task UpdateTrackingModeAsync()
+        {
+            IsZeroClickMode = false;
+            IsTimerMode = false;
+            IsStartButtonVisible = false;
+
+            var appSettings = await FetchAppSettings();
+
+            if (appSettings?.SettingValue == "ZeroClick")
+            {
+                IsZeroClickMode = true;
+                _screenshotService.StartCapturingAsync(); // Auto-start
+            }
+            else if (appSettings?.SettingValue == "Timer")
+            {
+                IsTimerMode = true;
+                IsStartButtonVisible = true;
+            }
+
+            OnPropertyChanged(nameof(IsZeroClickMode));
+            OnPropertyChanged(nameof(IsTimerMode));
+            OnPropertyChanged(nameof(IsStartButtonVisible));
+        }
+
         public async Task<AppSettings> FetchAppSettings()
         {
             try
@@ -77,10 +96,8 @@ namespace Employee_Monitoring_System.Views
         {
             try
             {
-                // Show loading indicator
                 LoadingIndicator.IsVisible = true;
 
-                // Retrieve the token securely
                 string token = await SecureStorage.GetAsync("auth_token");
 
                 if (!string.IsNullOrEmpty(token))
@@ -93,11 +110,13 @@ namespace Employee_Monitoring_System.Views
                     return;
                 }
 
-                // Fetch user role from Preferences
                 string userRole = Preferences.Get("UserRole", "Employee");
                 DashboardTitle.Text = $"{userRole} Dashboard";
 
-                // Fetch data based on role
+                AdminView.IsVisible = false;
+                TeamLeaderView.IsVisible = false;
+                EmployeeView.IsVisible = false;
+
                 if (userRole == "Admin")
                 {
                     await LoadAdminData();
@@ -121,7 +140,6 @@ namespace Employee_Monitoring_System.Views
             }
         }
 
-
         private async Task LoadAdminData()
         {
             var employees = await _httpClient.GetFromJsonAsync<List<object>>("Users");
@@ -130,10 +148,41 @@ namespace Employee_Monitoring_System.Views
             var leaves = await _httpClient.GetFromJsonAsync<List<object>>("LeaveRequests");
 
             AdminView.IsVisible = true;
-            TotalEmployeesLabel.Text = $"Total Employees: {employees?.Count ?? 0}";
-            TotalProjectsLabel.Text = $"Total Projects: {projects?.Count ?? 0}";
-            TotalTasksLabel.Text = $"Total Tasks: {tasks?.Count ?? 0}";
-            LeavesTakenLabel.Text = $"Total Leaves: {leaves?.Count ?? 0}";
+            AdminView.Children.Clear(); // Clear previous data
+
+            // Add cards dynamically
+            AdminView.Children.Add(new CardComponent
+            {
+                Title = "Total Employees",
+                Value = $"{employees?.Count ?? 0}",
+                Icon = "employee_icon.png", // Replace with your actual image file
+                AdditionalText = $"+5 from last week"
+            });
+
+            AdminView.Children.Add(new CardComponent
+            {
+                Title = "Total Projects",
+                Value = $"{projects?.Count ?? 0}",
+                Icon = "project_icon.png", // Replace with your actual image file
+                AdditionalText = $"+2 from last week"
+            });
+
+            AdminView.Children.Add(new CardComponent
+            {
+                Title = "Total Tasks",
+                Value = $"{tasks?.Count ?? 0}",
+                Icon = "tasks_icon.png", // Replace with your actual image file
+                AdditionalText = $"-1 from last week"
+            });
+
+            AdminView.Children.Add(new CardComponent
+            {
+                Title = "Total Leaves",
+                Value = $"{leaves?.Count ?? 0}",
+                Icon = "leaves_icon.png", // Replace with your actual image file
+                AdditionalText = $"+1 from last week"
+            });
+
         }
 
         private async Task LoadTeamLeaderData()
@@ -142,8 +191,24 @@ namespace Employee_Monitoring_System.Views
             var tasks = await _httpClient.GetFromJsonAsync<List<object>>("_Task");
 
             TeamLeaderView.IsVisible = true;
-            TLTotalProjectsLabel.Text = $"Total Projects: {projects?.Count ?? 0}";
-            PendingTasksLabel.Text = $"Pending Tasks: {tasks?.Count ?? 0}";
+            TeamLeaderView.Children.Clear(); // Clear previous data
+
+            // Add cards dynamically
+            TeamLeaderView.Children.Add(new CardComponent
+            {
+                Title = "Total Projects",
+                Value = $"{projects?.Count ?? 0}",
+                Icon = "project_icon.png",
+                AdditionalText = $"+2 from last week"
+            });
+
+            TeamLeaderView.Children.Add(new CardComponent
+            {
+                Title = "Pending Tasks",
+                Value = $"{tasks?.Count ?? 0}",
+                Icon = "tasks_icon.png",
+                AdditionalText = $"+3 from last week"
+            });
         }
 
         private async Task LoadEmployeeData()
@@ -152,10 +217,24 @@ namespace Employee_Monitoring_System.Views
             var leaves = await _httpClient.GetFromJsonAsync<List<object>>("LeaveRequests");
 
             EmployeeView.IsVisible = true;
-            EmpTotalProjectsLabel.Text = $"Total Projects: {tasks?.Count ?? 0}";
-            AssignedTasksLabel.Text = $"Assigned Tasks: {tasks?.Count ?? 0}";
-            AttendanceLabel.Text = $"Attendance: Present"; // Modify this if you have an attendance API
-            EmpLeavesTakenLabel.Text = $"Leaves Taken: {leaves?.Count ?? 0}";
+            EmployeeView.Children.Clear(); // Clear previous data
+
+            // Add cards dynamically
+            EmployeeView.Children.Add(new CardComponent
+            {
+                Title = "Assigned Tasks",
+                Value = $"{tasks?.Count ?? 0}",
+                Icon = "tasks_icon.png",
+                AdditionalText = $"+4 from last week"
+            });
+
+            EmployeeView.Children.Add(new CardComponent
+            {
+                Title = "Leaves Taken",
+                Value = $"{leaves?.Count ?? 0}",
+                Icon = "leaves_icon.png",
+                AdditionalText = $"+1 from last week"
+            });
         }
 
         private void StartButton_Clicked(object sender, EventArgs e)

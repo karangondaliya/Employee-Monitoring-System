@@ -5,82 +5,144 @@
              x:Class="Employee_Monitoring_System.Views.DashboardPage"
              BackgroundColor="{DynamicResource PageBackgroundColor}">
 
-    <Grid RowDefinitions="Auto, *" ColumnDefinitions="250, *">
-        <!-- Navbar -->
-        <ContentView Grid.Row="0" Grid.ColumnSpan="2">
-            <local:Navbar />
-        </ContentView>
-
-        <!-- Sidebar -->
-        <ContentView Grid.Row="1" Grid.Column="0" BackgroundColor="{DynamicResource SidebarBackgroundColor}" WidthRequest="250">
+    <Grid ColumnDefinitions="250, *" RowDefinitions="*">
+        <!-- Sidebar (FULL HEIGHT) -->
+        <ContentView Grid.Row="0" Grid.Column="0" BackgroundColor="{DynamicResource SidebarBackgroundColor}">
             <local:Sidebar />
         </ContentView>
 
-        <!-- Main Content -->
-        <ScrollView Grid.Row="1" Grid.Column="1" Padding="20">
-            <VerticalStackLayout Spacing="20">
-                <!-- Role-Based Dashboard Heading -->
-                <Label x:Name="DashboardTitle" FontSize="24" FontAttributes="Bold" TextColor="{DynamicResource PrimaryTextColor}" />
+        <!-- Right Side: Contains Navbar at Top, Body Below -->
+        <Grid Grid.Row="0" Grid.Column="1" RowDefinitions="Auto, *">
+            <!-- Navbar at Top -->
+            <ContentView Grid.Row="0">
+                <local:Navbar />
+            </ContentView>
 
-                <!-- Screenshot Mode Label -->
-                <Label x:Name="ScreenshotModeLabel" Text="Start Monitoring" FontSize="18" TextColor="{DynamicResource PrimaryTextColor}" 
-                       HorizontalOptions="Center" />
+            <!-- Main Content -->
+            <ScrollView Grid.Row="1" Padding="20">
+                <VerticalStackLayout Spacing="20">
+                    <Label x:Name="DashboardTitle" FontSize="24" FontAttributes="Bold" TextColor="{DynamicResource PrimaryTextColor}" />
 
-                <!-- Start Screenshot Button (Visible only in Timer Mode) -->
-                <Button x:Name="StartButton"
-                        Text="Start"
-                        BackgroundColor="Green"
-                        TextColor="White"
-                        FontSize="18"
-                        IsVisible="False"
-                        Clicked="StartButton_Clicked"/>
+                    <HorizontalStackLayout x:Name="AdminView"
+                       IsVisible="False"
+                       Spacing="20"
+                       HorizontalOptions="FillAndExpand"
+                       Margin="0,0,0,10">
+                        <local:CardComponent WidthRequest="160" HeightRequest="120" Title="Total Employees"
+                         Value="{Binding TotalEmployees}"
+                         Icon="add.png"
+                         AdditionalText="+5 from last week" />
+                        <local:CardComponent WidthRequest="160" HeightRequest="120" Title="Total Projects"
+                         Value="{Binding TotalProjects}"
+                         Icon="briefcase.png"
+                         AdditionalText="+2 from last week" />
+                        <local:CardComponent WidthRequest="160" HeightRequest="120" Title="Total Tasks"
+                         Value="{Binding TotalTasks}"
+                         Icon="clipboard.png"
+                         AdditionalText="+1 from last week" />
+                        <local:CardComponent WidthRequest="160" HeightRequest="120" Title="Total Leaves"
+                         Value="{Binding TotalLeaves}"
+                         Icon="calendar.png"
+                         AdditionalText="-1 from last week" />
+                    </HorizontalStackLayout>
 
-                <!-- Loading Indicator -->
-                <ActivityIndicator x:Name="LoadingIndicator" IsVisible="False" IsRunning="{Binding IsVisible, Source={x:Reference LoadingIndicator}}" />
 
-                <!-- Admin Dashboard View -->
-                <StackLayout x:Name="AdminView" IsVisible="False">
-                    <Frame BackgroundColor="#f0f0f0" CornerRadius="10" Padding="20" Margin="10">
-                        <Label x:Name="TotalEmployeesLabel" FontSize="20" FontAttributes="Bold" TextColor="{DynamicResource PrimaryTextColor}"/>
-                    </Frame>
-                    <Frame BackgroundColor="#f0f0f0" CornerRadius="10" Padding="20" Margin="10">
-                        <Label x:Name="TotalProjectsLabel" FontSize="20" FontAttributes="Bold" TextColor="{DynamicResource PrimaryTextColor}"/>
-                    </Frame>
-                    <Frame BackgroundColor="#f0f0f0" CornerRadius="10" Padding="20" Margin="10">
-                        <Label x:Name="TotalTasksLabel" FontSize="20" FontAttributes="Bold" TextColor="{DynamicResource PrimaryTextColor}"/>
-                    </Frame>
-                    <Frame BackgroundColor="#f0f0f0" CornerRadius="10" Padding="20" Margin="10">
-                        <Label x:Name="LeavesTakenLabel" FontSize="20" FontAttributes="Bold" TextColor="{DynamicResource PrimaryTextColor}"/>
-                    </Frame>
-                </StackLayout>
+                    <!-- TeamLeader Dashboard -->
+                    <HorizontalStackLayout x:Name="TeamLeaderView"
+                          IsVisible="False"
+                          Spacing="15"
+                          HorizontalOptions="FillAndExpand"
+                          Margin="0,0,0,10">
+                        <local:CardComponent Title="Total Projects"
+                         Value="{Binding TotalProjects}"
+                         Icon="briefcase.png"
+                         AdditionalText="+2 from last week"
+                         Grid.Column="0" />
+                        <local:CardComponent Title="Pending Tasks"
+                         Value="{Binding PendingTasks}"
+                         Icon="clipboard.png"
+                         AdditionalText="+3 from last week"
+                         Grid.Column="1" />
+                    </HorizontalStackLayout>
 
-                <!-- Team Leader Dashboard View -->
-                <StackLayout x:Name="TeamLeaderView" IsVisible="False">
-                    <Frame BackgroundColor="#e0e0e0" CornerRadius="10" Padding="20" Margin="10">
-                        <Label x:Name="TLTotalProjectsLabel" FontSize="20" FontAttributes="Bold" TextColor="{DynamicResource PrimaryTextColor}"/>
-                    </Frame>
-                    <Frame BackgroundColor="#e0e0e0" CornerRadius="10" Padding="20" Margin="10">
-                        <Label x:Name="PendingTasksLabel" FontSize="20" FontAttributes="Bold" TextColor="{DynamicResource PrimaryTextColor}"/>
-                    </Frame>
-                </StackLayout>
+                    <!-- Employee Dashboard -->
+                    <HorizontalStackLayout x:Name="EmployeeView"
+                          IsVisible="False"
+                          Spacing="15"
+                          HorizontalOptions="FillAndExpand"
+                          Margin="0,0,0,10">
+                        <local:CardComponent Title="Assigned Tasks"
+                         Value="{Binding AssignedTasks}"
+                         Icon="tasks_icon.png"
+                         AdditionalText="+4 from last week"
+                         Grid.Column="0" />
+                        <local:CardComponent Title="Leaves Taken"
+                         Value="{Binding LeavesTaken}"
+                         Icon="calendar.png"
+                         AdditionalText="+1 from last week"
+                         Grid.Column="1" />
+                    </HorizontalStackLayout>
+                    <Frame BackgroundColor="{DynamicResource CardBackgroundColor}"
+                           CornerRadius="10"
+                           Padding="20"
+                           Margin="10">
+                        <VerticalStackLayout Spacing="10">
+                            <!-- Title -->
+                            <Label Text="Tracking Mode"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}" />
 
-                <!-- Employee Dashboard View (FIXED) -->
-                <StackLayout x:Name="EmployeeView" IsVisible="False">
-                    <Frame BackgroundColor="#d0d0d0" CornerRadius="10" Padding="20" Margin="10">
-                        <Label x:Name="EmpTotalProjectsLabel" FontSize="20" FontAttributes="Bold" TextColor="{DynamicResource PrimaryTextColor}"/>
-                    </Frame>
-                    <Frame BackgroundColor="#d0d0d0" CornerRadius="10" Padding="20" Margin="10">
-                        <Label x:Name="AssignedTasksLabel" FontSize="20" FontAttributes="Bold" TextColor="{DynamicResource PrimaryTextColor}"/>
-                    </Frame>
-                    <Frame BackgroundColor="#d0d0d0" CornerRadius="10" Padding="20" Margin="10">
-                        <Label x:Name="AttendanceLabel" FontSize="20" FontAttributes="Bold" TextColor="{DynamicResource PrimaryTextColor}"/>
-                    </Frame>
-                    <Frame BackgroundColor="#d0d0d0" CornerRadius="10" Padding="20" Margin="10">
-                        <Label x:Name="EmpLeavesTakenLabel" FontSize="20" FontAttributes="Bold" TextColor="{DynamicResource PrimaryTextColor}"/>
-                    </Frame>
-                </StackLayout>
+                            <!-- Card Content -->
+                            <Grid ColumnDefinitions="*, *" RowDefinitions="Auto" HorizontalOptions="Center">
+                                <!-- Zero Click Mode -->
+                                <StackLayout IsVisible="{Binding IsZeroClickMode}"
+                                     BackgroundColor="Green"
+                                     Padding="15"
+                                     Margin="5">
+                                    <Image Source="zero_click_icon.png" WidthRequest="30" HeightRequest="30" />
+                                    <Label Text="Zero Click Mode"
+                                           FontSize="18"
+                                           FontAttributes="Bold"
+                                           HorizontalOptions="Center"
+                                           TextColor="Black" />
+                                    <Label Text="Automatic screenshot tracking"
+                                           FontSize="12"
+                                           TextColor="White"
+                                           HorizontalOptions="Center"/>
+                                </StackLayout>
 
-            </VerticalStackLayout>
-        </ScrollView>
+                                <!-- Timer Mode -->
+                                <StackLayout IsVisible="{Binding IsTimerMode}"
+                                         BackgroundColor="LightGray"
+                                         Padding="15"
+                                         Margin="5">
+                                    <Image Source="timer_icon.png" WidthRequest="30" HeightRequest="30" />
+                                    <Label Text="Timer Mode"
+                                           HorizontalTextAlignment="Center"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="Black" />
+                                    <Label Text="Manual Tracking"
+                                           FontSize="12"
+                                           HorizontalTextAlignment="Center"
+                                           TextColor="Black" />
+                                </StackLayout>
+                            </Grid>
+
+                            <!-- Start Button -->
+                            <Button Text="Start Tracking"
+                            BackgroundColor="Green"
+                            TextColor="White"
+                            FontSize="18"
+                            IsVisible="{Binding IsStartButtonVisible}"
+                            Clicked="StartButton_Clicked" />
+                        </VerticalStackLayout>
+                    </Frame>
+                    <ActivityIndicator x:Name="LoadingIndicator" IsVisible="False" IsRunning="{Binding IsVisible, Source={x:Reference LoadingIndicator}}" />
+
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
     </Grid>
 </ContentPage>

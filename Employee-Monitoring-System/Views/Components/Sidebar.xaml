@@ -4,28 +4,42 @@
              x:Class="Employee_Monitoring_System.Views.Components.Sidebar"
              BindingContext="{x:Static local:SidebarViewModel.Instance}">
 
-    <StackLayout BackgroundColor="#2C3E50" Padding="20" VerticalOptions="FillAndExpand">
+    <StackLayout BackgroundColor="#2C3E50" Padding="20" VerticalOptions="FillAndExpand" WidthRequest="250">
+
+        <!-- Dashboard Title -->
+        <Label Text="WorkHub" 
+           FontSize="24" 
+           FontAttributes="Bold" 
+           TextColor="White" 
+           HorizontalOptions="Center" 
+           Margin="0,10,0,20" />
 
         <!-- Dynamic Sidebar Buttons -->
-        <StackLayout BindableLayout.ItemsSource="{Binding SidebarItems}" Margin="10,20,10,20">
+        <StackLayout BindableLayout.ItemsSource="{Binding SidebarItems}" Margin="10,0,10,20">
             <BindableLayout.ItemTemplate>
                 <DataTemplate>
                     <Button Text="{Binding .}" 
-                            TextColor="White"
-                            BackgroundColor="{Binding ., Converter={StaticResource PageToColorConverter}}"
-                            FontAttributes="Bold"
-                            Padding="12"
-                            Margin="0,5"
-                            Command="{Binding NavigateCommand, Source={x:Static local:SidebarViewModel.Instance}}"
-                            CommandParameter="{Binding .}"/>
+                        TextColor="White"
+                        BackgroundColor="{Binding ., Converter={StaticResource PageToColorConverter}}"
+                        FontAttributes="Bold"
+                        Padding="12"
+                        Margin="0,5"
+                        Command="{Binding NavigateCommand, Source={x:Static local:SidebarViewModel.Instance}}"
+                        CommandParameter="{Binding .}"/>
                 </DataTemplate>
             </BindableLayout.ItemTemplate>
         </StackLayout>
 
         <!-- Logout Button -->
         <StackLayout VerticalOptions="EndAndExpand">
-            <Button Text="Logout" TextColor="White" BackgroundColor="#E74C3C" CornerRadius="20" Margin="20" Padding="12" Clicked="OnLogoutClicked"/>
+            <Button Text="Logout" 
+                TextColor="White" 
+                BackgroundColor="#E74C3C" 
+                CornerRadius="20" 
+                Margin="20" 
+                Padding="12" 
+                Clicked="OnLogoutClicked"/>
         </StackLayout>
-
     </StackLayout>
+
 </ContentView>

@@ -22,10 +22,15 @@
 
                 <Label Text="User Profile" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" />
 
+                <Label Text="Full Name:" FontSize="14"/>
                 <Entry x:Name="FullNameEntry" Placeholder="Full Name" IsReadOnly="false"/>
+                <Label Text="Email:" FontSize="14"/>
                 <Entry x:Name="EmailEntry" Placeholder="Email" IsReadOnly="false"/>
+                <Label Text="Role:" FontSize="14"/>
                 <Entry x:Name="RoleEntry" Placeholder="Role" IsReadOnly="True"/>
+                <Label Text="Branch:" FontSize="14"/>
                 <Entry x:Name="BranchEntry" Placeholder="Branch" IsReadOnly="True"/>
+                <Label Text="Phone NO.:" FontSize="14"/>
                 <Entry x:Name="PhoneNumberEntry" Placeholder="false"/>
 
                 <Label Text="Last Login:" FontSize="14"/>
