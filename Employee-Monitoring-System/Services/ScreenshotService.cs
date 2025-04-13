@@ -12,11 +12,13 @@ namespace Employee_Monitoring_System.Services
 {
     public class ScreenshotService
     {
+        private readonly TimeSpan _idleCheckInterval = TimeSpan.FromMinutes(1);
+        private readonly TimeSpan _idleThreshold = TimeSpan.FromMinutes(1);
         private readonly HttpClient _httpClient;
         private readonly string _apiUrl = "https://localhost:7227/api/Screenshots/UploadFile"; // API endpoint
         private readonly TimeSpan _captureInterval = TimeSpan.FromMinutes(1); // Capture every 5 minutes
         private bool _isRunning = false;
-
+        private bool _idleAlertShown = false;
         public ScreenshotService()
         {
             _httpClient = new HttpClient();
@@ -30,11 +32,23 @@ namespace Employee_Monitoring_System.Services
             // Show alert message only once when the process starts
             await Application.Current.MainPage.DisplayAlert("Screenshot Capturing", "Screenshot capturing has started.", "OK");
 
-            while (_isRunning)
+            _ = Task.Run(async () =>
             {
-                await CaptureAndUploadScreenshot();
-                await Task.Delay(_captureInterval); // Wait before capturing next screenshot
-            }
+                while (_isRunning)
+                {
+                    await CaptureAndUploadScreenshot();
+                    await Task.Delay(_captureInterval);
+                }
+            });
+
+            _ = Task.Run(async () =>
+            {
+                while (_isRunning)
+                {
+                    CheckIdleTime();
+                    await Task.Delay(_idleCheckInterval);
+                }
+            });
         }
 
         public void StopCapturing()
@@ -58,6 +72,27 @@ namespace Employee_Monitoring_System.Services
             catch (Exception ex)
             {
                 Console.WriteLine($"Error capturing screenshot: {ex.Message}");
+            }
+        }
+
+        private void CheckIdleTime()
+        {
+            var idleTime = IdleTimeDetector.GetIdleTime();
+
+            if (idleTime >= _idleThreshold)
+            {
+                if (!_idleAlertShown)
+                {
+                    _idleAlertShown = true;
+                    MainThread.BeginInvokeOnMainThread(async () =>
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Idle Alert", "You have been idle for over 10 minutes.", "OK");
+                    });
+                }
+            }
+            else
+            {
+                _idleAlertShown = false; // Reset if user becomes active again
             }
         }
 

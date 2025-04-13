@@ -19,7 +19,7 @@
         </Grid>
 
         <!-- Notification Icon -->
-        <Image Source="notification_icon.png" WidthRequest="20" HeightRequest="20" 
+        <Image Source="bell.png" WidthRequest="20" HeightRequest="20" 
            Grid.Column="3" VerticalOptions="Center" Margin="40,0,0,0">
             <Image.GestureRecognizers>
                 <TapGestureRecognizer Tapped="OnNotificationIconTapped" />
