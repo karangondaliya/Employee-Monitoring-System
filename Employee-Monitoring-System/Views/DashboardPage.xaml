@@ -82,63 +82,57 @@
                          AdditionalText="+1 from last week"
                          Grid.Column="1" />
                     </HorizontalStackLayout>
-                    <Frame BackgroundColor="{DynamicResource CardBackgroundColor}"
-                           CornerRadius="10"
-                           Padding="20"
-                           Margin="10">
-                        <VerticalStackLayout Spacing="10">
-                            <!-- Title -->
-                            <Label Text="Tracking Mode"
-                               FontSize="20"
+                    <Grid RowDefinitions="Auto, *, Auto" BackgroundColor="#121212" Padding="20">
+                        <!-- Header -->
+                        <Label Text="Tracking Mode"
+                               FontSize="24"
                                FontAttributes="Bold"
-                               TextColor="{DynamicResource PrimaryTextColor}" />
+                               TextColor="White"
+                               Margin="10,20,10,10" />
 
-                            <!-- Card Content -->
-                            <Grid ColumnDefinitions="*, *" RowDefinitions="Auto" HorizontalOptions="Center">
-                                <!-- Zero Click Mode -->
-                                <StackLayout IsVisible="{Binding IsZeroClickMode}"
-                                     BackgroundColor="Green"
-                                     Padding="15"
-                                     Margin="5">
-                                    <Image Source="zero_click_icon.png" WidthRequest="30" HeightRequest="30" />
-                                    <Label Text="Zero Click Mode"
-                                           FontSize="18"
-                                           FontAttributes="Bold"
-                                           HorizontalOptions="Center"
-                                           TextColor="Black" />
-                                    <Label Text="Automatic screenshot tracking"
-                                           FontSize="12"
-                                           TextColor="White"
-                                           HorizontalOptions="Center"/>
-                                </StackLayout>
+                        <VerticalStackLayout x:Name="AdminViewZeroClick" IsVisible="False" />
+                        <VerticalStackLayout x:Name="TeamLeaderViewZeroClick" IsVisible="False" />
+                        <VerticalStackLayout x:Name="EmployeeViewZeroClick" IsVisible="False" />
 
-                                <!-- Timer Mode -->
-                                <StackLayout IsVisible="{Binding IsTimerMode}"
-                                         BackgroundColor="LightGray"
-                                         Padding="15"
-                                         Margin="5">
-                                    <Image Source="timer_icon.png" WidthRequest="30" HeightRequest="30" />
-                                    <Label Text="Timer Mode"
-                                           HorizontalTextAlignment="Center"
+
+                        <!-- Timer Mode Info -->
+                        <Frame BackgroundColor="#E0E0E0"
+                               CornerRadius="10"
+                               Padding="10"
+                               HorizontalOptions="Center"
+                               Margin="0,10">
+                            <StackLayout>
+                                <Image Source="timer_icon.png"
+                                       HeightRequest="40"
+                                       HorizontalOptions="Center"/>
+                                <Label Text="Timer Mode"
                                        FontSize="18"
                                        FontAttributes="Bold"
-                                       TextColor="Black" />
-                                    <Label Text="Manual Tracking"
-                                           FontSize="12"
-                                           HorizontalTextAlignment="Center"
-                                           TextColor="Black" />
-                                </StackLayout>
-                            </Grid>
+                                       HorizontalOptions="Center"/>
+                                <Label Text="Manual Tracking"
+                                       FontSize="14"
+                                       TextColor="Gray"
+                                       HorizontalOptions="Center"/>
+                            </StackLayout>
+                        </Frame>
 
-                            <!-- Start Button -->
-                            <Button Text="Start Tracking"
-                            BackgroundColor="Green"
-                            TextColor="White"
-                            FontSize="18"
-                            IsVisible="{Binding IsStartButtonVisible}"
-                            Clicked="StartButton_Clicked" />
-                        </VerticalStackLayout>
-                    </Frame>
+                        <!-- Tracking Button -->
+                        <Button x:Name="StartTrackingButton"
+                                Grid.Row="2"
+                                Text="Start Tracking"
+                                ImageSource="play_icon.png"
+                                BackgroundColor="#1DB954"
+                                TextColor="White"
+                                FontSize="20"
+                                CornerRadius="30"
+                                Padding="20"
+                                Margin="0,40"
+                                HeightRequest="80"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                Clicked="StartButton_Clicked"/>
+                    </Grid>
+
                     <ActivityIndicator x:Name="LoadingIndicator" IsVisible="False" IsRunning="{Binding IsVisible, Source={x:Reference LoadingIndicator}}" />
 
                 </VerticalStackLayout>

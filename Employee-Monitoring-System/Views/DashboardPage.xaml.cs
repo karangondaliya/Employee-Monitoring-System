@@ -7,13 +7,15 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Employee_Monitoring_System.Models;
 using Employee_Monitoring_System.Services;
-using Employee_Monitoring_System.Views.Components; // Import for CardComponent
+using Employee_Monitoring_System.Views.Components;
+using Microsoft.Maui.Controls.Compatibility; // Import for CardComponent
 
 namespace Employee_Monitoring_System.Views
 {
     public partial class DashboardPage : ContentPage
     {
         private readonly HttpClient _httpClient;
+        private bool _isTrackingActive = false;
         private ScreenshotService _screenshotService;
 
         public bool IsZeroClickMode { get; set; }
@@ -182,7 +184,10 @@ namespace Employee_Monitoring_System.Views
                 Icon = "leaves_icon.png", // Replace with your actual image file
                 AdditionalText = $"+1 from last week"
             });
-
+            if (IsZeroClickMode)
+            {
+                AddZeroClickModeCard(AdminViewZeroClick);
+            }
         }
 
         private async Task LoadTeamLeaderData()
@@ -209,6 +214,10 @@ namespace Employee_Monitoring_System.Views
                 Icon = "tasks_icon.png",
                 AdditionalText = $"+3 from last week"
             });
+            if (IsZeroClickMode)
+            {
+                AddZeroClickModeCard(TeamLeaderViewZeroClick);
+            }
         }
 
         private async Task LoadEmployeeData()
@@ -235,11 +244,48 @@ namespace Employee_Monitoring_System.Views
                 Icon = "leaves_icon.png",
                 AdditionalText = $"+1 from last week"
             });
+            if (IsZeroClickMode)
+            {
+                AddZeroClickModeCard(EmployeeViewZeroClick);
+            }
         }
 
-        private void StartButton_Clicked(object sender, EventArgs e)
+        private async void StartButton_Clicked(object sender, EventArgs e)
         {
-            _screenshotService.StartCapturingAsync();
+            var button = sender as Button;
+
+            if (!_isTrackingActive)
+            {
+                await _screenshotService.StartCapturingAsync();
+                button.Text = "Stop Tracking";
+                button.ImageSource = "pause_icon.png";
+                button.BackgroundColor = Colors.Red;
+                _isTrackingActive = true;
+            }
+            else
+            {
+                _screenshotService.StopCapturing();
+                button.Text = "Start Tracking";
+                button.ImageSource = "play_icon.png";
+                button.BackgroundColor = Color.FromArgb("#1DB954");
+                _isTrackingActive = false;
+            }
         }
+
+        private void AddZeroClickModeCard(VerticalStackLayout targetView)
+        {
+            if (IsZeroClickMode)
+            {
+                targetView.Children.Add(new CardComponent
+                {
+                    Title = "Zero-Click Mode",
+                    Value = "Active",
+                    Icon = "zero_click_icon.png", // Add a new icon file for this if needed
+                    AdditionalText = "Screenshots are being captured automatically."
+                });
+            }
+        }
+
+
     }
 }

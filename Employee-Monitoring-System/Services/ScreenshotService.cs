@@ -30,16 +30,21 @@ namespace Employee_Monitoring_System.Services
             _isRunning = true;
 
             // Show alert message only once when the process starts
-            await Application.Current.MainPage.DisplayAlert("Screenshot Capturing", "Screenshot capturing has started.", "OK");
+            await Application.Current.MainPage.DisplayAlert("Tracking Started", "Screenshot capturing & Idle Detection has started.", "OK");
 
             _ = Task.Run(async () =>
             {
                 while (_isRunning)
                 {
-                    await CaptureAndUploadScreenshot();
+                    await MainThread.InvokeOnMainThreadAsync(async () =>
+                    {
+                        await CaptureAndUploadScreenshot();
+                    });
+
                     await Task.Delay(_captureInterval);
                 }
             });
+
 
             _ = Task.Run(async () =>
             {
@@ -84,10 +89,10 @@ namespace Employee_Monitoring_System.Services
                 if (!_idleAlertShown)
                 {
                     _idleAlertShown = true;
-                    MainThread.BeginInvokeOnMainThread(async () =>
-                    {
-                        await Application.Current.MainPage.DisplayAlert("Idle Alert", "You have been idle for over 10 minutes.", "OK");
-                    });
+                    Console.WriteLine("User has been idle for over 10 minutes.");
+
+                    // You can set a global flag/property and reflect it in UI if needed
+                    // OR use a non-intrusive toast/badge instead
                 }
             }
             else
@@ -95,6 +100,7 @@ namespace Employee_Monitoring_System.Services
                 _idleAlertShown = false; // Reset if user becomes active again
             }
         }
+
 
         private async Task UploadScreenshot(byte[] imageBytes)
         {
