@@ -79,6 +79,10 @@ namespace Employee_Monitoring_System.ViewModels
             {
                 await Shell.Current.GoToAsync("//LeaveRequestPage");
             }
+            if(item.Title is "My Projects" or "Projects" or "Manage Projects")
+            {
+                await Shell.Current.GoToAsync("//ProjectsPage");
+            }
             else
             {
                 await Shell.Current.GoToAsync($"//{ActivePage}");

@@ -21,7 +21,7 @@
             <!-- Main Content -->
             <ScrollView Grid.Row="1" Padding="20">
                 <VerticalStackLayout Spacing="20">
-                    <Label x:Name="DashboardTitle" FontSize="24" FontAttributes="Bold" TextColor="{DynamicResource PrimaryTextColor}" />
+                    <Label x:Name="DashboardTitle" FontSize="24" FontAttributes="Bold" TextColor="{DynamicResource PrimaryDarkText}" />
 
                     <HorizontalStackLayout x:Name="AdminView"
                        IsVisible="False"
@@ -82,56 +82,77 @@
                          AdditionalText="+1 from last week"
                          Grid.Column="1" />
                     </HorizontalStackLayout>
-                    <Grid RowDefinitions="Auto, *, Auto" BackgroundColor="#121212" Padding="20">
-                        <!-- Header -->
-                        <Label Text="Tracking Mode"
-                               FontSize="24"
-                               FontAttributes="Bold"
-                               TextColor="White"
-                               Margin="10,20,10,10" />
+                    <Frame BorderColor="Black"
+                           CornerRadius="16"
+                           Padding="0"
+                           HasShadow="False"
+                           Margin="20">
 
-                        <VerticalStackLayout x:Name="AdminViewZeroClick" IsVisible="False" />
-                        <VerticalStackLayout x:Name="TeamLeaderViewZeroClick" IsVisible="False" />
-                        <VerticalStackLayout x:Name="EmployeeViewZeroClick" IsVisible="False" />
+                        <Grid RowDefinitions="Auto, *, Auto"
+                                  BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                  Padding="20">
 
+                            <!-- Header -->
+                            <Label Text="Tracking Mode"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryDarkText}"
+                                   Margin="10,20,10,10" />
 
-                        <!-- Timer Mode Info -->
-                        <Frame BackgroundColor="#E0E0E0"
-                               CornerRadius="10"
-                               Padding="10"
-                               HorizontalOptions="Center"
-                               Margin="0,10">
-                            <StackLayout>
-                                <Image Source="timer_icon.png"
-                                       HeightRequest="40"
-                                       HorizontalOptions="Center"/>
-                                <Label Text="Timer Mode"
-                                       FontSize="18"
+                            <!-- Zero Click Sections -->
+                            <VerticalStackLayout x:Name="AdminViewZeroClick" IsVisible="False" />
+                            <VerticalStackLayout x:Name="TeamLeaderViewZeroClick" IsVisible="False" />
+                            <VerticalStackLayout x:Name="EmployeeViewZeroClick" IsVisible="False" />
+
+                            <!-- Timer Mode Info -->
+                            <Frame BackgroundColor="{DynamicResource InfoCardBackgroundColor}"
+                                   BorderColor="{DynamicResource FrameBorderColor}"
+                                   HasShadow="True"
+                                   CornerRadius="16"
+                                   Padding="20"
+                                   Margin="0,20"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"
+                                   WidthRequest="180">
+
+                                <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                                    <Image Source="timer_icon.png"
+                                           HeightRequest="40"
+                                           WidthRequest="40"
+                                           HorizontalOptions="Center" />
+
+                                    <Label Text="Timer Mode"
+                                       FontSize="16"
                                        FontAttributes="Bold"
-                                       HorizontalOptions="Center"/>
-                                <Label Text="Manual Tracking"
-                                       FontSize="14"
-                                       TextColor="Gray"
-                                       HorizontalOptions="Center"/>
-                            </StackLayout>
-                        </Frame>
+                                       TextColor="{DynamicResource PrimaryDarkText}"
+                                       HorizontalOptions="Center" />
 
-                        <!-- Tracking Button -->
-                        <Button x:Name="StartTrackingButton"
-                                Grid.Row="2"
-                                Text="Start Tracking"
-                                ImageSource="play_icon.png"
-                                BackgroundColor="#1DB954"
-                                TextColor="White"
-                                FontSize="20"
-                                CornerRadius="30"
-                                Padding="20"
-                                Margin="0,40"
-                                HeightRequest="80"
-                                HorizontalOptions="Center"
-                                VerticalOptions="Center"
-                                Clicked="StartButton_Clicked"/>
-                    </Grid>
+                                    <Label Text="Manual Tracking"
+                                           FontSize="13"
+                                           TextColor="{DynamicResource SecondaryDarkText}"
+                                           HorizontalOptions="Center" />
+                                </VerticalStackLayout>
+                            </Frame>
+
+                            <!-- Tracking Button -->
+                            <Button x:Name="StartTrackingButton"
+                                    Grid.Row="2"
+                                    Text="Start Tracking"
+                                    ImageSource="play_icon.png"
+                                    BackgroundColor="Green"
+                                    TextColor="{DynamicResource ButtonTextColor}"
+                                    FontSize="20"
+                                    CornerRadius="30"
+                                    Padding="20"
+                                    Margin="0,40"
+                                    HeightRequest="80"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"
+                                    Clicked="StartButton_Clicked"/>
+                        </Grid>
+                    </Frame>
+
+
 
                     <ActivityIndicator x:Name="LoadingIndicator" IsVisible="False" IsRunning="{Binding IsVisible, Source={x:Reference LoadingIndicator}}" />
 

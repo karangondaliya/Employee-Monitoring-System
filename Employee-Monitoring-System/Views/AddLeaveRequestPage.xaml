@@ -1,22 +1,49 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:Employee_Monitoring_System.Views.Components"
              x:Class="Employee_Monitoring_System.Views.AddLeaveRequestPage"
              BackgroundColor="{DynamicResource PageBackgroundColor}">
 
-    <VerticalStackLayout Padding="20" Spacing="20">
-        <Label Text="New Leave Request" FontSize="24" FontAttributes="Bold" TextColor="{DynamicResource PrimaryTextColor}" />
+    <Grid ColumnDefinitions="250, *" RowDefinitions="*">
+        <!-- Sidebar (full height) -->
+        <ContentView Grid.Row="0" Grid.Column="0" BackgroundColor="{DynamicResource SidebarBackgroundColor}">
+            <controls:Sidebar />
+        </ContentView>
 
-        <Label Text="Leave Type:" FontSize="14"/>
-        <Entry Placeholder="Leave Type (Sick, Casual, etc.)" x:Name="LeaveTypeEntry" />
-        <Label Text="Start Date:" FontSize="14" />
-        <DatePicker x:Name="StartDatePicker" />
-        <Label Text="End Date:" FontSize="14" />
-        <DatePicker x:Name="EndDatePicker" />
+        <!-- Right Side (Navbar top, content below) -->
+        <Grid Grid.Row="0" Grid.Column="1" RowDefinitions="Auto, *">
+            <!-- Navbar -->
+            <ContentView Grid.Row="0">
+                <controls:Navbar />
+            </ContentView>
 
-        <Button Text="Submit Request"
-                BackgroundColor="Green"
-                TextColor="White"
-                Clicked="OnSubmitLeaveRequestClicked"/>
-    </VerticalStackLayout>
+            <!-- Main Content -->
+            <ScrollView Grid.Row="1" Padding="20">
+                <VerticalStackLayout Spacing="20">
+
+                    <Label Text="New Leave Request"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           TextColor="{DynamicResource PrimaryTextColor}" />
+
+                    <Label Text="Leave Type:" FontSize="14"/>
+                    <Entry Placeholder="Leave Type (Sick, Casual, etc.)"
+                           x:Name="LeaveTypeEntry" />
+
+                    <Label Text="Start Date:" FontSize="14"/>
+                    <DatePicker x:Name="StartDatePicker" />
+
+                    <Label Text="End Date:" FontSize="14"/>
+                    <DatePicker x:Name="EndDatePicker" />
+
+                    <Button Text="Submit Request"
+                            BackgroundColor="Green"
+                            TextColor="White"
+                            Clicked="OnSubmitLeaveRequestClicked" />
+
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+    </Grid>
 </ContentPage>

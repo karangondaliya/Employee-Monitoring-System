@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Employee_Monitoring_System.Views.Components"
+             xmlns:vm="clr-namespace:Employee_Monitoring_System.ViewModels"
+             x:Class="Employee_Monitoring_System.Views.ProjectsPage"
+             BackgroundColor="{DynamicResource PageBackgroundColor}">
+
+    <ContentPage.BindingContext>
+        <vm:ProjectsViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid ColumnDefinitions="250, *" RowDefinitions="*">
+        <!-- Sidebar -->
+        <ContentView Grid.Row="0" Grid.Column="0" BackgroundColor="{DynamicResource SidebarBackgroundColor}">
+            <local:Sidebar />
+        </ContentView>
+
+        <!-- Right Side: Navbar and Main Content -->
+        <Grid Grid.Row="0" Grid.Column="1" RowDefinitions="Auto, *">
+            <!-- Navbar -->
+            <ContentView Grid.Row="0">
+                <local:Navbar />
+            </ContentView>
+
+            <!-- Main Content -->
+            <ScrollView Grid.Row="1" Padding="20">
+                <VerticalStackLayout Spacing="20">
+                    <!-- Title Section -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Projects"
+                               FontSize="32"
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}" />
+                        <Label Text="Manage and track all company projects"
+                               FontSize="16"
+                               TextColor="{DynamicResource SecondaryTextColor}" />
+                    </VerticalStackLayout>
+
+                    <!-- Search and Filter Section -->
+                    <HorizontalStackLayout Spacing="20">
+                        <!-- Search Bar -->
+                        <SearchBar Placeholder="Search projects..."
+                                   Text="{Binding SearchQuery}"
+                                   HorizontalOptions="FillAndExpand" />
+
+                        <!-- Status Filter -->
+                        <Picker Title="All Statuses"
+                                ItemsSource="{Binding Statuses}"
+                                SelectedItem="{Binding SelectedStatus}"
+                                WidthRequest="150" />
+
+                        <!-- New Project Button (Admin Only) -->
+                        <Button Text="+ New Project"
+                                FontSize="16"
+                                BackgroundColor="Green"
+                                TextColor="White"
+                                CornerRadius="8"
+                                IsVisible="{Binding IsAdmin}"
+                                Command="{Binding NewProjectCommand}"
+                                HorizontalOptions="End" />
+                    </HorizontalStackLayout>
+
+                    <!-- Projects Section -->
+                    <CollectionView ItemsSource="{Binding Projects}"
+                                    Margin="0,20,0,0"
+                                    ItemsLayout="VerticalGrid, 2">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Padding="15"
+                                       CornerRadius="12"
+                                       Margin="10"
+                                       HasShadow="True"
+                                       BackgroundColor="{DynamicResource CardBackgroundColor}">
+                                    <VerticalStackLayout Spacing="10">
+                                        <!-- Project Title -->
+                                        <Label Text="{Binding Title}"
+                                               FontSize="20"
+                                               FontAttributes="Bold"
+                                               TextColor="{DynamicResource PrimaryTextColor}" />
+                                        <!-- Project Description -->
+                                        <Label Text="{Binding Description}"
+                                               FontSize="14"
+                                               TextColor="{DynamicResource SecondaryTextColor}" />
+
+                                        <!-- Progress Bar and Deadline -->
+                                        <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto" Margin="0,10,0,0">
+                                            <!-- Progress -->
+                                            <VerticalStackLayout>
+                                                <Label Text="Progress"
+                                                       FontSize="12"
+                                                       TextColor="{DynamicResource SecondaryTextColor}" />
+                                                <ProgressBar Progress="{Binding ProgressPercentage}"
+                                                             HeightRequest="6"
+                                                             BackgroundColor="{DynamicResource ProgressBarBackgroundColor}"
+                                                             ProgressColor="Green" />
+                                            </VerticalStackLayout>
+
+                                            <!-- Deadline -->
+                                            <VerticalStackLayout HorizontalOptions="End">
+                                                <Label Text="Deadline"
+                                                       FontSize="12"
+                                                       TextColor="{DynamicResource SecondaryTextColor}" />
+                                                <Label Text="{Binding Deadline, StringFormat='{0:MMM dd, yyyy}'}"
+                                                       FontSize="14"
+                                                       TextColor="{DynamicResource PrimaryTextColor}" />
+                                            </VerticalStackLayout>
+                                        </Grid>
+
+                                        <!-- Team -->
+                                        <VerticalStackLayout>
+                                            <Label Text="Team"
+                                                   FontSize="12"
+                                                   TextColor="{DynamicResource SecondaryTextColor}" />
+                                            <Label Text="{Binding Team}"
+                                                   FontSize="14"
+                                                   TextColor="{DynamicResource PrimaryTextColor}" />
+                                        </VerticalStackLayout>
+
+                                        <!-- View Details -->
+                                        <Button Text="View Details →"
+                                                FontSize="14"
+                                                TextColor="White"
+                                                BackgroundColor="{DynamicResource ButtonBackgroundColor}"
+                                                Command="{Binding ViewDetailsCommand}"
+                                                CommandParameter="{Binding}" />
+                                    </VerticalStackLayout>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>

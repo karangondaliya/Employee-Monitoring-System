@@ -10,7 +10,7 @@
     <Color x:Key="PrimaryDark">#ac99ea</Color>
     <Color x:Key="PrimaryDarkText">#242424</Color>
     <Color x:Key="Secondary">#DFD8F7</Color>
-    <Color x:Key="SecondaryDarkText">#9880e5</Color>
+    <Color x:Key="SecondaryDarkText">black</Color>
     <Color x:Key="Tertiary">#2B0B98</Color>
 
     <Color x:Key="White">White</Color>
@@ -18,8 +18,15 @@
     <Color x:Key="Magenta">#D600AA</Color>
     <Color x:Key="MidnightBlue">#190649</Color>
     <Color x:Key="OffBlack">#1f1f1f</Color>
+    <!-- Light Mode Colors -->
+    <Color x:Key="FrameBorderColor">black</Color>
+    <Color x:Key="InfoCardBackgroundColor">#FFFFFF</Color>
+
+    <Color x:Key="PageBackgroundColor">#F2F4F8</Color>
+    <Color x:Key="SidebarBackgroundColor">#FFFFFF</Color>
 
     <Color x:Key="Gray100">#E1E1E1</Color>
+    <Color x:Key="CardBackgroundColor">#FFFFFF</Color>
     <Color x:Key="Gray200">#C8C8C8</Color>
     <Color x:Key="Gray300">#ACACAC</Color>
     <Color x:Key="Gray400">#919191</Color>
