@@ -62,7 +62,7 @@ namespace Employee_Monitoring_System.Views
                     StartDate = leaveRequest.StartDate;
                     EndDate = leaveRequest.EndDate;
                     Status = leaveRequest.Status;
-                    ApproverId = leaveRequest.ApproverId;
+                    ApproverId = leaveRequest.ApprovedById;
 
                     OnPropertyChanged(nameof(LeaveType));
                     OnPropertyChanged(nameof(StartDate));

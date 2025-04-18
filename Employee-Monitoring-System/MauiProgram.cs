@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Employee_Monitoring_System.Services;
+using Microsoft.Extensions.Logging;
 
 namespace Employee_Monitoring_System
 {
@@ -14,6 +15,7 @@ namespace Employee_Monitoring_System
                     fonts.AddFont("SegoeUIVariable.ttf", "SegoeUI");
                 });
             builder.Services.AddSingleton<HttpClient>(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7227/") });
+            builder.Services.AddSingleton<HolidayService>();
 
 
 #if DEBUG

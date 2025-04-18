@@ -24,10 +24,10 @@
             </ContentView>
 
             <!-- Main Content -->
-            <ScrollView Grid.Row="1" Padding="20">
-                <VerticalStackLayout Spacing="20">
+            <ScrollView Grid.Row="1">
+                <Grid Padding="24" RowDefinitions="Auto, Auto, *">
                     <!-- Title Section -->
-                    <VerticalStackLayout Spacing="5">
+                    <VerticalStackLayout Grid.Row="0" Spacing="8" Margin="0,0,0,20">
                         <Label Text="Projects"
                                FontSize="32"
                                FontAttributes="Bold"
@@ -38,98 +38,186 @@
                     </VerticalStackLayout>
 
                     <!-- Search and Filter Section -->
-                    <HorizontalStackLayout Spacing="20">
-                        <!-- Search Bar -->
-                        <SearchBar Placeholder="Search projects..."
-                                   Text="{Binding SearchQuery}"
-                                   HorizontalOptions="FillAndExpand" />
+                    <Grid Grid.Row="1" ColumnDefinitions="*, Auto, Auto" Margin="0,0,0,24">
+                        <!-- Search Bar with improved border -->
+                        <Border Grid.Column="0"
+                                Stroke="#CCCCCC"
+                                StrokeThickness="1"
+                                BackgroundColor="#F5F5F5"
+                                StrokeShape="RoundRectangle 8">
+                            <SearchBar Placeholder="Search projects..."
+                                       Text="{Binding SearchQuery}"
+                                       BackgroundColor="Transparent"
+                                       Margin="5,0" />
+                        </Border>
+
+                        <!-- Status Filter with improved border -->
+                        <Border Grid.Column="1"
+                                Stroke="#CCCCCC"
+                                StrokeThickness="1"
+                                BackgroundColor="#F5F5F5"
+                                StrokeShape="RoundRectangle 8"
+                                Margin="12,0,0,0"
+                                WidthRequest="170">
+                            <Picker Title="All Statuses"
+                                    ItemsSource="{Binding Statuses}"
+                                    SelectedItem="{Binding SelectedStatus}"
+                                    Margin="10,0" />
+                        </Border>
 
                         <!-- Status Filter -->
-                        <Picker Title="All Statuses"
-                                ItemsSource="{Binding Statuses}"
-                                SelectedItem="{Binding SelectedStatus}"
-                                WidthRequest="150" />
+                        <Frame Grid.Column="1" 
+                               Margin="12,0,0,0" 
+                               Padding="0"
+                               BorderColor="Transparent"
+                               BackgroundColor="#F5F5F5"
+                               CornerRadius="8"
+                               HasShadow="False"
+                               WidthRequest="170">
+                            <Picker Title="All Statuses"
+                                    ItemsSource="{Binding Statuses}"
+                                    SelectedItem="{Binding SelectedStatus}"
+                                    Margin="10,0" />
+                        </Frame>
 
                         <!-- New Project Button (Admin Only) -->
-                        <Button Text="+ New Project"
-                                FontSize="16"
-                                BackgroundColor="Green"
+                        <Button Grid.Column="2" 
+                                Text="+ New Project"
+                                FontSize="14"
+                                FontAttributes="Bold"
+                                BackgroundColor="#4CAF50"
                                 TextColor="White"
                                 CornerRadius="8"
+                                HeightRequest="45"
+                                Margin="12,0,0,0"
                                 IsVisible="{Binding IsAdmin}"
-                                Command="{Binding NewProjectCommand}"
-                                HorizontalOptions="End" />
-                    </HorizontalStackLayout>
+                                Command="{Binding NewProjectCommand}" />
+                    </Grid>
 
-                    <!-- Projects Section -->
-                    <CollectionView ItemsSource="{Binding Projects}"
-                                    Margin="0,20,0,0"
-                                    ItemsLayout="VerticalGrid, 2">
+                    <!-- Projects Section - Fixed 2-column Grid -->
+                    <CollectionView x:Name="ProjectsCollectionView"
+                                    Grid.Row="2"
+                                    ItemsSource="{Binding Projects}">
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout Orientation="Vertical" 
+                                             Span="2" 
+                                             HorizontalItemSpacing="16" 
+                                             VerticalItemSpacing="16" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.EmptyView>
+                            <VerticalStackLayout VerticalOptions="Center" 
+                                                HorizontalOptions="Center" 
+                                                Spacing="20">
+                                <Label Text="No projects found"
+                                       FontSize="20"
+                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                       HorizontalOptions="Center" />
+                                <Label Text="Try changing your search criteria or create a new project"
+                                       FontSize="16"
+                                       TextColor="{DynamicResource SecondaryTextColor}"
+                                       HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                        </CollectionView.EmptyView>
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Frame Padding="15"
+                                <!-- Project Card -->
+                                <Frame Padding="0"
                                        CornerRadius="12"
-                                       Margin="10"
                                        HasShadow="True"
-                                       BackgroundColor="{DynamicResource CardBackgroundColor}">
-                                    <VerticalStackLayout Spacing="10">
-                                        <!-- Project Title -->
-                                        <Label Text="{Binding Title}"
-                                               FontSize="20"
-                                               FontAttributes="Bold"
-                                               TextColor="{DynamicResource PrimaryTextColor}" />
-                                        <!-- Project Description -->
-                                        <Label Text="{Binding Description}"
-                                               FontSize="14"
-                                               TextColor="{DynamicResource SecondaryTextColor}" />
+                                       BorderColor="#EAEAEA"
+                                       BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                       HeightRequest="380">
+                                    <Grid RowDefinitions="Auto, *">
+                                        <!-- Color Strip at Top -->
+                                        <BoxView Grid.Row="0" 
+                                                 HeightRequest="8" 
+                                                 BackgroundColor="#4CAF50" />
 
-                                        <!-- Progress Bar and Deadline -->
-                                        <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto" Margin="0,10,0,0">
-                                            <!-- Progress -->
-                                            <VerticalStackLayout>
-                                                <Label Text="Progress"
-                                                       FontSize="12"
-                                                       TextColor="{DynamicResource SecondaryTextColor}" />
-                                                <ProgressBar Progress="{Binding ProgressPercentage}"
-                                                             HeightRequest="6"
-                                                             BackgroundColor="{DynamicResource ProgressBarBackgroundColor}"
-                                                             ProgressColor="Green" />
-                                            </VerticalStackLayout>
+                                        <!-- Card Content -->
+                                        <VerticalStackLayout Grid.Row="1" 
+                                                             Spacing="16" 
+                                                             Padding="20,16,20,20">
+                                            <!-- Project Title -->
+                                            <Label Text="{Binding Title}"
+                                                   FontSize="20"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{DynamicResource PrimaryTextColor}" />
 
-                                            <!-- Deadline -->
-                                            <VerticalStackLayout HorizontalOptions="End">
-                                                <Label Text="Deadline"
-                                                       FontSize="12"
+                                            <!-- Project Description -->
+                                            <Label Text="{Binding Description}"
+                                                   FontSize="14"
+                                                   LineBreakMode="WordWrap"
+                                                   TextColor="{DynamicResource SecondaryTextColor}" />
+
+                                            <!-- Progress Bar and Deadline -->
+                                            <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto" Margin="0,6,0,0">
+                                                <!-- Progress -->
+                                                <VerticalStackLayout Grid.Column="0" Spacing="6">
+                                                    <Grid ColumnDefinitions="*, Auto">
+                                                        <Label Grid.Column="0"
+                                                               Text="Progress"
+                                                               FontSize="13"
+                                                               TextColor="{DynamicResource SecondaryTextColor}" />
+                                                        <Label Grid.Column="1"
+                                                               Text="{Binding ProgressPercentage, StringFormat='{0:P0}'}"
+                                                               FontAttributes="Bold"
+                                                               FontSize="13"
+                                                               TextColor="{DynamicResource PrimaryTextColor}" />
+                                                    </Grid>
+                                                    <Frame Padding="0" 
+                                                           BorderColor="Transparent"
+                                                           BackgroundColor="#F0F0F0"
+                                                           CornerRadius="4"
+                                                           HeightRequest="8"
+                                                           HasShadow="False">
+                                                        <ProgressBar Progress="{Binding ProgressPercentage}"
+                                                                     HeightRequest="8"
+                                                                     BackgroundColor="Transparent"
+                                                                     ProgressColor="#4CAF50" />
+                                                    </Frame>
+                                                </VerticalStackLayout>
+
+                                                <!-- Deadline -->
+                                                <VerticalStackLayout Grid.Column="1" 
+                                                                     HorizontalOptions="End" 
+                                                                     Spacing="6">
+                                                    <Label Text="Deadline"
+                                                           FontSize="13"
+                                                           TextColor="{DynamicResource SecondaryTextColor}" />
+                                                    <Label Text="{Binding Deadline, StringFormat='{0:MMM dd, yyyy}'}"
+                                                           FontAttributes="Bold"
+                                                           FontSize="14"
+                                                           TextColor="{DynamicResource PrimaryTextColor}" />
+                                                </VerticalStackLayout>
+                                            </Grid>
+
+                                            <!-- Team -->
+                                            <VerticalStackLayout Spacing="6">
+                                                <Label Text="Team"
+                                                       FontSize="13"
                                                        TextColor="{DynamicResource SecondaryTextColor}" />
-                                                <Label Text="{Binding Deadline, StringFormat='{0:MMM dd, yyyy}'}"
+                                                <Label Text="{Binding Team}"
                                                        FontSize="14"
                                                        TextColor="{DynamicResource PrimaryTextColor}" />
                                             </VerticalStackLayout>
-                                        </Grid>
 
-                                        <!-- Team -->
-                                        <VerticalStackLayout>
-                                            <Label Text="Team"
-                                                   FontSize="12"
-                                                   TextColor="{DynamicResource SecondaryTextColor}" />
-                                            <Label Text="{Binding Team}"
-                                                   FontSize="14"
-                                                   TextColor="{DynamicResource PrimaryTextColor}" />
+                                            <!-- View Details -->
+                                            <Button Text="View Details"
+                                                    FontSize="14"
+                                                    TextColor="White"
+                                                    BackgroundColor="#5C6BC0"
+                                                    CornerRadius="8"
+                                                    HeightRequest="40"
+                                                    Margin="0,8,0,0"
+                                                    Command="{Binding ViewDetailsCommand}"
+                                                    CommandParameter="{Binding}" />
                                         </VerticalStackLayout>
-
-                                        <!-- View Details -->
-                                        <Button Text="View Details →"
-                                                FontSize="14"
-                                                TextColor="White"
-                                                BackgroundColor="{DynamicResource ButtonBackgroundColor}"
-                                                Command="{Binding ViewDetailsCommand}"
-                                                CommandParameter="{Binding}" />
-                                    </VerticalStackLayout>
+                                    </Grid>
                                 </Frame>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
-                </VerticalStackLayout>
+                </Grid>
             </ScrollView>
         </Grid>
     </Grid>

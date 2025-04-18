@@ -8,106 +8,87 @@ using Microsoft.Maui.Storage;
 using Newtonsoft.Json;
 using Employee_Monitoring_System.Models;
 using System.Diagnostics;
+using System.Windows.Input;
+using Employee_Monitoring_System.ViewModels;
 
 namespace Employee_Monitoring_System.Views
 {
     public partial class LeaveRequestPage : ContentPage
     {
-        private readonly HttpClient _httpClient;
-        public ObservableCollection<LeaveRequest> LeaveRequests { get; set; } = new ObservableCollection<LeaveRequest>();
+        private readonly LeaveRequestViewModel _viewModel;
 
         public LeaveRequestPage()
         {
             InitializeComponent();
-            _httpClient = new HttpClient { BaseAddress = new Uri("https://localhost:7227/api/") };
-            LoadLeaveRequests();
-            BindingContext = this;  // Binding to UI
-        }
-        private async void LoadLeaveRequests()
-        {
-            try
-            {
-                string token = await SecureStorage.GetAsync("auth_token");
-                if (string.IsNullOrEmpty(token))
-                {
-                    await DisplayAlert("Error", "Authentication required. Please log in again.", "OK");
-                    return;
-                }
 
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                int Id = int.Parse(await SecureStorage.GetAsync("UserId"));
-                var response = await _httpClient.GetAsync($"LeaveRequests/GetByUserId/{Id}");
+            // Initialize ViewModel and set as BindingContext
+            _viewModel = new LeaveRequestViewModel();
+            BindingContext = _viewModel;
 
-                if (response.IsSuccessStatusCode)
-                {
-                    var json = await response.Content.ReadAsStringAsync();
-                    var leaveRequests = JsonConvert.DeserializeObject<List<LeaveRequest>>(json);
-
-                    LeaveRequests.Clear();
-                    foreach (var leave in leaveRequests)
-                    {
-                        LeaveRequests.Add(leave);
-                    }
-                }
-                else
-                {
-                    await DisplayAlert("Error", "Failed to fetch leave requests.", "OK");
-                }
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
-            }
+            // Set the initial tab as selected
+            UpdateTabSelection("MyRequests");
         }
 
-        private async void OnAddLeaveRequestClicked(object sender, EventArgs e)
+        protected override async void OnAppearing()
         {
-            await Navigation.PushAsync(new AddLeaveRequestPage());
+            base.OnAppearing();
+            await _viewModel.LoadLeaveRequests();
         }
 
-        private async void OnEditClicked(object sender, EventArgs e)
+        private void OnAddLeaveRequestClicked(object sender, EventArgs e)
         {
-            var button = sender as Button;
-            var leaveRequest = button?.BindingContext as LeaveRequest;
-            if (leaveRequest == null) return;
-            Debug.WriteLine($"Fetching Leave Request ID: {leaveRequest.Id}");
-            await Navigation.PushAsync(new EditLeaveRequestPage(leaveRequest.Id));
+            Navigation.PushAsync(new AddLeaveRequestPage());
         }
 
-        private async void OnDeleteClicked(object sender, EventArgs e)
+        private async void OnMyRequestsTabClicked(object sender, EventArgs e)
         {
-            var button = sender as Button;
-            var leaveRequest = button?.BindingContext as LeaveRequest;
-            if (leaveRequest == null) return;
+            UpdateTabSelection("MyRequests");
+            _viewModel.CurrentTab = "MyRequests";
+            await _viewModel.LoadLeaveRequests();
+        }
 
-            bool confirm = await DisplayAlert("Confirm", "Are you sure you want to delete this leave request?", "Yes", "No");
-            if (!confirm) return;
+        private async void OnTeamRequestsTabClicked(object sender, EventArgs e)
+        {
+            UpdateTabSelection("TeamRequests");
+            _viewModel.CurrentTab = "TeamRequests";
+            await _viewModel.LoadTeamRequests();
+        }
 
-            try
+        private void OnLeavePolicyTabClicked(object sender, EventArgs e)
+        {
+            UpdateTabSelection("LeavePolicy");
+            _viewModel.CurrentTab = "LeavePolicy";
+            // Show coming soon message since we don't have this page yet
+            Application.Current.MainPage.DisplayAlert("Coming Soon", "Leave policy view will be available in a future update.", "OK");
+        }
+
+        private void UpdateTabSelection(string selectedTab)
+        {
+            // Reset all tabs
+            MyRequestsTab.BackgroundColor = Colors.Transparent;
+            MyRequestsTab.TextColor = Color.Parse("#303846");
+
+            TeamRequestsTab.BackgroundColor = Colors.Transparent;
+            TeamRequestsTab.TextColor = Color.Parse("#303846");
+
+            LeavePolicyTab.BackgroundColor = Colors.Transparent;
+            LeavePolicyTab.TextColor = Color.Parse("#303846");
+
+            // Set the selected tab
+            switch (selectedTab)
             {
-                string token = await SecureStorage.GetAsync("auth_token");
-                if (string.IsNullOrEmpty(token))
-                {
-                    await DisplayAlert("Error", "Authentication required. Please log in again.", "OK");
-                    return;
-                }
-
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                var response = await _httpClient.DeleteAsync($"LeaveRequests/{leaveRequest.Id}");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    LeaveRequests.Remove(leaveRequest);
-                    await DisplayAlert("Success", "Leave request deleted successfully.", "OK");
-                }
-                else
-                {
-                    await DisplayAlert("Error", "Failed to delete leave request.", "OK");
-                }
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
+                case "MyRequests":
+                    MyRequestsTab.BackgroundColor = Color.Parse("#303846");
+                    MyRequestsTab.TextColor = Colors.White;
+                    break;
+                case "TeamRequests":
+                    TeamRequestsTab.BackgroundColor = Color.Parse("#303846");
+                    TeamRequestsTab.TextColor = Colors.White;
+                    break;
+                case "LeavePolicy":
+                    LeavePolicyTab.BackgroundColor = Color.Parse("#303846");
+                    LeavePolicyTab.TextColor = Colors.White;
+                    break;
             }
         }
     }

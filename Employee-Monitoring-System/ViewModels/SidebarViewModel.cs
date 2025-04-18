@@ -73,22 +73,43 @@ namespace Employee_Monitoring_System.ViewModels
             if (item == null || string.IsNullOrWhiteSpace(item.Title))
                 return;
 
-            ActivePage = item.Title.ToLower();
+            ActivePage = item.Title;
 
-            if (item.Title is "My Leaves" or "View Leaves" or "Manage Leaves")
+            try
             {
-                await Shell.Current.GoToAsync("//LeaveRequestPage");
+                // Use a more straightforward approach for navigation
+                if (item.Title == "My Leaves" || item.Title == "View Leaves" || item.Title == "Manage Leaves")
+                {
+                    await Shell.Current.GoToAsync("//LeaveRequestPage");
+                }
+                else if (item.Title == "My Projects" || item.Title == "Projects" || item.Title == "Manage Projects")
+                {
+                    await Shell.Current.GoToAsync("//ProjectsPage");
+                }
+                else if (item.Title == "Dashboard")
+                {
+                    // Navigate to dashboard - could be the root or a specific page
+                    await Shell.Current.GoToAsync("//dashboard");
+                }
+                else
+                {
+                    // For all other pages, try to navigate using a standard format
+                    string pageName = item.Title.Replace(" ", "").Replace("-", "") + "Page";
+                    await Shell.Current.GoToAsync($"//{pageName}");
+                    System.Diagnostics.Debug.WriteLine($"Navigating to: //{pageName}");
+                }
             }
-            if(item.Title is "My Projects" or "Projects" or "Manage Projects")
+            catch (Exception ex)
             {
-                await Shell.Current.GoToAsync("//ProjectsPage");
-            }
-            else
-            {
-                await Shell.Current.GoToAsync($"//{ActivePage}");
+                // Log navigation error
+                System.Diagnostics.Debug.WriteLine($"Navigation error: {ex.Message}");
+
+                // Show a user-friendly message
+                await Shell.Current.DisplayAlert("Navigation Error",
+                    $"Unable to navigate to {item.Title} page. Please check the route is registered in AppShell.xaml.",
+                    "OK");
             }
         }
-
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)

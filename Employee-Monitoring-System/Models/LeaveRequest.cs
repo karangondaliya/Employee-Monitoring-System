@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Employee_Monitoring_System.Models
 {
@@ -13,9 +9,10 @@ namespace Employee_Monitoring_System.Models
         public string LeaveType { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public string Description { get; set; } // Instead of Reason
         public string Status { get; set; }
-        public string? Remark { get; set; }
-        public DateTime RequestedDate { get; set; } = DateTime.UtcNow;
-        public int? ApproverId { get; set; }
+        public int? ApprovedById { get; set; } // Instead of ApprovedBy as string
+        public string ApproverName { get; set; } // For display purposes
+        public DateTime CreatedDate { get; set; }
     }
 }
