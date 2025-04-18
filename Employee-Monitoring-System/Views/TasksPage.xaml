@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Employee_Monitoring_System.Views.Components"
+             x:Class="Employee_Monitoring_System.Views.TasksPage"
+             xmlns:viewmodels="clr-namespace:Employee_Monitoring_System.ViewModels"
+             BackgroundColor="#F5F7FA">
+
+    <ContentPage.BindingContext>
+        <viewmodels:TasksPageViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid ColumnDefinitions="250, *" RowDefinitions="*">
+        <!-- Sidebar (FULL HEIGHT) -->
+        <ContentView Grid.Row="0" Grid.Column="0" BackgroundColor="#1A2035">
+            <local:Sidebar />
+        </ContentView>
+
+        <!-- Right Side: Contains Navbar at Top, Body Below -->
+        <Grid Grid.Row="0" Grid.Column="1" RowDefinitions="Auto, *">
+            <!-- Navbar at Top -->
+            <ContentView Grid.Row="0" BackgroundColor="White">
+                <local:Navbar />
+            </ContentView>
+
+            <!-- Main Content -->
+            <ScrollView Grid.Row="1" Padding="25">
+                <Grid RowDefinitions="Auto,*,Auto">
+                    <!-- Header -->
+                    <VerticalStackLayout Grid.Row="0" Spacing="5" Margin="0,0,0,15">
+                        <Label Text="Employee Tasks" FontSize="28" FontAttributes="Bold" TextColor="#333" HorizontalOptions="Start"/>
+                        <Label Text="Manage and Track Your Assigned Tasks" HorizontalOptions="Start" FontSize="14" TextColor="#666"/>
+
+                        <Frame BorderColor="#E0E0E0" Padding="10" Margin="0,15,0,10" HasShadow="False" CornerRadius="8" BackgroundColor="White">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Entry Placeholder="Search tasks..." Text="{Binding SearchText}" Grid.Column="0" 
+                                       BackgroundColor="Transparent" PlaceholderColor="#AAA"/>
+                                <Button Text="Search" Command="{Binding SearchCommand}" Grid.Column="1" 
+                                        BackgroundColor="Green" TextColor="White" CornerRadius="6" 
+                                        HeightRequest="40" FontAttributes="Bold"/>
+                            </Grid>
+                        </Frame>
+
+                        <Grid ColumnDefinitions="*,*,*" Margin="0,5,0,10">
+                            <Button Text="All Tasks" Command="{Binding FilterCommand}" CommandParameter="All" 
+            BackgroundColor="{Binding AllTasksFilterColor, FallbackValue=#4361EE}" 
+            TextColor="#4361EE" Grid.Column="0" Margin="2" BorderColor="#4361EE" BorderWidth="1" CornerRadius="6" HeightRequest="40" FontAttributes="Bold"/>
+                            <Button Text="In Progress" Command="{Binding FilterCommand}" CommandParameter="InProgress" 
+            BackgroundColor="{Binding InProgressFilterColor, FallbackValue=#FFFFFF}" 
+            TextColor="#4361EE" Grid.Column="1" Margin="2" BorderColor="#4361EE" BorderWidth="1"
+            CornerRadius="6" HeightRequest="40" FontAttributes="Bold"/>
+                            <Button Text="Completed" Command="{Binding FilterCommand}" CommandParameter="Completed"
+            BackgroundColor="{Binding CompletedFilterColor, FallbackValue=#FFFFFF}" 
+            TextColor="#4361EE" Grid.Column="2" Margin="2" BorderColor="#4361EE" BorderWidth="1"
+            CornerRadius="6" HeightRequest="40" FontAttributes="Bold"/>
+                        </Grid>
+                    </VerticalStackLayout>
+
+                    <!-- Tasks List -->
+                    <RefreshView Grid.Row="1" IsRefreshing="{Binding IsBusy}" Command="{Binding LoadTasksCommand}">
+                        <CollectionView ItemsSource="{Binding FilteredTasks}" SelectionMode="Single"
+                                        SelectionChangedCommand="{Binding TaskSelectedCommand}"
+                                        SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}">
+                            <CollectionView.EmptyView>
+                                <Grid VerticalOptions="Center" HorizontalOptions="Center" RowDefinitions="Auto,Auto" RowSpacing="15">
+                                    <Image Source="no_tasks.png" HeightRequest="120" WidthRequest="120" Grid.Row="0" 
+                                           HorizontalOptions="Center" Opacity="0.7"/>
+                                    <Label Text="No tasks available" FontSize="18" TextColor="#666" Grid.Row="1"
+                                           HorizontalOptions="Center" FontAttributes="Bold"/>
+                                </Grid>
+                            </CollectionView.EmptyView>
+
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame Margin="0,6" BorderColor="#E0E0E0" Padding="20" HasShadow="False" 
+                                           CornerRadius="10" BackgroundColor="White">
+                                        <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto" RowSpacing="10">
+                                            <!-- Task Title and Due Date -->
+                                            <Label Text="{Binding Title}" FontSize="18" FontAttributes="Bold" 
+                                                   TextColor="#333" Grid.Row="0" Grid.Column="0"/>
+
+                                            <Label Grid.Row="0" Grid.Column="1" TextColor="#666">
+                                                <Label.Text>
+                                                    <MultiBinding StringFormat="Due: {0:MMM dd, yyyy}">
+                                                        <Binding Path="DueDate"/>
+                                                    </MultiBinding>
+                                                </Label.Text>
+                                            </Label>
+
+                                            <!-- Description -->
+                                            <Label Text="{Binding Description}" TextColor="#666" LineBreakMode="TailTruncation" 
+                                                   MaxLines="2" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" 
+                                                   Margin="0,0,0,5"/>
+
+                                            <!-- Status, Priority, and Assigned To -->
+                                            <HorizontalStackLayout Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Spacing="12">
+                                                <Frame Padding="12,6" BackgroundColor="#EDE7F6" BorderColor="Transparent" CornerRadius="20">
+                                                    <Label Text="{Binding Status}" TextColor="#5E35B1" FontSize="13" FontAttributes="Bold"/>
+                                                </Frame>
+
+                                                <Frame Padding="12,6" BackgroundColor="#E3F2FD" BorderColor="Transparent" CornerRadius="20">
+                                                    <Label Text="{Binding Priority}" TextColor="#1976D2" FontSize="13" FontAttributes="Bold"/>
+                                                </Frame>
+
+                                                <Label HorizontalOptions="EndAndExpand" TextColor="#666" VerticalOptions="Center">
+                                                    <Label.Text>
+                                                        <MultiBinding StringFormat="Assigned to: {0}">
+                                                            <Binding Path="AssignedTo"/>
+                                                        </MultiBinding>
+                                                    </Label.Text>
+                                                </Label>
+                                            </HorizontalStackLayout>
+                                        </Grid>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </RefreshView>
+
+                    <!-- Add Task Button -->
+                    <Button Grid.Row="2" Text="+ Add New Task" Command="{Binding AddTaskCommand}" 
+                            BackgroundColor="Green" TextColor="White" Margin="0,20,0,10"
+                            CornerRadius="30" Padding="25,15" FontSize="16" 
+                            HorizontalOptions="Center" FontAttributes="Bold" 
+                            HeightRequest="60" WidthRequest="220"/>
+                </Grid>
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>

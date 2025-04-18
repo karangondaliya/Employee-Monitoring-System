@@ -21,5 +21,7 @@
     <ShellContent ContentTemplate="{DataTemplate local:AddLeaveRequestPage}" Route="AddLeaveRequestPage" />
     <ShellContent ContentTemplate="{DataTemplate local:ProjectsPage}" Route="ProjectsPage" />
     <ShellContent ContentTemplate="{DataTemplate local:EditLeaveRequestPage}" Route="EditLeaveRequestPage" />
+    <!-- Add this inside the TabBar or ShellContent section of your AppShell.xaml -->
+    <ShellContent ContentTemplate="{DataTemplate local:TasksPage}" Route="TasksPage" />
 </Shell>
     

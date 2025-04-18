@@ -91,6 +91,10 @@ namespace Employee_Monitoring_System.ViewModels
                     // Navigate to dashboard - could be the root or a specific page
                     await Shell.Current.GoToAsync("//dashboard");
                 }
+                else if(item.Title == "Manage Tasks" || item.Title == "My Tasks") 
+                {
+                    await Shell.Current.GoToAsync("//TasksPage");
+                }
                 else
                 {
                     // For all other pages, try to navigate using a standard format
