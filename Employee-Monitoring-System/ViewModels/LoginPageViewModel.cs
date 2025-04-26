@@ -18,6 +18,9 @@ namespace Employee_Monitoring_System
         {
             _httpClient = new HttpClient { BaseAddress = new Uri("https://localhost:7227/api/Users/") };
             LoginCommand = new Command(async () => await LoginAsync());
+
+            // Simple cleanup for new login
+            Preferences.Set("ForceRefreshSidebar", true);
         }
 
         private string _email;
@@ -56,6 +59,7 @@ namespace Employee_Monitoring_System
 
             try
             {
+                System.Diagnostics.Debug.WriteLine($"Attempting login for: {Email}");
                 var response = await _httpClient.PostAsJsonAsync("login", loginRequest);
 
                 if (response.IsSuccessStatusCode)
@@ -64,13 +68,18 @@ namespace Employee_Monitoring_System
 
                     if (loginResponse != null)
                     {
-                        // Save token and user role securely
-                        await SecureStorage.SetAsync("auth_token", loginResponse.Token);
-                        Preferences.Set("UserRole", loginResponse.Role);
-                        await SecureStorage.SetAsync("UserId", loginResponse.Id.ToString());
+                        System.Diagnostics.Debug.WriteLine($"Login successful. User ID: {loginResponse.Id}, Role: {loginResponse.Role}");
 
-                        // Navigate to DashboardPage
-                        await Shell.Current.GoToAsync(nameof(DashboardPage));
+                        // Save token and user data
+                        await SecureStorage.SetAsync("auth_token", loginResponse.Token);
+                        await SecureStorage.SetAsync("UserId", loginResponse.Id.ToString());
+                        Preferences.Set("UserRole", loginResponse.Role);
+
+                        // Force sidebar refresh
+                        Preferences.Set("ForceRefreshSidebar", true);
+
+                        // Navigate to dashboard
+                        await Shell.Current.GoToAsync("//DashboardPage");
                     }
                     else
                     {
@@ -84,9 +93,9 @@ namespace Employee_Monitoring_System
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"Login error: {ex.Message}");
                 await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
             }
         }
     }
-
 }

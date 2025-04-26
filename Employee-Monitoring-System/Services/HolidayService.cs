@@ -18,7 +18,7 @@ namespace Employee_Monitoring_System.Services
         public HolidayService(IPreferences preferences)
         {
             _httpClient = new HttpClient();
-            _baseUrl = "https://your-api-url.com/api/Holidays"; // Replace with your actual API URL
+            _baseUrl = "https://localhost:7227/api/Holidays"; // Replace with your actual API URL
             _preferences = preferences;
 
             // Set the default headers for the HttpClient

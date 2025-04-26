@@ -99,13 +99,6 @@
                         </VerticalStackLayout>
                     </VerticalStackLayout>
 
-                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
-                        <CheckBox Grid.Column="0" Color="{StaticResource AccentColor}"/>
-                        <Label Grid.Column="1" Text="Remember me"
-                               TextColor="{StaticResource SecondaryText}"
-                               VerticalOptions="Center"/>
-                    </Grid>
-
                     <Button Text="Log In"
                             BackgroundColor="{StaticResource AccentColor}"
                             Command="{Binding LoginCommand}"

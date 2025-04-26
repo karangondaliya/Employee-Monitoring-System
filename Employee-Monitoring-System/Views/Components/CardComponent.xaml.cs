@@ -41,10 +41,7 @@ namespace Employee_Monitoring_System.Views.Components
         public CardComponent()
         {
             InitializeComponent();
-            this.BindingContextChanged += (s, e) =>
-            {
-                Console.WriteLine($"CardComponent Data - Title: {Title}, Value: {Value}, Icon: {Icon}, AdditionalText: {AdditionalText}");
-            };
+            BindingContext = this; // Ensure BindingContext is set to the CardComponent
         }
     }
 }

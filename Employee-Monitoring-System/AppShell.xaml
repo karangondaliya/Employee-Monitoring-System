@@ -4,16 +4,17 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:Employee_Monitoring_System.Views"
+    xmlns:views="clr-namespace:Employee_Monitoring_System.Views.Components"
     Shell.FlyoutBehavior="Disabled"
     Title="WorkHub">
 
-    <!--<ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />-->
+    <!-- We need to move the sidebar reference to within the Shell's content structure -->
+    <Shell.FlyoutContent>
+        <views:Sidebar x:Name="sidebar" />
+    </Shell.FlyoutContent>
 
     <ShellContent Title="Login" ContentTemplate="{DataTemplate local:LoginPage}" Route="LoginPage"/>
-    <ShellContent ContentTemplate="{DataTemplate local:DashboardPage}" Route="dashboard"/>
+    <ShellContent ContentTemplate="{DataTemplate local:DashboardPage}" Route="DashboardPage"/>
     <ShellContent ContentTemplate="{DataTemplate local:UserProfilePage}" Route="UserProfilePage" />
     <ShellContent ContentTemplate="{DataTemplate local:UpdatePasswordPage}" Route="UpdatePasswordPage" />
     <ShellContent ContentTemplate="{DataTemplate local:NotificationsPage}" Route="NotificationsPage" />
@@ -21,7 +22,7 @@
     <ShellContent ContentTemplate="{DataTemplate local:AddLeaveRequestPage}" Route="AddLeaveRequestPage" />
     <ShellContent ContentTemplate="{DataTemplate local:ProjectsPage}" Route="ProjectsPage" />
     <ShellContent ContentTemplate="{DataTemplate local:EditLeaveRequestPage}" Route="EditLeaveRequestPage" />
-    <!-- Add this inside the TabBar or ShellContent section of your AppShell.xaml -->
     <ShellContent ContentTemplate="{DataTemplate local:TasksPage}" Route="TasksPage" />
+    <ShellContent ContentTemplate="{DataTemplate local:EmployeesPage}" Route="EmployeesPage" />
+
 </Shell>
-    

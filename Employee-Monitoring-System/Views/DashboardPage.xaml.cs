@@ -157,7 +157,7 @@ namespace Employee_Monitoring_System.Views
             {
                 Title = "Total Employees",
                 Value = $"{employees?.Count ?? 0}",
-                Icon = "employee_icon.png", // Replace with your actual image file
+                Icon = "group.png", // Replace with your actual image file
                 AdditionalText = $"+5 from last week"
             });
 
@@ -165,7 +165,7 @@ namespace Employee_Monitoring_System.Views
             {
                 Title = "Total Projects",
                 Value = $"{projects?.Count ?? 0}",
-                Icon = "project_icon.png", // Replace with your actual image file
+                Icon = "project.png", // Replace with your actual image file
                 AdditionalText = $"+2 from last week"
             });
 
@@ -173,7 +173,7 @@ namespace Employee_Monitoring_System.Views
             {
                 Title = "Total Tasks",
                 Value = $"{tasks?.Count ?? 0}",
-                Icon = "tasks_icon.png", // Replace with your actual image file
+                Icon = "clipboard.png", // Replace with your actual image file
                 AdditionalText = $"-1 from last week"
             });
 
@@ -181,7 +181,7 @@ namespace Employee_Monitoring_System.Views
             {
                 Title = "Total Leaves",
                 Value = $"{leaves?.Count ?? 0}",
-                Icon = "leaves_icon.png", // Replace with your actual image file
+                Icon = "calendar.png", // Replace with your actual image file
                 AdditionalText = $"+1 from last week"
             });
             if (IsZeroClickMode)
@@ -203,7 +203,7 @@ namespace Employee_Monitoring_System.Views
             {
                 Title = "Total Projects",
                 Value = $"{projects?.Count ?? 0}",
-                Icon = "project_icon.png",
+                Icon = "project.png",
                 AdditionalText = $"+2 from last week"
             });
 
@@ -211,7 +211,7 @@ namespace Employee_Monitoring_System.Views
             {
                 Title = "Pending Tasks",
                 Value = $"{tasks?.Count ?? 0}",
-                Icon = "tasks_icon.png",
+                Icon = "clipboard.png",
                 AdditionalText = $"+3 from last week"
             });
             if (IsZeroClickMode)
@@ -233,7 +233,7 @@ namespace Employee_Monitoring_System.Views
             {
                 Title = "Assigned Tasks",
                 Value = $"{tasks?.Count ?? 0}",
-                Icon = "tasks_icon.png",
+                Icon = "clipboard.png",
                 AdditionalText = $"+4 from last week"
             });
 
@@ -241,7 +241,7 @@ namespace Employee_Monitoring_System.Views
             {
                 Title = "Leaves Taken",
                 Value = $"{leaves?.Count ?? 0}",
-                Icon = "leaves_icon.png",
+                Icon = "calendar.png",
                 AdditionalText = $"+1 from last week"
             });
             if (IsZeroClickMode)
@@ -258,7 +258,7 @@ namespace Employee_Monitoring_System.Views
             {
                 await _screenshotService.StartCapturingAsync();
                 button.Text = "Stop Tracking";
-                button.ImageSource = "pause_icon.png";
+                button.ImageSource = "pause_icon_white.png";
                 button.BackgroundColor = Colors.Red;
                 _isTrackingActive = true;
             }
@@ -266,7 +266,7 @@ namespace Employee_Monitoring_System.Views
             {
                 _screenshotService.StopCapturing();
                 button.Text = "Start Tracking";
-                button.ImageSource = "play_icon.png";
+                button.ImageSource = "play_icon_white.png";
                 button.BackgroundColor = Color.FromArgb("#1DB954");
                 _isTrackingActive = false;
             }

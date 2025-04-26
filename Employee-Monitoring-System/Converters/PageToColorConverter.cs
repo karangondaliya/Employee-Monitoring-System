@@ -1,8 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using System;
-using System.Globalization;
-using Employee_Monitoring_System.ViewModels;
-using Employee_Monitoring_System.Models;
+﻿using System.Globalization;
 
 namespace Employee_Monitoring_System.Converters
 {
@@ -10,17 +6,23 @@ namespace Employee_Monitoring_System.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var item = value as SidebarItem;
-            var vm = SidebarViewModel.Instance;
+            // This converter checks if the current menu item is selected/active
 
-            if (item == null || vm == null || string.IsNullOrEmpty(vm.ActivePage))
+            if (value == null || parameter == null)
                 return Colors.Transparent;
 
-            return item.Title.ToLower() == vm.ActivePage.ToLower()
-                ? Color.FromArgb("#1ABC9C")
-                : Colors.Transparent;
-        }
+            var menuItem = value as Models.SidebarItem;
+            var activePage = parameter as string;
 
+            if (menuItem == null || string.IsNullOrEmpty(activePage))
+                return Colors.Transparent;
+
+            // If the title matches the active page, return a highlight color
+            if (menuItem.Title == activePage)
+                return Color.FromArgb("#2C5282"); // Deeper blue for selected item
+
+            return Colors.Transparent; // Default background
+        }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {

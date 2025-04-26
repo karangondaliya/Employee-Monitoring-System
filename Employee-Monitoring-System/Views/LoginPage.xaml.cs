@@ -1,16 +1,21 @@
-namespace Employee_Monitoring_System.Views;
+using Employee_Monitoring_System.Models;
+using Employee_Monitoring_System.ViewModels;
 
-public partial class LoginPage : ContentPage
+namespace Employee_Monitoring_System.Views
 {
-    public LoginPage()
+    public partial class LoginPage : ContentPage
     {
-        InitializeComponent();
-        BindingContext = new LoginPageViewModel();
+        public LoginPage()
+        {
+            InitializeComponent();
+            BindingContext = new LoginPageViewModel();
+        }
+
+        private async void OnUpdatePasswordTapped(object sender, EventArgs e)
+        {
+            // TODO: Implement forgot password logic
+            await Navigation.PushAsync(new UpdatePasswordPage());
+        }
     }
 
-    private async void OnUpdatePasswordTapped(object sender, EventArgs e)
-    {
-        // TODO: Implement forgot password logic
-        await Navigation.PushAsync(new UpdatePasswordPage());
-    }
 }

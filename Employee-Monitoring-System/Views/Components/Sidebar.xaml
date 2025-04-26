@@ -1,8 +1,7 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Employee_Monitoring_System.ViewModels"
-             x:Class="Employee_Monitoring_System.Views.Components.Sidebar"
-             BindingContext="{x:Static local:SidebarViewModel.Instance}">
+             x:Class="Employee_Monitoring_System.Views.Components.Sidebar">
 
     <Grid BackgroundColor="#1b263b"
           WidthRequest="250"
@@ -32,11 +31,13 @@
                         <DataTemplate>
                             <Grid Padding="10"
                                   ColumnDefinitions="Auto,*"
-                                  BackgroundColor="{Binding ., Converter={StaticResource PageToColorConverter}}">
+                                  BackgroundColor="{Binding ., Converter={StaticResource PageToColorConverter}, ConverterParameter={Binding Path=ActivePage, Source={RelativeSource AncestorType={x:Type local:SidebarViewModel}}}}"
+                                  Margin="0,2">
 
+                                <!-- Use a direct TapGestureRecognizer to execute the command -->
                                 <Grid.GestureRecognizers>
                                     <TapGestureRecognizer 
-                                        Command="{Binding NavigateCommand, Source={x:Static local:SidebarViewModel.Instance}}"
+                                        Command="{Binding Path=NavigateCommand, Source={RelativeSource AncestorType={x:Type local:SidebarViewModel}}}"
                                         CommandParameter="{Binding .}" />
                                 </Grid.GestureRecognizers>
 
@@ -58,25 +59,34 @@
             </VerticalStackLayout>
         </ScrollView>
 
-        <!-- Logout -->
         <!-- User Info + Logout Section -->
         <VerticalStackLayout Grid.Row="2" Spacing="20" Margin="0,30,0,0">
 
             <!-- User Info -->
             <Grid ColumnDefinitions="Auto,*"
                   Padding="5"
-                  BackgroundColor="Transparent">
+                  BackgroundColor="Transparent"
+                  IsVisible="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}">
 
-                <Frame Padding="5"
+                <!-- Add gesture recognizer to the entire grid -->
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnUserProfileTapped" />
+                </Grid.GestureRecognizers>
+
+                <!-- Profile Image -->
+                <Frame Padding="0"
                        CornerRadius="50"
                        WidthRequest="40"
                        HeightRequest="40"
-                       BackgroundColor="#2f3e46"
+                       BackgroundColor="Transparent"
                        HasShadow="False"
-                       VerticalOptions="Center">
-                    <Image Source="user_icon.png"
-                           WidthRequest="30"
-                           HeightRequest="30"
+                       BorderColor="White"
+                       VerticalOptions="Center"
+                       IsClippedToBounds="True">
+                    <Image Source="{Binding UserProfileImage}"
+                           WidthRequest="40"
+                           HeightRequest="40"
+                           Aspect="AspectFill"
                            HorizontalOptions="Center"
                            VerticalOptions="Center"/>
                 </Frame>
@@ -84,11 +94,11 @@
                 <StackLayout Grid.Column="1"
                              Margin="10,0,0,0"
                              VerticalOptions="Center">
-                    <Label Text="Jane Cooper"
+                    <Label Text="{Binding UserName}"
                            FontSize="14"
                            FontAttributes="Bold"
                            TextColor="White"/>
-                    <Label Text="Software Developer"
+                    <Label Text="{Binding UserRole}"
                            FontSize="12"
                            TextColor="#b0b8c1"/>
                 </StackLayout>

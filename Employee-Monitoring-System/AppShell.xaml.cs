@@ -1,23 +1,74 @@
-﻿using Employee_Monitoring_System;
-using Employee_Monitoring_System.Views;
+﻿using System;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Storage;
+using Employee_Monitoring_System.ViewModels;
+using Employee_Monitoring_System.Views.Components;
 
-namespace Employee_Monitoring_System;
-
-public partial class AppShell : Shell
+namespace Employee_Monitoring_System
 {
-    public AppShell()
+    public partial class AppShell : Shell
     {
-        InitializeComponent();
+        private Sidebar sidebarInstance;
 
-        Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
-        Routing.RegisterRoute(nameof(DashboardPage), typeof(DashboardPage));
-        Routing.RegisterRoute(nameof(UserProfilePage), typeof(UserProfilePage));
-        Routing.RegisterRoute(nameof(UpdatePasswordPage), typeof(UpdatePasswordPage));
-        Routing.RegisterRoute(nameof(NotificationsPage), typeof(NotificationsPage));
-        Routing.RegisterRoute(nameof(LeaveRequestPage), typeof(LeaveRequestPage));
-        Routing.RegisterRoute(nameof(AddLeaveRequestPage), typeof(AddLeaveRequestPage));
-        Routing.RegisterRoute(nameof(ProjectsPage), typeof(ProjectsPage));
-        // In AppShell.xaml.cs in the RegisterRoutes() method
-        Routing.RegisterRoute("TasksPage", typeof(Views.TasksPage));
+        public AppShell()
+        {
+            InitializeComponent();
+
+            // Register routes
+            Routing.RegisterRoute("LoginPage", typeof(Views.LoginPage));
+            Routing.RegisterRoute("DashboardPage", typeof(Views.DashboardPage));
+            Routing.RegisterRoute("UserProfilePage", typeof(Views.UserProfilePage));
+            Routing.RegisterRoute("UpdatePasswordPage", typeof(Views.UpdatePasswordPage));
+            Routing.RegisterRoute("NotificationsPage", typeof(Views.NotificationsPage));
+            Routing.RegisterRoute("LeaveRequestPage", typeof(Views.LeaveRequestPage));
+            Routing.RegisterRoute("AddLeaveRequestPage", typeof(Views.AddLeaveRequestPage));
+            Routing.RegisterRoute("ProjectsPage", typeof(Views.ProjectsPage));
+            Routing.RegisterRoute("EditLeaveRequestPage", typeof(Views.EditLeaveRequestPage));
+            Routing.RegisterRoute("TasksPage", typeof(Views.TasksPage));
+            Routing.RegisterRoute("EmployeesPage", typeof(Views.EmployeesPage));
+
+            // Store reference to sidebar
+            sidebarInstance = this.sidebar;
+        }
+
+        // Method to refresh the sidebar
+        public void RefreshSidebar()
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine($"[{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}] Manually refreshing sidebar");
+
+                if (sidebarInstance != null)
+                {
+                    // Force the sidebar to recreate with the current role
+                    sidebarInstance.BindingContext = SidebarViewModel.Create();
+                    System.Diagnostics.Debug.WriteLine("Sidebar refreshed successfully");
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("Sidebar reference is null");
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error refreshing sidebar: {ex.Message}");
+            }
+        }
+
+        protected override void OnNavigating(ShellNavigatingEventArgs args)
+        {
+            base.OnNavigating(args);
+
+            // Check if navigating to leaves page
+            // Fix: Convert Uri to string and then check if it contains LeaveRequestPage
+            if (args.Target.Location.ToString().Contains("LeaveRequestPage"))
+            {
+                System.Diagnostics.Debug.WriteLine($"Navigating to LeaveRequestPage, refreshing sidebar");
+
+                // Force sidebar refresh
+                Preferences.Set("ForceRefreshSidebar", true);
+                RefreshSidebar();
+            }
+        }
     }
 }

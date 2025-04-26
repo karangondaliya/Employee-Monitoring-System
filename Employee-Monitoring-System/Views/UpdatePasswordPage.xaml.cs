@@ -19,7 +19,7 @@ namespace Employee_Monitoring_System.Views
 
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(oldPassword) || string.IsNullOrEmpty(newPassword))
             {
-                await DisplayAlert("Error", "All fields are required.", "OK");
+                await DisplayAlert("Input Required", "Please fill in all fields to continue.", "OK");
                 return;
             }
 
@@ -39,19 +39,24 @@ namespace Employee_Monitoring_System.Views
 
                 if (response.IsSuccessStatusCode)
                 {
-                    await DisplayAlert("Success", "Password updated successfully!", "OK");
+                    await DisplayAlert("Success", "Your password has been updated successfully!", "OK");
                     await Navigation.PopAsync(); // Go back to login page
                 }
                 else
                 {
                     var responseMessage = await response.Content.ReadAsStringAsync();
-                    await DisplayAlert("Error", responseMessage, "OK");
+                    await DisplayAlert("Update Failed", responseMessage, "OK");
                 }
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
+                await DisplayAlert("Connection Error", $"Unable to update password: {ex.Message}", "OK");
             }
+        }
+
+        private async void OnCancelClicked(object sender, EventArgs e)
+        {
+            await Navigation.PopAsync(); // Return to previous page (login)
         }
     }
 }

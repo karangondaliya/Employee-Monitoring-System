@@ -16,6 +16,7 @@ namespace Employee_Monitoring_System.Views
     public partial class LeaveRequestPage : ContentPage
     {
         private readonly LeaveRequestViewModel _viewModel;
+        private bool isFirstLoad;
 
         public LeaveRequestPage()
         {
@@ -32,6 +33,31 @@ namespace Employee_Monitoring_System.Views
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+
+            try
+            {
+                // Get current role
+                string currentRole = Preferences.Get("UserRole", "Employee");
+                System.Diagnostics.Debug.WriteLine($"Leave page appearing with role: {currentRole}");
+
+                // Set flag for sidebar refresh
+                Preferences.Set("ForceRefreshSidebar", true);
+
+                // Try to refresh the sidebar through AppShell
+                if (Application.Current.MainPage is AppShell appShell)
+                {
+                    MainThread.BeginInvokeOnMainThread(() => {
+                        appShell.RefreshSidebar();
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error refreshing sidebar: {ex.Message}");
+            }
+
+            // Load leave data
+            isFirstLoad = true;
             await _viewModel.LoadLeaveRequests();
         }
 
@@ -91,5 +117,6 @@ namespace Employee_Monitoring_System.Views
                     break;
             }
         }
+
     }
 }

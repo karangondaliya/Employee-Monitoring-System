@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Employee_Monitoring_System.Views.Components"
+             xmlns:vm="clr-namespace:Employee_Monitoring_System.ViewModels"
+             xmlns:converters="clr-namespace:Employee_Monitoring_System.Converters"
+             x:Class="Employee_Monitoring_System.Views.EmployeesPage"
+             BackgroundColor="{DynamicResource PageBackgroundColor}">
+
+    <ContentPage.Resources>
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+    </ContentPage.Resources>
+
+    <ContentPage.BindingContext>
+        <vm:EmployeesViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid ColumnDefinitions="250, *" RowDefinitions="*">
+        <!-- Sidebar -->
+        <ContentView Grid.Row="0" Grid.Column="0" BackgroundColor="{DynamicResource SidebarBackgroundColor}">
+            <local:Sidebar />
+        </ContentView>
+
+        <!-- Right Side: Navbar and Main Content -->
+        <Grid Grid.Row="0" Grid.Column="1" RowDefinitions="Auto, *">
+            <!-- Navbar -->
+            <ContentView Grid.Row="0">
+                <local:Navbar />
+            </ContentView>
+
+            <!-- Main Content -->
+            <ScrollView Grid.Row="1">
+                <Grid Padding="24" RowDefinitions="Auto, Auto, *">
+                    <!-- Title Section -->
+                    <VerticalStackLayout Grid.Row="0" Spacing="8" Margin="0,0,0,20">
+                        <Label Text="Employees"
+                               FontSize="32"
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource PrimaryTextColor}" />
+                        <Label Text="Manage and track all company employees"
+                               FontSize="16"
+                               TextColor="{DynamicResource SecondaryTextColor}" />
+                    </VerticalStackLayout>
+
+                    <!-- Search and Filter Section -->
+                    <Grid Grid.Row="1" ColumnDefinitions="*, Auto, Auto" Margin="0,0,0,24">
+                        <!-- Search Bar -->
+                        <Border Grid.Column="0"
+                                Stroke="#CCCCCC"
+                                StrokeThickness="1"
+                                BackgroundColor="#F5F5F5"
+                                StrokeShape="RoundRectangle 8">
+                            <SearchBar Placeholder="Search employees..."
+                                       Text="{Binding SearchQuery}"
+                                       BackgroundColor="Transparent"
+                                       Margin="5,0" />
+                        </Border>
+
+                        <!-- Department Filter -->
+                        <Border Grid.Column="1"
+                                Stroke="#CCCCCC"
+                                StrokeThickness="1"
+                                BackgroundColor="#F5F5F5"
+                                StrokeShape="RoundRectangle 8"
+                                Margin="12,0,0,0"
+                                WidthRequest="170">
+                            <Picker Title="All Departments"
+                                    ItemsSource="{Binding Departments}"
+                                    SelectedItem="{Binding SelectedDepartment}"
+                                    Margin="10,0" />
+                        </Border>
+
+                        <!-- New Employee Button (Admin Only) -->
+                        <Button Grid.Column="2" 
+                                Text="+ New Employee"
+                                FontSize="14"
+                                FontAttributes="Bold"
+                                BackgroundColor="#4CAF50"
+                                TextColor="White"
+                                CornerRadius="8"
+                                HeightRequest="45"
+                                Margin="12,0,0,0"
+                                IsVisible="{Binding IsAdmin}"
+                                Command="{Binding NewEmployeeCommand}" />
+                    </Grid>
+
+                    <!-- Activity indicator -->
+                    <ActivityIndicator Grid.Row="2" 
+                                       IsVisible="{Binding IsLoading}"
+                                       IsRunning="{Binding IsLoading}"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center" />
+
+                    <!-- Employees Section - List View -->
+                    <RefreshView Grid.Row="2"
+                                 Command="{Binding RefreshCommand}"
+                                 IsRefreshing="{Binding IsLoading}">
+                        <CollectionView x:Name="EmployeesCollectionView"
+                                        ItemsSource="{Binding Employees}"
+                                        IsVisible="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Vertical" 
+                                                  ItemSpacing="16" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.EmptyView>
+                                <VerticalStackLayout VerticalOptions="Center" 
+                                                     HorizontalOptions="Center" 
+                                                     Spacing="20">
+                                    <Label Text="No employees found"
+                                           FontSize="20"
+                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                           HorizontalOptions="Center" />
+                                    <Label Text="Try changing your search criteria or add a new employee"
+                                           FontSize="16"
+                                           TextColor="{DynamicResource SecondaryTextColor}"
+                                           HorizontalOptions="Center" />
+                                </VerticalStackLayout>
+                            </CollectionView.EmptyView>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <!-- Employee Card -->
+                                    <Frame Padding="20"
+                                           CornerRadius="12"
+                                           HasShadow="True"
+                                           BorderColor="#EAEAEA"
+                                           BackgroundColor="{DynamicResource CardBackgroundColor}">
+                                        <Grid ColumnDefinitions="Auto, *, Auto" RowDefinitions="Auto, Auto"
+                                              ColumnSpacing="16" RowSpacing="12">
+
+                                            <!-- Profile Image (placeholder) -->
+                                            <Frame Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
+                                                   WidthRequest="60" HeightRequest="60"
+                                                   Padding="0" CornerRadius="30"
+                                                   IsClippedToBounds="True"
+                                                   BackgroundColor="#E0E0E0">
+                                                <Label Text="{Binding FirstName, Converter={StaticResource FirstLetterConverter}}"
+                                                       FontSize="24" FontAttributes="Bold"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center"
+                                                       TextColor="#757575" />
+                                            </Frame>
+
+                                            <!-- Name and Position -->
+                                            <StackLayout Grid.Row="0" Grid.Column="1" Spacing="4">
+                                                <Label Text="{Binding FullName}"
+                                                       FontSize="18" FontAttributes="Bold"
+                                                       TextColor="{DynamicResource PrimaryTextColor}" />
+                                                <Label Text="{Binding Position}"
+                                                       FontSize="14"
+                                                       TextColor="{DynamicResource SecondaryTextColor}" />
+                                            </StackLayout>
+
+                                            <!-- Department Badge -->
+                                            <Frame Grid.Row="0" Grid.Column="2"
+                                                   Padding="8,4" CornerRadius="6"
+                                                   BackgroundColor="#E3F2FD"
+                                                   BorderColor="Transparent"
+                                                   HorizontalOptions="End"
+                                                   VerticalOptions="Start">
+                                                <Label Text="{Binding Department}"
+                                                       FontSize="12" FontAttributes="Bold"
+                                                       TextColor="#1976D2" />
+                                            </Frame>
+
+                                            <!-- Contact Info -->
+                                            <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="1"
+                                                  ColumnDefinitions="Auto, *" ColumnSpacing="8">
+                                                <StackLayout Grid.Column="0" Spacing="8">
+                                                    <Label Text="Email:" FontSize="14" TextColor="#757575" />
+                                                    <Label Text="Phone:" FontSize="14" TextColor="#757575" />
+                                                </StackLayout>
+                                                <StackLayout Grid.Column="1" Spacing="8">
+                                                    <Label Text="{Binding Email}" FontSize="14" 
+                                                           TextColor="{DynamicResource PrimaryTextColor}" />
+                                                    <Label Text="{Binding Phone}" FontSize="14" 
+                                                           TextColor="{DynamicResource PrimaryTextColor}" />
+                                                </StackLayout>
+                                            </Grid>
+
+                                            <!-- View Details Button -->
+                                            <Button Grid.Row="1" Grid.Column="2"
+                                                    Text="View Details"
+                                                    FontSize="14"
+                                                    TextColor="White"
+                                                    BackgroundColor="#5C6BC0"
+                                                    CornerRadius="8"
+                                                    HeightRequest="40"
+                                                    Padding="16,0"
+                                                    HorizontalOptions="End"
+                                                    VerticalOptions="End"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:EmployeesViewModel}}, Path=ViewDetailsCommand}"
+                                                    CommandParameter="{Binding .}" />
+                                        </Grid>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </RefreshView>
+                </Grid>
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>

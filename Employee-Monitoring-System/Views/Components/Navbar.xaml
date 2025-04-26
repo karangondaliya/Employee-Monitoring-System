@@ -3,24 +3,28 @@
              x:Class="Employee_Monitoring_System.Views.Components.Navbar">
     <Grid BackgroundColor="#F9F9F9"
         ColumnDefinitions="*, Auto, Auto, Auto, Auto" 
-      Padding="10"
-      VerticalOptions="CenterAndExpand"
-      HeightRequest="60"
-      Margin="0,0,0,1">
-        <!-- Add bottom margin line -->
-        <!-- Removed WorkHub title -->
+        Padding="10"
+        VerticalOptions="CenterAndExpand"
+        HeightRequest="60"
+        Margin="0,0,0,1">
 
-        <!-- Dark Mode Toggle -->
-        <Label x:Name="DarkModeLabel" Text="Dark Mode" TextColor="Black"
-           Grid.Column="0" HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,10,0"/>
-        <Grid WidthRequest="50" Grid.Column="1">
-            <Switch x:Name="DarkModeToggle" IsToggled="True"
-                Toggled="OnDarkModeToggled" HorizontalOptions="End" VerticalOptions="Center" />
-        </Grid>
+        <!-- Dark Mode Toggle with Icons -->
+
+        <!-- Theme Toggle Image instead of Switch -->
+        <Image x:Name="ThemeToggleImage" 
+               Grid.Column="1"
+               WidthRequest="24" 
+               HeightRequest="24"
+               HorizontalOptions="End" 
+               VerticalOptions="Center">
+            <Image.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnThemeIconTapped" />
+            </Image.GestureRecognizers>
+        </Image>
 
         <!-- Notification Icon -->
         <Image Source="bell.png" WidthRequest="20" HeightRequest="20" 
-           Grid.Column="3" VerticalOptions="Center" Margin="40,0,0,0">
+               Grid.Column="3" VerticalOptions="Center" Margin="40,0,0,0">
             <Image.GestureRecognizers>
                 <TapGestureRecognizer Tapped="OnNotificationIconTapped" />
             </Image.GestureRecognizers>
@@ -28,11 +32,10 @@
 
         <!-- User Profile Icon -->
         <Image Source="user_profile_icon.png" WidthRequest="20" HeightRequest="20" 
-           Grid.Column="4" VerticalOptions="Center" Margin="40,0,20,0">
+               Grid.Column="4" VerticalOptions="Center" Margin="40,0,20,0">
             <Image.GestureRecognizers>
                 <TapGestureRecognizer Tapped="OnProfileImageTapped" />
             </Image.GestureRecognizers>
         </Image>
     </Grid>
-
 </ContentView>

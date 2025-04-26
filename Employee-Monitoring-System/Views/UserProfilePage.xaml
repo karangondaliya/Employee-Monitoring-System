@@ -1,45 +1,312 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Employee_Monitoring_System.Views.Components"
              x:Class="Employee_Monitoring_System.Views.UserProfilePage"
              BackgroundColor="{DynamicResource PageBackgroundColor}">
 
-    <Grid RowDefinitions="Auto, *" ColumnDefinitions="250, *">
-
-        <!-- Navbar -->
-        <ContentView Grid.Row="0" Grid.ColumnSpan="2">
-            <local:Navbar />
-        </ContentView>
-
-        <!-- Sidebar -->
-        <ContentView Grid.Row="1" Grid.Column="0" BackgroundColor="{DynamicResource SidebarBackgroundColor}" WidthRequest="250">
+    <Grid ColumnDefinitions="250, *" RowDefinitions="*">
+        <!-- Sidebar (FULL HEIGHT) -->
+        <ContentView Grid.Row="0" Grid.Column="0" BackgroundColor="{DynamicResource SidebarBackgroundColor}">
             <local:Sidebar />
         </ContentView>
 
-        <!-- Main Content -->
-        <ScrollView Grid.Row="1" Grid.Column="1" Padding="20">
-            <VerticalStackLayout Spacing="10">
+        <!-- Right Side: Contains Navbar at Top, Body Below -->
+        <Grid Grid.Row="0" Grid.Column="1" RowDefinitions="Auto, *">
+            <!-- Navbar at Top -->
+            <ContentView Grid.Row="0">
+                <local:Navbar />
+            </ContentView>
 
-                <Label Text="User Profile" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" />
+            <!-- Main Content -->
+            <Grid Grid.Row="1" RowDefinitions="*, Auto" Padding="25">
+                <!-- Content Area -->
+                <Grid Grid.Row="0" ColumnDefinitions="*, *" ColumnSpacing="25">
+                    <!-- Personal Information Card -->
+                    <Frame Grid.Column="0" 
+                           BorderColor="#EEEEEE"
+                           CornerRadius="10"
+                           Padding="20"
+                           HasShadow="False"
+                           BackgroundColor="White"
+                           VerticalOptions="Start">
 
-                <Label Text="Full Name:" FontSize="14"/>
-                <Entry x:Name="FullNameEntry" Placeholder="Full Name" IsReadOnly="false"/>
-                <Label Text="Email:" FontSize="14"/>
-                <Entry x:Name="EmailEntry" Placeholder="Email" IsReadOnly="false"/>
-                <Label Text="Role:" FontSize="14"/>
-                <Entry x:Name="RoleEntry" Placeholder="Role" IsReadOnly="True"/>
-                <Label Text="Branch:" FontSize="14"/>
-                <Entry x:Name="BranchEntry" Placeholder="Branch" IsReadOnly="True"/>
-                <Label Text="Phone NO.:" FontSize="14"/>
-                <Entry x:Name="PhoneNumberEntry" Placeholder="false"/>
+                        <VerticalStackLayout Spacing="20">
+                            <Label Text="Personal Information" 
+                                   FontSize="18" 
+                                   FontAttributes="Bold"
+                                   TextColor="#333333" />
 
-                <Label Text="Last Login:" FontSize="14"/>
-                <Label x:Name="LastLoginLabel" FontSize="14" FontAttributes="Bold"/>
+                            <!-- Profile Image -->
+                            <VerticalStackLayout HorizontalOptions="Center" Spacing="15" Margin="0,10">
+                                <Frame BorderColor="#EEEEEE"
+                                       HasShadow="False"
+                                       CornerRadius="75"
+                                       HeightRequest="150"
+                                       WidthRequest="150"
+                                       IsClippedToBounds="True"
+                                       Padding="0"
+                                       HorizontalOptions="Center">
+                                    <Image x:Name="ProfileImage"
+                                           Aspect="AspectFill"
+                                           WidthRequest="150"
+                                           HeightRequest="150"
+                                           Source="person.png"/>
+                                </Frame>
+                                <Button Text="Change Photo"
+                                        FontSize="14"
+                                        Clicked="OnChangePhotoClicked"
+                                        BackgroundColor="#6C47FF"
+                                        TextColor="White"
+                                        CornerRadius="5"
+                                        Padding="15,5"
+                                        WidthRequest="130"
+                                        HeightRequest="40"
+                                        HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
 
-                <Button Text="Update Profile" Clicked="OnUpdateProfileClicked" 
-                        BackgroundColor="Blue" TextColor="White"/>
-            </VerticalStackLayout>
-        </ScrollView>
+                            <!-- Personal Info Fields -->
+                            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" 
+                                  ColumnDefinitions="Auto,*" 
+                                  RowSpacing="20" 
+                                  ColumnSpacing="15">
 
+                                <!-- Full Name -->
+                                <Label Text="Full Name:" 
+                                       FontSize="14" 
+                                       FontAttributes="Bold"
+                                       TextColor="#333333"
+                                       VerticalOptions="Center"
+                                       Grid.Row="0" Grid.Column="0"/>
+                                <Entry x:Name="FullNameEntry" 
+                                       Placeholder="Full Name" 
+                                       PlaceholderColor="#AAAAAA"
+                                       TextColor="#333333"
+                                       Grid.Row="0" Grid.Column="1"/>
+
+                                <!-- Email -->
+                                <Label Text="Email:" 
+                                       FontSize="14" 
+                                       FontAttributes="Bold"
+                                       TextColor="#333333"
+                                       VerticalOptions="Center"
+                                       Grid.Row="1" Grid.Column="0"/>
+                                <Entry x:Name="EmailEntry" 
+                                       Placeholder="Email" 
+                                       PlaceholderColor="#AAAAAA"
+                                       TextColor="#333333"
+                                       Grid.Row="1" Grid.Column="1"/>
+
+                                <!-- Phone Number -->
+                                <Label Text="Phone Number:" 
+                                       FontSize="14" 
+                                       FontAttributes="Bold"
+                                       TextColor="#333333"
+                                       VerticalOptions="Center"
+                                       Grid.Row="2" Grid.Column="0"/>
+                                <Entry x:Name="PhoneNumberEntry" 
+                                       Placeholder="Phone Number"
+                                       PlaceholderColor="#AAAAAA"
+                                       TextColor="#333333"
+                                       Grid.Row="2" Grid.Column="1"/>
+
+                                <!-- Job Title -->
+                                <Label Text="Job Title:" 
+                                       FontSize="14" 
+                                       FontAttributes="Bold"
+                                       TextColor="#333333"
+                                       VerticalOptions="Center"
+                                       Grid.Row="3" Grid.Column="0"/>
+                                <Entry x:Name="JobTitleEntry" 
+                                       Placeholder="Job Title"
+                                       PlaceholderColor="#AAAAAA"
+                                       TextColor="#333333"
+                                       Grid.Row="3" Grid.Column="1"/>
+
+                                <!-- Address -->
+                                <Label Text="Address:" 
+                                       FontSize="14" 
+                                       FontAttributes="Bold"
+                                       TextColor="#333333"
+                                       VerticalOptions="Center"
+                                       Grid.Row="4" Grid.Column="0"/>
+                                <Entry x:Name="AddressEntry" 
+                                       Placeholder="Address"
+                                       PlaceholderColor="#AAAAAA"
+                                       TextColor="#333333"
+                                       Grid.Row="4" Grid.Column="1"/>
+
+                                <!-- Status -->
+                                <Label Text="Status:" 
+                                       FontSize="14" 
+                                       FontAttributes="Bold"
+                                       TextColor="#333333"
+                                       VerticalOptions="Center"
+                                       Grid.Row="5" Grid.Column="0"/>
+                                <Label x:Name="StatusLabel" 
+                                       Text="Active"
+                                       FontSize="14"
+                                       TextColor="#4CAF50"
+                                       VerticalOptions="Center"
+                                       Grid.Row="5" Grid.Column="1"/>
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Work Information Card -->
+                    <Frame Grid.Column="1" 
+                           BorderColor="#EEEEEE"
+                           CornerRadius="10"
+                           Padding="20"
+                           HasShadow="False"
+                           BackgroundColor="White"
+                           VerticalOptions="Start">
+
+                        <VerticalStackLayout Spacing="20">
+                            <Label Text="Work Information" 
+                                   FontSize="18" 
+                                   FontAttributes="Bold"
+                                   TextColor="#333333" />
+
+                            <!-- Work Info Fields -->
+                            <Grid RowDefinitions="Auto,Auto,Auto" 
+                                  ColumnDefinitions="Auto,*" 
+                                  RowSpacing="20" 
+                                  ColumnSpacing="15"
+                                  Margin="0,5,0,5">
+
+                                <!-- Role -->
+                                <Label Text="Role:" 
+                                       FontSize="14" 
+                                       FontAttributes="Bold"
+                                       TextColor="#333333"
+                                       VerticalOptions="Center"
+                                       Grid.Row="0" Grid.Column="0"/>
+                                <Label x:Name="RoleLabel" 
+                                       Text="Admin" 
+                                       FontSize="14"
+                                       TextColor="#333333"
+                                       VerticalOptions="Center"
+                                       Grid.Row="0" Grid.Column="1"/>
+
+                                <!-- Branch -->
+                                <Label Text="Branch:" 
+                                       FontSize="14" 
+                                       FontAttributes="Bold"
+                                       TextColor="#333333"
+                                       VerticalOptions="Center"
+                                       Grid.Row="1" Grid.Column="0"/>
+                                <Label x:Name="BranchLabel" 
+                                       Text="Main Office" 
+                                       FontSize="14"
+                                       TextColor="#333333"
+                                       VerticalOptions="Center"
+                                       Grid.Row="1" Grid.Column="1"/>
+
+                                <!-- Last Login -->
+                                <Label Text="Last Login:" 
+                                       FontSize="14" 
+                                       FontAttributes="Bold"
+                                       TextColor="#333333"
+                                       VerticalOptions="Center"
+                                       Grid.Row="2" Grid.Column="0"/>
+                                <Label x:Name="LastLoginLabel" 
+                                       FontSize="14"
+                                       TextColor="#333333"
+                                       VerticalOptions="Center"
+                                       Grid.Row="2" Grid.Column="1"/>
+                            </Grid>
+
+                            <!-- Technical Skills -->
+                            <BoxView HeightRequest="1" 
+                                     BackgroundColor="#EEEEEE" 
+                                     Margin="0,5" />
+
+                            <VerticalStackLayout Spacing="15">
+                                <Label Text="Technical Skills" 
+                                       FontSize="16" 
+                                       FontAttributes="Bold"
+                                       TextColor="#333333" />
+
+                                <Label x:Name="NoSkillsLabel"
+                                       Text="No skills added yet" 
+                                       TextColor="#888888"
+                                       IsVisible="True" />
+
+                                <VerticalStackLayout x:Name="SkillsStackLayout" 
+                                                   Spacing="5" 
+                                                   IsVisible="False">
+                                    <!-- Skills will be added here programmatically -->
+                                </VerticalStackLayout>
+
+                                <Button Text="Add Skill"
+                                        Clicked="OnAddSkillClicked"
+                                        BackgroundColor="#6C47FF"
+                                        TextColor="White"
+                                        CornerRadius="5"
+                                        HeightRequest="40"
+                                        WidthRequest="100"
+                                        HorizontalOptions="Start" />
+                            </VerticalStackLayout>
+
+                            <!-- Certifications -->
+                            <BoxView HeightRequest="1" 
+                                     BackgroundColor="#EEEEEE" 
+                                     Margin="0,5" />
+
+                            <VerticalStackLayout Spacing="15">
+                                <Label Text="Certifications" 
+                                       FontSize="16" 
+                                       FontAttributes="Bold"
+                                       TextColor="#333333" />
+
+                                <Label x:Name="NoCertificationsLabel"
+                                       Text="No certifications added yet" 
+                                       TextColor="#888888"
+                                       IsVisible="True" />
+
+                                <VerticalStackLayout x:Name="CertificationsStackLayout" 
+                                                   Spacing="5" 
+                                                   IsVisible="False">
+                                    <!-- Certifications will be added here programmatically -->
+                                </VerticalStackLayout>
+
+                                <Button Text="Add Certification"
+                                        Clicked="OnAddCertificationClicked"
+                                        BackgroundColor="#6C47FF"
+                                        TextColor="White"
+                                        CornerRadius="5"
+                                        HeightRequest="40"
+                                        WidthRequest="150"
+                                        HorizontalOptions="Start" />
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </Frame>
+                </Grid>
+
+                <!-- Update Profile Button - Now in its own row -->
+                <Button Grid.Row="1"
+                        Text="Update Profile" 
+                        Clicked="OnUpdateProfileClicked"
+                        BackgroundColor="#6C47FF"
+                        TextColor="White"
+                        FontSize="16"
+                        CornerRadius="5"
+                        HeightRequest="50"
+                        WidthRequest="200"
+                        Margin="0,25,0,10"
+                        HorizontalOptions="Center" />
+            </Grid>
+
+            <!-- Activity Indicator -->
+            <ActivityIndicator x:Name="LoadingIndicator" 
+                              IsVisible="False" 
+                              IsRunning="{Binding IsVisible, Source={x:Reference LoadingIndicator}}"
+                              Color="#6C47FF"
+                              Scale="1.5"
+                              HorizontalOptions="Center"
+                              VerticalOptions="Center"
+                              Grid.Row="1" />
+        </Grid>
     </Grid>
 </ContentPage>
