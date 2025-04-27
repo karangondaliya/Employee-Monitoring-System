@@ -134,11 +134,11 @@ namespace Employee_Monitoring_System.ViewModels
                 System.Diagnostics.Debug.WriteLine("Adding ADMIN menu items");
                 SidebarItems.Add(new SidebarItem { Title = "Manage Employees", Icon = "users.png", NavigationTarget = "//EmployeesPage" });
                 SidebarItems.Add(new SidebarItem { Title = "Manage Projects", Icon = "briefcase.png", NavigationTarget = "//ProjectsPage" });
-                SidebarItems.Add(new SidebarItem { Title = "Manage Notifications", Icon = "notification_icon.png", NavigationTarget = "//ManageNotificationsPage" });
-                SidebarItems.Add(new SidebarItem { Title = "Manage Branches", Icon = "office.png", NavigationTarget = "//ManageBranchesPage" });
-                SidebarItems.Add(new SidebarItem { Title = "Settings", Icon = "settings.png", NavigationTarget = "//SettingsPage" });
-                SidebarItems.Add(new SidebarItem { Title = "View Screenshots", Icon = "landscape.png", NavigationTarget = "//ViewScreenshotsPage" });
-                SidebarItems.Add(new SidebarItem { Title = "Track Activity", Icon = "task.png", NavigationTarget = "//TrackActivityPage" });
+                //SidebarItems.Add(new SidebarItem { Title = "Manage Notifications", Icon = "notification_icon.png", NavigationTarget = "//ManageNotificationsPage" });
+                //SidebarItems.Add(new SidebarItem { Title = "Manage Branches", Icon = "office.png", NavigationTarget = "//ManageBranchesPage" });
+                //SidebarItems.Add(new SidebarItem { Title = "Settings", Icon = "settings.png", NavigationTarget = "//SettingsPage" });
+                //SidebarItems.Add(new SidebarItem { Title = "View Screenshots", Icon = "landscape.png", NavigationTarget = "//ViewScreenshotsPage" });
+                //SidebarItems.Add(new SidebarItem { Title = "Track Activity", Icon = "task.png", NavigationTarget = "//TrackActivityPage" });
                 SidebarItems.Add(new SidebarItem { Title = "View Leaves", Icon = "calendar_white.png", NavigationTarget = "//LeaveRequestPage" });
             }
             else if (userRole == "TeamLead")
@@ -159,9 +159,6 @@ namespace Employee_Monitoring_System.ViewModels
             {
                 System.Diagnostics.Debug.WriteLine($"Unknown role: {userRole}, showing minimal sidebar");
             }
-
-            // Profile page for all users
-            SidebarItems.Add(new SidebarItem { Title = "User Profile", Icon = "person.png", NavigationTarget = "//UserProfilePage" });
 
             OnPropertyChanged(nameof(SidebarItems));
             System.Diagnostics.Debug.WriteLine($"Sidebar loaded with {SidebarItems.Count} items for role: {userRole}");

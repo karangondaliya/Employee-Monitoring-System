@@ -10,7 +10,6 @@ namespace Employee_Monitoring_System.Converters
             {
                 return text.Substring(0, 1).ToUpper();
             }
-
             return "?";
         }
 

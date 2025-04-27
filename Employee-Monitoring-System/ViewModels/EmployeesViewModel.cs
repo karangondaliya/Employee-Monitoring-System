@@ -11,26 +11,23 @@ namespace Employee_Monitoring_System.ViewModels
         private readonly EmployeeService _employeeService;
         private bool _isLoading;
         private string _searchQuery;
-        private string _selectedDepartment;
         private ICommand _refreshCommand;
         private ICommand _newEmployeeCommand;
         private ICommand _viewDetailsCommand;
+        private bool _hasConnectionError = false;
 
         public ObservableCollection<Employee> Employees { get; } = new();
-        public ObservableCollection<string> Departments { get; } = new()
-        {
-            "All Departments",
-            "IT",
-            "HR",
-            "Finance",
-            "Marketing",
-            "Operations"
-        };
 
         public bool IsLoading
         {
             get => _isLoading;
             set => SetProperty(ref _isLoading, value);
+        }
+
+        public bool HasConnectionError
+        {
+            get => _hasConnectionError;
+            set => SetProperty(ref _hasConnectionError, value);
         }
 
         public string SearchQuery
@@ -39,18 +36,6 @@ namespace Employee_Monitoring_System.ViewModels
             set
             {
                 if (SetProperty(ref _searchQuery, value))
-                {
-                    LoadEmployeesAsync().ConfigureAwait(false);
-                }
-            }
-        }
-
-        public string SelectedDepartment
-        {
-            get => _selectedDepartment;
-            set
-            {
-                if (SetProperty(ref _selectedDepartment, value))
                 {
                     LoadEmployeesAsync().ConfigureAwait(false);
                 }
@@ -77,6 +62,8 @@ namespace Employee_Monitoring_System.ViewModels
             set => SetProperty(ref _viewDetailsCommand, value);
         }
 
+        public ICommand RetryConnectionCommand { get; private set; }
+
         // Public parameterless constructor for XAML
         public EmployeesViewModel()
         {
@@ -101,6 +88,7 @@ namespace Employee_Monitoring_System.ViewModels
             RefreshCommand = new Command(async () => await LoadEmployeesAsync());
             NewEmployeeCommand = new Command(async () => await OnNewEmployee());
             ViewDetailsCommand = new Command<Employee>(async (employee) => await OnViewDetails(employee));
+            RetryConnectionCommand = new Command(async () => await LoadEmployeesAsync());
 
             // Initial load
             LoadEmployeesAsync().ConfigureAwait(false);
@@ -113,6 +101,7 @@ namespace Employee_Monitoring_System.ViewModels
             try
             {
                 IsLoading = true;
+                HasConnectionError = false;
 
                 // Check for authentication token
                 var token = await SecureStorage.GetAsync("auth_token");
@@ -123,14 +112,28 @@ namespace Employee_Monitoring_System.ViewModels
                     return;
                 }
 
-                var department = SelectedDepartment == "All Departments" ? null : SelectedDepartment;
-                var employees = await _employeeService.GetEmployeesAsync(SearchQuery, department);
+                var employees = await _employeeService.GetEmployeesAsync(SearchQuery);
 
                 // Debug output to confirm data is received
                 System.Diagnostics.Debug.WriteLine($"Received {employees?.Count ?? 0} employees from service");
-                foreach (var employee in employees)
+
+                // Process employees to ensure valid data
+                if (employees != null)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Employee: {employee.Id} - {employee.FullName} - {employee.Position}");
+                    foreach (var employee in employees)
+                    {
+                        // Ensure phone is not null
+                        if (string.IsNullOrEmpty(employee.Phone))
+                        {
+                            employee.PhoneNumber = "Not provided";
+                        }
+
+                        // Ensure status is not null
+                        if (string.IsNullOrEmpty(employee.Status))
+                        {
+                            employee.IsActive = true;
+                        }
+                    }
                 }
 
                 // Update UI on the main thread
@@ -155,6 +158,11 @@ namespace Employee_Monitoring_System.ViewModels
                 await Application.Current.MainPage.DisplayAlert("Session Expired",
                     "Please log in again.", "OK");
                 await Shell.Current.GoToAsync("//LoginPage");
+            }
+            catch (HttpRequestException ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Connection error loading employees: {ex.Message}");
+                HasConnectionError = true;
             }
             catch (Exception ex)
             {

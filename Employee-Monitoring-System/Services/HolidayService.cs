@@ -31,8 +31,7 @@ namespace Employee_Monitoring_System.Services
             var token = _preferences.Get("auth_token", string.Empty);
             if (!string.IsNullOrEmpty(token))
             {
-                _httpClient.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", token);
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
         }
 

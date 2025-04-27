@@ -12,13 +12,14 @@ namespace Employee_Monitoring_System.Services
 {
     public class ScreenshotService
     {
-        private readonly TimeSpan _idleCheckInterval = TimeSpan.FromMinutes(1);
-        private readonly TimeSpan _idleThreshold = TimeSpan.FromMinutes(1);
+        private readonly TimeSpan _idleCheckInterval = TimeSpan.FromSeconds(10);
+        private readonly TimeSpan _idleThreshold = TimeSpan.FromSeconds(10);
         private readonly HttpClient _httpClient;
         private readonly string _apiUrl = "https://localhost:7227/api/Screenshots/UploadFile"; // API endpoint
-        private readonly TimeSpan _captureInterval = TimeSpan.FromMinutes(1); // Capture every 5 minutes
+        private readonly TimeSpan _captureInterval = TimeSpan.FromSeconds(30); // Changed to 30 seconds
         private bool _isRunning = false;
         private bool _idleAlertShown = false;
+
         public ScreenshotService()
         {
             _httpClient = new HttpClient();
@@ -45,12 +46,11 @@ namespace Employee_Monitoring_System.Services
                 }
             });
 
-
             _ = Task.Run(async () =>
             {
                 while (_isRunning)
                 {
-                    CheckIdleTime();
+                    await CheckIdleTime();
                     await Task.Delay(_idleCheckInterval);
                 }
             });
@@ -77,10 +77,16 @@ namespace Employee_Monitoring_System.Services
             catch (Exception ex)
             {
                 Console.WriteLine($"Error capturing screenshot: {ex.Message}");
+
+                // Show error alert on main thread
+                await MainThread.InvokeOnMainThreadAsync(async () => {
+                    await Application.Current.MainPage.DisplayAlert("Screenshot Error",
+                        $"Error capturing screenshot: {ex.Message}", "OK");
+                });
             }
         }
 
-        private void CheckIdleTime()
+        private async Task CheckIdleTime()
         {
             var idleTime = IdleTimeDetector.GetIdleTime();
 
@@ -89,10 +95,14 @@ namespace Employee_Monitoring_System.Services
                 if (!_idleAlertShown)
                 {
                     _idleAlertShown = true;
-                    Console.WriteLine("User has been idle for over 10 minutes.");
+                    Console.WriteLine("User has been idle for over 30 seconds.");
 
-                    // You can set a global flag/property and reflect it in UI if needed
-                    // OR use a non-intrusive toast/badge instead
+                    // Display alert on main thread when idle time threshold is reached
+                    await MainThread.InvokeOnMainThreadAsync(async () =>
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Idle Detection",
+                            "You have been idle for 10 seconds. Your activity is being monitored.", "OK");
+                    });
                 }
             }
             else
@@ -100,7 +110,6 @@ namespace Employee_Monitoring_System.Services
                 _idleAlertShown = false; // Reset if user becomes active again
             }
         }
-
 
         private async Task UploadScreenshot(byte[] imageBytes)
         {
@@ -110,7 +119,10 @@ namespace Employee_Monitoring_System.Services
 
                 if (string.IsNullOrEmpty(token))
                 {
-                    await Application.Current.MainPage.DisplayAlert("Error", "Authentication token is missing. Please log in again.", "OK");
+                    await MainThread.InvokeOnMainThreadAsync(async () => {
+                        await Application.Current.MainPage.DisplayAlert("Error",
+                            "Authentication token is missing. Please log in again.", "OK");
+                    });
                     return;
                 }
 
@@ -127,15 +139,33 @@ namespace Employee_Monitoring_System.Services
                 if (response.IsSuccessStatusCode)
                 {
                     Console.WriteLine("Screenshot uploaded successfully.");
+
+                    // Optional: Show success message (uncomment if you want to show upload confirmation)
+                    // await MainThread.InvokeOnMainThreadAsync(async () => {
+                    //     await Application.Current.MainPage.DisplayAlert("Screenshot", 
+                    //         "Screenshot captured and uploaded successfully.", "OK");
+                    // });
                 }
                 else
                 {
                     Console.WriteLine($"Failed to upload screenshot: {response.ReasonPhrase}");
+
+                    // Show error on main thread
+                    await MainThread.InvokeOnMainThreadAsync(async () => {
+                        await Application.Current.MainPage.DisplayAlert("Upload Error",
+                            $"Failed to upload screenshot: {response.ReasonPhrase}", "OK");
+                    });
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error uploading screenshot: {ex.Message}");
+
+                // Show error on main thread
+                await MainThread.InvokeOnMainThreadAsync(async () => {
+                    await Application.Current.MainPage.DisplayAlert("Upload Error",
+                        $"Error uploading screenshot: {ex.Message}", "OK");
+                });
             }
         }
     }
