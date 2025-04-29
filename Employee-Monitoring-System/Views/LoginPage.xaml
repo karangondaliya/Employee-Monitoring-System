@@ -37,8 +37,8 @@
                                  VerticalOptions="Center"
                                  HorizontalOptions="Center">
                 <Image Source="image1.png"
-                       HeightRequest="320"
-                       WidthRequest="490"
+                       HeightRequest="350"
+                       WidthRequest="530"
                        Aspect="AspectFit"/>
 
                 <!-- Added text after the image -->
@@ -59,7 +59,7 @@
             <!-- Right Side - Login Form -->
             <Border Grid.Column="1"
                     Style="{StaticResource CardStyle}"
-                    Margin="90,0,20,0"
+                    Margin="200,0,20,0"
                     Padding="32">
 
                 <VerticalStackLayout Spacing="50" VerticalOptions="Center">
@@ -100,12 +100,15 @@
                     </VerticalStackLayout>
 
                     <Button Text="Log In"
-                            BackgroundColor="{StaticResource AccentColor}"
+                            BackgroundColor="#4CAF50"
                             Command="{Binding LoginCommand}"
                             TextColor="White"
                             HeightRequest="45"
                             CornerRadius="6"
-                            FontSize="16" />
+                            FontSize="16"
+                            x:Name="LoginButton"
+                            Pressed="LoginButton_Pressed"
+                            Released="LoginButton_Released" />
 
                     <Label Text="Want to Update your password?"
                            TextColor="{StaticResource AccentColor}"

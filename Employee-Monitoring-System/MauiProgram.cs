@@ -3,7 +3,6 @@ using Employee_Monitoring_System.ViewModels;
 using Employee_Monitoring_System.Views;
 using Microsoft.Extensions.Logging;
 
-
 namespace Employee_Monitoring_System
 {
     public static class MauiProgram
