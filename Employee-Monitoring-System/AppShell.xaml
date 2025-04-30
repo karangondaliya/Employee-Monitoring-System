@@ -24,5 +24,6 @@
     <ShellContent ContentTemplate="{DataTemplate local:EditLeaveRequestPage}" Route="EditLeaveRequestPage" />
     <ShellContent ContentTemplate="{DataTemplate local:TasksPage}" Route="TasksPage" />
     <ShellContent ContentTemplate="{DataTemplate local:EmployeesPage}" Route="EmployeesPage" />
+    <ShellContent ContentTemplate="{DataTemplate local:AdminSettingsPage}" Route="AdminSettingsPage" />
 
 </Shell>

@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Employee_Monitoring_System.Views.Components"
+             x:Class="Employee_Monitoring_System.Views.AdminSettingsPage"
+             BackgroundColor="{DynamicResource PageBackgroundColor}">
+
+    <Grid ColumnDefinitions="250, *" RowDefinitions="*">
+        <!-- Sidebar (FULL HEIGHT) -->
+        <ContentView Grid.Row="0" Grid.Column="0" BackgroundColor="{DynamicResource SidebarBackgroundColor}">
+            <local:Sidebar />
+        </ContentView>
+
+        <!-- Right Side: Contains Navbar at Top, Body Below -->
+        <Grid Grid.Row="0" Grid.Column="1" RowDefinitions="Auto, *">
+            <!-- Navbar at Top -->
+            <ContentView Grid.Row="0">
+                <local:Navbar />
+            </ContentView>
+
+            <!-- Main Content -->
+            <ScrollView Grid.Row="1" Padding="20">
+                <VerticalStackLayout Spacing="20">
+                    <Label Text="Application Settings" FontSize="24" FontAttributes="Bold" TextColor="{DynamicResource PrimaryDarkText}" />
+
+                    <!-- Tracking Mode Settings -->
+                    <Frame BorderColor="Black"
+                           CornerRadius="16"
+                           Padding="0"
+                           HasShadow="False"
+                           Margin="0,10,0,20">
+                        <Grid RowDefinitions="Auto, *"
+                              BackgroundColor="{DynamicResource CardBackgroundColor}"
+                              Padding="20">
+
+                            <!-- Header -->
+                            <Label Text="Tracking Mode"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryDarkText}"
+                                   Margin="10,20,10,10" />
+
+                            <Grid Grid.Row="1" ColumnDefinitions="*, *" Margin="0,20" RowDefinitions="Auto,Auto,Auto">
+                                <!-- Timer Mode Option -->
+                                <Frame Grid.Column="0" 
+                                       BackgroundColor="{DynamicResource InfoCardBackgroundColor}"
+                                       BorderColor="{Binding IsTimerModeSelected, Converter={StaticResource BooleanToColorConverter}, ConverterParameter='Primary,Gray'}"
+                                       HasShadow="True"
+                                       CornerRadius="16"
+                                       Padding="20"
+                                       Margin="10">
+                                    <Grid RowDefinitions="Auto,Auto,Auto">
+                                        <RadioButton x:Name="TimerModeRadio" 
+                                                    GroupName="TrackingMode" 
+                                                    IsChecked="{Binding IsTimerModeSelected}"
+                                                    CheckedChanged="OnTrackingModeChanged"
+                                                    HorizontalOptions="Center"/>
+
+                                        <VerticalStackLayout Grid.Row="1" Spacing="8" HorizontalOptions="Center">
+                                            <Image Source="timer_icon.png"
+                                                   HeightRequest="40"
+                                                   WidthRequest="40"
+                                                   HorizontalOptions="Center" />
+
+                                            <Label Text="Timer Mode"
+                                                   FontSize="16"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{DynamicResource PrimaryDarkText}"
+                                                   HorizontalOptions="Center" />
+
+                                            <Label Text="Manual Tracking"
+                                                   FontSize="13"
+                                                   TextColor="{DynamicResource SecondaryDarkText}"
+                                                   HorizontalOptions="Center" />
+                                        </VerticalStackLayout>
+
+                                        <Label Grid.Row="2" 
+                                               Text="Employees manually start and stop tracking. Screenshots are taken at regular intervals only when tracking is active."
+                                               FontSize="14" 
+                                               TextColor="Gray"
+                                               Margin="0,20,0,10"
+                                               HorizontalOptions="Center"
+                                               HorizontalTextAlignment="Center"/>
+                                    </Grid>
+                                </Frame>
+
+                                <!-- Zero-Click Mode Option -->
+                                <Frame Grid.Column="1" 
+                                       BackgroundColor="{DynamicResource InfoCardBackgroundColor}"
+                                       BorderColor="{Binding IsZeroClickModeSelected, Converter={StaticResource BoolToColorConverter}, ConverterParameter='Primary,Gray'}"
+                                       HasShadow="True"
+                                       CornerRadius="16"
+                                       Padding="20"
+                                       Margin="10">
+                                    <Grid RowDefinitions="Auto,Auto,Auto">
+                                        <RadioButton x:Name="ZeroClickModeRadio" 
+                                                    GroupName="TrackingMode" 
+                                                    IsChecked="{Binding IsZeroClickModeSelected}"
+                                                    CheckedChanged="OnTrackingModeChanged"
+                                                    HorizontalOptions="Center"/>
+
+                                        <VerticalStackLayout Grid.Row="1" Spacing="8" HorizontalOptions="Center">
+                                            <Image Source="zero_click_icon.png"
+                                                   HeightRequest="40"
+                                                   WidthRequest="40"
+                                                   HorizontalOptions="Center" />
+
+                                            <Label Text="Zero-Click Mode"
+                                                   FontSize="16"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{DynamicResource PrimaryDarkText}"
+                                                   HorizontalOptions="Center" />
+
+                                            <Label Text="Automatic Tracking"
+                                                   FontSize="13"
+                                                   TextColor="{DynamicResource SecondaryDarkText}"
+                                                   HorizontalOptions="Center" />
+                                        </VerticalStackLayout>
+
+                                        <Label Grid.Row="2" 
+                                               Text="Tracking starts automatically when employees log in. Screenshots are taken at regular intervals without manual intervention."
+                                               FontSize="14" 
+                                               TextColor="Gray"
+                                               Margin="0,20,0,10"
+                                               HorizontalOptions="Center"
+                                               HorizontalTextAlignment="Center"/>
+                                    </Grid>
+                                </Frame>
+                            </Grid>
+                        </Grid>
+                    </Frame>
+
+                    <!-- Screenshot Interval Settings -->
+                    <Frame BorderColor="Black"
+                           CornerRadius="16"
+                           Padding="0"
+                           HasShadow="False"
+                           Margin="0,10,0,20">
+                        <Grid RowDefinitions="Auto, *"
+                              BackgroundColor="{DynamicResource CardBackgroundColor}"
+                              Padding="20">
+
+                            <!-- Header -->
+                            <Label Text="Screenshot Interval"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryDarkText}"
+                                   Margin="10,20,10,10" />
+
+                            <VerticalStackLayout Grid.Row="1" Margin="10,20">
+                                <Label Text="Set how frequently screenshots are captured (in minutes)"
+                                       FontSize="16"
+                                       TextColor="{DynamicResource SecondaryDarkText}"
+                                       Margin="0,0,0,20" />
+
+                                <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+                                    <Label Text="5" Grid.Column="0" VerticalOptions="Center" />
+                                    <Slider x:Name="IntervalSlider" 
+                                            Minimum="5" 
+                                            Maximum="60" 
+                                            Value="{Binding ScreenshotInterval}" 
+                                            Grid.Column="1" 
+                                            ValueChanged="OnIntervalChanged" />
+                                    <Label Text="60" Grid.Column="2" VerticalOptions="Center" />
+
+                                    <Label Grid.Row="1" Grid.Column="1" 
+                                           Text="{Binding ScreenshotInterval, StringFormat='Current setting: {0:F0} minutes'}"
+                                           HorizontalOptions="Center"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           Margin="0,20,0,0" />
+                                </Grid>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Frame>
+
+                    <!-- Data Retention Settings -->
+                    <Frame BorderColor="Black"
+                           CornerRadius="16"
+                           Padding="0"
+                           HasShadow="False"
+                           Margin="0,10,0,20">
+                        <Grid RowDefinitions="Auto, *"
+                              BackgroundColor="{DynamicResource CardBackgroundColor}"
+                              Padding="20">
+
+                            <!-- Header -->
+                            <Label Text="Data Storage"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryDarkText}"
+                                   Margin="10,20,10,10" />
+
+                            <VerticalStackLayout Grid.Row="1" Margin="10,20">
+                                <Label Text="Configure how long to retain employee activity data"
+                                       FontSize="16"
+                                       TextColor="{DynamicResource SecondaryDarkText}"
+                                       Margin="0,0,0,20" />
+
+                                <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto">
+                                    <Label Text="Data Retention Period:" 
+                                           Grid.Column="0" 
+                                           VerticalOptions="Center"
+                                           FontSize="16" />
+                                    <Picker x:Name="DataRetentionPicker" 
+                                            Grid.Column="1" 
+                                            Title="Data Retention Period" 
+                                            ItemsSource="{Binding RetentionOptions}" 
+                                            SelectedItem="{Binding SelectedRetention}" 
+                                            SelectedIndexChanged="OnRetentionChanged"
+                                            Margin="20,0,0,0" />
+                                </Grid>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Frame>
+
+                    <!-- All App Settings -->
+                    <Frame BorderColor="Black"
+                           CornerRadius="16"
+                           Padding="0"
+                           HasShadow="False"
+                           Margin="0,10,0,20">
+                        <Grid RowDefinitions="Auto, *"
+                              BackgroundColor="{DynamicResource CardBackgroundColor}"
+                              Padding="20">
+
+                            <!-- Header -->
+                            <Label Text="All Settings"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryDarkText}"
+                                   Margin="10,20,10,10" />
+
+                            <VerticalStackLayout Grid.Row="1" Margin="10,20">
+                                <CollectionView x:Name="SettingsCollectionView" 
+                                                ItemsSource="{Binding AllSettings}" 
+                                                SelectionMode="None"
+                                                EmptyView="No settings found"
+                                                Margin="0,0,0,20">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Frame Margin="0,5" Padding="10" BorderColor="LightGray" CornerRadius="10">
+                                                <Grid ColumnDefinitions="*,*">
+                                                    <Label Text="{Binding SettingKey}" 
+                                                           FontAttributes="Bold" 
+                                                           FontSize="16"
+                                                           VerticalOptions="Center"/>
+                                                    <Entry Text="{Binding SettingValue}" 
+                                                           Grid.Column="1" 
+                                                           Completed="OnSettingValueChanged"
+                                                           ClassId="{Binding SettingKey}"/>
+                                                </Grid>
+                                            </Frame>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Frame>
+
+                    <!-- Add New Setting -->
+                    <Frame BorderColor="Black"
+                           CornerRadius="16"
+                           Padding="0"
+                           HasShadow="False"
+                           Margin="0,10,0,20">
+                        <Grid RowDefinitions="Auto, *"
+                              BackgroundColor="{DynamicResource CardBackgroundColor}"
+                              Padding="20">
+
+                            <!-- Header -->
+                            <Label Text="Add New Setting"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryDarkText}"
+                                   Margin="10,20,10,10" />
+
+                            <VerticalStackLayout Grid.Row="1" Margin="10,20">
+                                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto">
+                                    <Entry x:Name="NewSettingKeyEntry" 
+                                           Placeholder="Setting Key" 
+                                           Grid.Column="0"
+                                           Margin="0,0,10,0"/>
+                                    <Entry x:Name="NewSettingValueEntry" 
+                                           Placeholder="Setting Value" 
+                                           Grid.Column="1"
+                                           Margin="10,0,0,0"/>
+                                    <Button Text="Add Setting" 
+                                            Grid.Row="1" 
+                                            Grid.ColumnSpan="2"
+                                            Clicked="OnAddSettingClicked"
+                                            BackgroundColor="{DynamicResource Primary}"
+                                            TextColor="White"
+                                            FontSize="16"
+                                            Margin="0,20,0,10"/>
+                                </Grid>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Frame>
+
+                    <!-- Save Button -->
+                    <Button Text="Save All Settings" 
+                            Clicked="OnSaveClicked"
+                            BackgroundColor="Green"
+                            TextColor="White"
+                            FontSize="20"
+                            CornerRadius="30"
+                            Padding="20"
+                            Margin="0,20,0,40"
+                            HeightRequest="60"
+                            HorizontalOptions="Center"
+                            WidthRequest="250"/>
+
+                    <ActivityIndicator x:Name="LoadingIndicator" 
+                                      IsVisible="False" 
+                                      IsRunning="{Binding IsVisible, Source={x:Reference LoadingIndicator}}" />
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>

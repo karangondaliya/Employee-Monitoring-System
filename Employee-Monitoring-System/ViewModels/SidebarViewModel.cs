@@ -136,7 +136,7 @@ namespace Employee_Monitoring_System.ViewModels
                 SidebarItems.Add(new SidebarItem { Title = "Manage Projects", Icon = "briefcase.png", NavigationTarget = "//ProjectsPage" });
                 //SidebarItems.Add(new SidebarItem { Title = "Manage Notifications", Icon = "notification_icon.png", NavigationTarget = "//ManageNotificationsPage" });
                 //SidebarItems.Add(new SidebarItem { Title = "Manage Branches", Icon = "office.png", NavigationTarget = "//ManageBranchesPage" });
-                //SidebarItems.Add(new SidebarItem { Title = "Settings", Icon = "settings.png", NavigationTarget = "//SettingsPage" });
+                SidebarItems.Add(new SidebarItem { Title = "Settings", Icon = "settings.png", NavigationTarget = "//AdminSettingsPage" });
                 //SidebarItems.Add(new SidebarItem { Title = "View Screenshots", Icon = "landscape.png", NavigationTarget = "//ViewScreenshotsPage" });
                 //SidebarItems.Add(new SidebarItem { Title = "Track Activity", Icon = "task.png", NavigationTarget = "//TrackActivityPage" });
                 SidebarItems.Add(new SidebarItem { Title = "View Leaves", Icon = "calendar_white.png", NavigationTarget = "//LeaveRequestPage" });

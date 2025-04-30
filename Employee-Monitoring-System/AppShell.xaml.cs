@@ -26,6 +26,7 @@ namespace Employee_Monitoring_System
             Routing.RegisterRoute("EditLeaveRequestPage", typeof(Views.EditLeaveRequestPage));
             Routing.RegisterRoute("TasksPage", typeof(Views.TasksPage));
             Routing.RegisterRoute("EmployeesPage", typeof(Views.EmployeesPage));
+            Routing.RegisterRoute("AdminSettingsPage", typeof(Views.AdminSettingsPage));
 
             // Store reference to sidebar
             sidebarInstance = this.sidebar;
