@@ -5,6 +5,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Employee_Monitoring_System.Models;
+using Employee_Monitoring_System.Services;
 using Employee_Monitoring_System.Views;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
@@ -18,6 +19,7 @@ namespace Employee_Monitoring_System.ViewModels
         private readonly HttpClient _httpClient;
         private ObservableCollection<LeaveRequestItem> _leaveRequests;
         private ObservableCollection<Holiday> _upcomingHolidays;
+        private readonly HolidayService _holidayService;
         private string _currentTab = "MyRequests";
 
         // Leave Balance Properties
@@ -26,11 +28,13 @@ namespace Employee_Monitoring_System.ViewModels
         private int _personalLeaveBalance = 1;
         private int _unpaidLeaveBalance = 0;
 
+
         public LeaveRequestViewModel()
         {
             _httpClient = new HttpClient { BaseAddress = new Uri("https://localhost:7227/api/") };
             LeaveRequests = new ObservableCollection<LeaveRequestItem>();
             UpcomingHolidays = new ObservableCollection<Holiday>();
+            _holidayService = new HolidayService(Preferences.Default);
 
             // Initialize commands
             CalendarViewCommand = new Command(ExecuteCalendarViewCommand);
@@ -175,30 +179,20 @@ namespace Employee_Monitoring_System.ViewModels
         {
             try
             {
-                var response = await _httpClient.GetAsync("Holidays/GetUpcoming");
+                var response = await _holidayService.GetAllHolidaysAsync();
+                UpcomingHolidays.Clear();
 
-                if (response.IsSuccessStatusCode)
+                foreach (var holiday in response.OrderBy(h => h.Date))
                 {
-                    var json = await response.Content.ReadAsStringAsync();
-                    var holidays = JsonConvert.DeserializeObject<List<Holiday>>(json);
-
-                    UpcomingHolidays.Clear();
-
-                    if (holidays != null)
-                    {
-                        foreach (var holiday in holidays)
-                        {
-                            UpcomingHolidays.Add(holiday);
-                        }
-                    }
+                    UpcomingHolidays.Add(holiday);
                 }
+
+                System.Diagnostics.Debug.WriteLine($"Loaded {UpcomingHolidays.Count} upcoming holidays");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error loading holidays: {ex.Message}");
-
-                // Add some sample holidays for testing
-                LoadSampleHolidays();
+                System.Diagnostics.Debug.WriteLine($"Error loading upcoming holidays: {ex.Message}");
+                // Don't show error to user here as it's not critical
             }
         }
 
