@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Employee_Monitoring_System.Views.Components"
+             xmlns:vm="clr-namespace:Employee_Monitoring_System.ViewModels"
+             xmlns:models="clr-namespace:Employee_Monitoring_System.Models"
+             xmlns:converters="clr-namespace:Employee_Monitoring_System.Converters"
+             x:Class="Employee_Monitoring_System.Views.AddEmployeePage"
+             BackgroundColor="#FFFFFF">
+
+    <ContentPage.Resources>
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+    </ContentPage.Resources>
+
+    <ContentPage.BindingContext>
+        <vm:AddEmployeeViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid ColumnDefinitions="250, *" RowDefinitions="*">
+        <!-- Sidebar -->
+        <ContentView Grid.Row="0" Grid.Column="0" BackgroundColor="#1A2033">
+            <local:Sidebar />
+        </ContentView>
+
+        <!-- Right Side: Navbar and Main Content -->
+        <Grid Grid.Row="0" Grid.Column="1" RowDefinitions="Auto, *">
+            <!-- Navbar -->
+            <ContentView Grid.Row="0" BackgroundColor="White">
+                <local:Navbar />
+            </ContentView>
+
+            <!-- Main Content -->
+            <ScrollView Grid.Row="1" BackgroundColor="#F8F9FB">
+                <Grid RowDefinitions="Auto, Auto, *" Padding="24">
+                    <!-- Title Section -->
+                    <VerticalStackLayout Grid.Row="0" Spacing="4" Margin="0,0,0,16">
+                        <Label Text="Add New Employee"
+                               FontSize="28"
+                               FontAttributes="Bold"
+                               TextColor="#333333" />
+                        <Label Text="Enter employee details to add a new team member"
+                               FontSize="16"
+                               TextColor="#666666" />
+                    </VerticalStackLayout>
+
+                    <!-- Form Section -->
+                    <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="16">
+
+                        <!-- Profile Image Section -->
+                        <Grid Grid.Row="0" ColumnDefinitions="Auto,*" ColumnSpacing="16">
+                            <Border Grid.Column="0"
+                                    WidthRequest="100"
+                                    HeightRequest="100"
+                                    StrokeShape="RoundRectangle 50"
+                                    BackgroundColor="#E8E8E8"
+                                    HorizontalOptions="Start"
+                                    VerticalOptions="Start">
+
+                                <Grid>
+                                    <!-- Default Initial Letter - Shown when no image selected -->
+                                    <Label Text="+" 
+                                           FontSize="40" 
+                                           FontAttributes="Bold"
+                                           TextColor="#666666"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"
+                                           IsVisible="{Binding HasProfileImage, Converter={StaticResource InverseBooleanConverter}}" />
+
+                                    <!-- Profile Image - Shown when image is selected -->
+                                    <Image Source="{Binding ProfileImageSource}"
+                                           Aspect="AspectFill"
+                                           IsVisible="{Binding HasProfileImage}" />
+                                </Grid>
+                            </Border>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
+                                <Label Text="Profile Photo"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="#333333" />
+                                <Label Text="Upload a professional profile photo"
+                                       FontSize="14"
+                                       TextColor="#666666" />
+                                <Button Text="Upload Photo" 
+                                        BackgroundColor="#5B6AF0"
+                                        TextColor="White"
+                                        CornerRadius="4"
+                                        HeightRequest="38"
+                                        WidthRequest="150"
+                                        HorizontalOptions="Start"
+                                        Command="{Binding UploadPhotoCommand}" />
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <!-- Basic Details Section with Separator -->
+                        <BoxView Grid.Row="1" 
+                                 HeightRequest="1" 
+                                 BackgroundColor="#E0E0E0" 
+                                 Margin="0,8" 
+                                 HorizontalOptions="Fill" />
+
+                        <!-- Personal Information -->
+                        <Grid Grid.Row="2" ColumnDefinitions="*, *" ColumnSpacing="16">
+                            <!-- Full Name -->
+                            <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                <Label Text="Full Name" 
+                                       FontSize="14" 
+                                       FontAttributes="Bold"
+                                       TextColor="#333333" />
+                                <Border StrokeShape="RoundRectangle 4"
+                                        StrokeThickness="1"
+                                        Stroke="#E0E0E0"
+                                        BackgroundColor="White"
+                                        Padding="12, 0">
+                                    <Entry Text="{Binding FullName}" 
+                                           Placeholder="Enter full name"
+                                           HeightRequest="40"/>
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <!-- Email -->
+                            <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                <Label Text="Email" 
+                                       FontSize="14" 
+                                       FontAttributes="Bold"
+                                       TextColor="#333333" />
+                                <Border StrokeShape="RoundRectangle 4"
+                                        StrokeThickness="1"
+                                        Stroke="#E0E0E0"
+                                        BackgroundColor="White"
+                                        Padding="12, 0">
+                                    <Entry Text="{Binding Email}" 
+                                           Placeholder="Enter email address"
+                                           Keyboard="Email"
+                                           HeightRequest="40"/>
+                                </Border>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <!-- Contact and Role -->
+                        <Grid Grid.Row="3" ColumnDefinitions="*, *" ColumnSpacing="16">
+                            <!-- Phone Number -->
+                            <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                <Label Text="Phone Number" 
+                                       FontSize="14" 
+                                       FontAttributes="Bold"
+                                       TextColor="#333333" />
+                                <Border StrokeShape="RoundRectangle 4"
+                                        StrokeThickness="1"
+                                        Stroke="#E0E0E0"
+                                        BackgroundColor="White"
+                                        Padding="12, 0">
+                                    <Entry Text="{Binding PhoneNumber}" 
+                                           Placeholder="Enter phone number"
+                                           Keyboard="Telephone"
+                                           HeightRequest="40"/>
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <!-- Role Selection -->
+                            <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                <Label Text="Role" 
+                                       FontSize="14" 
+                                       FontAttributes="Bold" 
+                                       TextColor="#333333" />
+                                <Picker ItemsSource="{Binding Roles}"
+                                        SelectedItem="{Binding SelectedRole}"
+                                        BackgroundColor="White"
+                                        HeightRequest="40"
+                                        Margin="0,4,0,0"/>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <!-- Branch and Job Title -->
+                        <Grid Grid.Row="4" ColumnDefinitions="*, *" ColumnSpacing="16">
+                            <!-- Branch -->
+                            <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                <Label Text="Branch" 
+                                       FontSize="14" 
+                                       FontAttributes="Bold" 
+                                       TextColor="#333333" />
+                                <Picker ItemsSource="{Binding Branches}"
+                                        SelectedItem="{Binding SelectedBranch}"
+                                        ItemDisplayBinding="{Binding Name}"
+                                        BackgroundColor="White"
+                                        HeightRequest="40"
+                                        Margin="0,4,0,0"/>
+                            </VerticalStackLayout>
+
+                            <!-- Job Title -->
+                            <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                <Label Text="Job Title" 
+                                       FontSize="14" 
+                                       FontAttributes="Bold"
+                                       TextColor="#333333" />
+                                <Border StrokeShape="RoundRectangle 4"
+                                        StrokeThickness="1"
+                                        Stroke="#E0E0E0"
+                                        BackgroundColor="White"
+                                        Padding="12, 0">
+                                    <Entry Text="{Binding JobTitle}" 
+                                           Placeholder="Enter job title"
+                                           HeightRequest="40"/>
+                                </Border>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <!-- Password Section -->
+                        <Grid Grid.Row="5" ColumnDefinitions="*, *" ColumnSpacing="16">
+                            <!-- Password -->
+                            <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                <Label Text="Password" 
+                                       FontSize="14" 
+                                       FontAttributes="Bold"
+                                       TextColor="#333333" />
+                                <Border StrokeShape="RoundRectangle 4"
+                                        StrokeThickness="1"
+                                        Stroke="#E0E0E0"
+                                        BackgroundColor="White"
+                                        Padding="12, 0">
+                                    <Entry Text="{Binding Password}" 
+                                           IsPassword="True"
+                                           Placeholder="Enter password"
+                                           HeightRequest="40"/>
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <!-- Confirm Password -->
+                            <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                <Label Text="Confirm Password" 
+                                       FontSize="14" 
+                                       FontAttributes="Bold"
+                                       TextColor="#333333" />
+                                <Border StrokeShape="RoundRectangle 4"
+                                        StrokeThickness="1"
+                                        Stroke="#E0E0E0"
+                                        BackgroundColor="White"
+                                        Padding="12, 0">
+                                    <Entry Text="{Binding ConfirmPassword}" 
+                                           IsPassword="True"
+                                           Placeholder="Confirm password"
+                                           HeightRequest="40"/>
+                                </Border>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <!-- Address Section -->
+                        <VerticalStackLayout Grid.Row="6" Spacing="4">
+                            <Label Text="Address" 
+                                   FontSize="14" 
+                                   FontAttributes="Bold"
+                                   TextColor="#333333" />
+                            <Border StrokeShape="RoundRectangle 4"
+                                    StrokeThickness="1"
+                                    Stroke="#E0E0E0"
+                                    BackgroundColor="White"
+                                    Padding="12">
+                                <Editor Text="{Binding Address}" 
+                                        Placeholder="Enter address"
+                                        HeightRequest="100" 
+                                        AutoSize="TextChanges"/>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- Status Toggle -->
+                        <Grid Grid.Row="7" ColumnDefinitions="Auto, *" ColumnSpacing="16">
+                            <Label Grid.Column="0" 
+                                   Text="Active Status" 
+                                   FontSize="14" 
+                                   FontAttributes="Bold"
+                                   TextColor="#333333"
+                                   VerticalOptions="Center" />
+                            <Switch Grid.Column="1" 
+                                    IsToggled="{Binding IsActive}"
+                                    OnColor="#5B6AF0"
+                                    ThumbColor="White"
+                                    HorizontalOptions="Start"
+                                    VerticalOptions="Center" />
+                        </Grid>
+
+                        <!-- Action Buttons -->
+                        <Grid Grid.Row="8" ColumnDefinitions="Auto, *" ColumnSpacing="16" Margin="0,16,0,0">
+                            <Button Grid.Column="0" 
+                                    Text="Cancel" 
+                                    BackgroundColor="#E0E0E0"
+                                    TextColor="#333333"
+                                    CornerRadius="4"
+                                    HeightRequest="45"
+                                    WidthRequest="150"
+                                    Command="{Binding CancelCommand}" />
+
+                            <Button Grid.Column="1" 
+                                    Text="Save Employee" 
+                                    BackgroundColor="#4CAF50"
+                                    TextColor="White"
+                                    CornerRadius="4"
+                                    HeightRequest="45"
+                                    WidthRequest="150"
+                                    HorizontalOptions="Start"
+                                    Command="{Binding SaveCommand}" />
+                        </Grid>
+                    </Grid>
+
+                    <!-- Activity indicator -->
+                    <ActivityIndicator Grid.Row="2" 
+                                      IsVisible="{Binding IsLoading}"
+                                      IsRunning="{Binding IsLoading}"
+                                      HorizontalOptions="Center"
+                                      VerticalOptions="Center" />
+                </Grid>
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>

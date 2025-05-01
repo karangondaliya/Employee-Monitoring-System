@@ -181,7 +181,7 @@ namespace Employee_Monitoring_System.ViewModels
             try
             {
                 // Navigate to new employee page or show modal
-                await Shell.Current.GoToAsync("//EmployeeDetailsPage?mode=new");
+                await Shell.Current.GoToAsync("AddEmployeePage");
             }
             catch (Exception ex)
             {

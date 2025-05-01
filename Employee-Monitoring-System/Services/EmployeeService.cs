@@ -193,5 +193,20 @@ namespace Employee_Monitoring_System.Services
             var response = await _httpClient.DeleteAsync($"Users/{id}");
             response.EnsureSuccessStatusCode();
         }
+        public async Task<List<Branch>> GetBranchesAsync()
+        {
+            try
+            {
+                await SetAuthorizationHeader();
+                var response = await _httpClient.GetAsync("Branches");
+                response.EnsureSuccessStatusCode();
+                return await response.Content.ReadFromJsonAsync<List<Branch>>();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error getting branches: {ex.Message}");
+                return new List<Branch>();
+            }
+        }
     }
 }
