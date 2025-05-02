@@ -9,6 +9,7 @@
 
     <ContentPage.Resources>
         <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+        <converters:HalfWidthConverter x:Key="HalfWidthConverter"/>
     </ContentPage.Resources>
 
     <ContentPage.BindingContext>
@@ -96,58 +97,60 @@
                                Command="{Binding RefreshCommand}"
                                IsRefreshing="{Binding IsLoading}">
                         <CollectionView x:Name="ProjectsCollectionView"
-                                      ItemsSource="{Binding Projects}"
-                                      IsVisible="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}">
+                                        ItemsSource="{Binding Projects}"
+                                        IsVisible="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}">
                             <CollectionView.ItemsLayout>
                                 <GridItemsLayout Orientation="Vertical" 
-                                               Span="2" 
-                                               HorizontalItemSpacing="16" 
-                                               VerticalItemSpacing="16" />
+                                                 Span="2" 
+                                                 HorizontalItemSpacing="16" 
+                                                 VerticalItemSpacing="16" />
                             </CollectionView.ItemsLayout>
                             <CollectionView.EmptyView>
                                 <VerticalStackLayout VerticalOptions="Center" 
-                                                   HorizontalOptions="Center" 
-                                                   Spacing="20">
+                                                       HorizontalOptions="Center" 
+                                                       Spacing="20">
                                     <Label Text="No projects found"
-                                         FontSize="20"
-                                         TextColor="{DynamicResource SecondaryTextColor}"
-                                         HorizontalOptions="Center" />
+                                             FontSize="20"
+                                             TextColor="{DynamicResource SecondaryTextColor}"
+                                             HorizontalOptions="Center" />
                                     <Label Text="Try changing your search criteria or create a new project"
-                                         FontSize="16"
-                                         TextColor="{DynamicResource SecondaryTextColor}"
-                                         HorizontalOptions="Center" />
+                                             FontSize="16"
+                                             TextColor="{DynamicResource SecondaryTextColor}"
+                                             HorizontalOptions="Center" />
                                 </VerticalStackLayout>
                             </CollectionView.EmptyView>
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
                                     <!-- Project Card -->
                                     <Frame Padding="0"
-                                         CornerRadius="12"
-                                         HasShadow="True"
-                                         BorderColor="#EAEAEA"
-                                         BackgroundColor="{DynamicResource CardBackgroundColor}"
-                                         HeightRequest="380">
+                                           CornerRadius="12"
+                                           HasShadow="True"
+                                           BorderColor="#EAEAEA"
+                                           BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                           HeightRequest="380"
+                                           WidthRequest="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=Width, Converter={StaticResource HalfWidthConverter}}"
+                                           HorizontalOptions="Fill">
                                         <Grid RowDefinitions="Auto, *">
                                             <!-- Color Strip at Top -->
                                             <BoxView Grid.Row="0" 
-                                                   HeightRequest="8" 
-                                                   BackgroundColor="#4CAF50" />
+                                                       HeightRequest="8" 
+                                                       BackgroundColor="#4CAF50" />
 
                                             <!-- Card Content -->
                                             <VerticalStackLayout Grid.Row="1" 
-                                                               Spacing="16" 
-                                                               Padding="20,16,20,20">
+                                                                   Spacing="16" 
+                                                                   Padding="20,16,20,20">
                                                 <!-- Project Title -->
                                                 <Label Text="{Binding Title}"
-                                                     FontSize="20"
-                                                     FontAttributes="Bold"
-                                                     TextColor="{DynamicResource PrimaryTextColor}" />
+                                                         FontSize="20"
+                                                         FontAttributes="Bold"
+                                                         TextColor="{DynamicResource PrimaryTextColor}" />
 
                                                 <!-- Project Description -->
                                                 <Label Text="{Binding Description}"
-                                                     FontSize="14"
-                                                     LineBreakMode="WordWrap"
-                                                     TextColor="{DynamicResource SecondaryTextColor}" />
+                                                         FontSize="14"
+                                                         LineBreakMode="WordWrap"
+                                                         TextColor="{DynamicResource SecondaryTextColor}" />
 
                                                 <!-- Progress Bar and Deadline -->
                                                 <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto" Margin="0,6,0,0">
@@ -155,62 +158,62 @@
                                                     <VerticalStackLayout Grid.Column="0" Spacing="6">
                                                         <Grid ColumnDefinitions="*, Auto">
                                                             <Label Grid.Column="0"
-                                                                 Text="Progress"
-                                                                 FontSize="13"
-                                                                 TextColor="{DynamicResource SecondaryTextColor}" />
+                                                                     Text="Progress"
+                                                                     FontSize="13"
+                                                                     TextColor="{DynamicResource SecondaryTextColor}" />
                                                             <Label Grid.Column="1"
-                                                                 Text="{Binding ProgressPercentage, StringFormat='{0:P0}'}"
-                                                                 FontAttributes="Bold"
-                                                                 FontSize="13"
-                                                                 TextColor="{DynamicResource PrimaryTextColor}" />
+                                                                     Text="{Binding ProgressPercentage, StringFormat='{0:P0}'}"
+                                                                     FontAttributes="Bold"
+                                                                     FontSize="13"
+                                                                     TextColor="{DynamicResource PrimaryTextColor}" />
                                                         </Grid>
                                                         <Frame Padding="0" 
-                                                             BorderColor="Transparent"
-                                                             BackgroundColor="#F0F0F0"
-                                                             CornerRadius="4"
-                                                             HeightRequest="8"
-                                                             HasShadow="False">
+                                                                 BorderColor="Transparent"
+                                                                 BackgroundColor="#F0F0F0"
+                                                                 CornerRadius="4"
+                                                                 HeightRequest="8"
+                                                                 HasShadow="False">
                                                             <ProgressBar Progress="{Binding ProgressPercentage}"
-                                                                       HeightRequest="8"
-                                                                       BackgroundColor="Transparent"
-                                                                       ProgressColor="#4CAF50" />
+                                                                           HeightRequest="8"
+                                                                           BackgroundColor="Transparent"
+                                                                           ProgressColor="#4CAF50" />
                                                         </Frame>
                                                     </VerticalStackLayout>
 
                                                     <!-- Deadline -->
                                                     <VerticalStackLayout Grid.Column="1" 
-                                                                       HorizontalOptions="End" 
-                                                                       Spacing="6">
+                                                                           HorizontalOptions="End" 
+                                                                           Spacing="6">
                                                         <Label Text="Deadline"
-                                                             FontSize="13"
-                                                             TextColor="{DynamicResource SecondaryTextColor}" />
+                                                                 FontSize="13"
+                                                                 TextColor="{DynamicResource SecondaryTextColor}" />
                                                         <Label Text="{Binding Deadline, StringFormat='{0:MMM dd, yyyy}'}"
-                                                             FontAttributes="Bold"
-                                                             FontSize="14"
-                                                             TextColor="{DynamicResource PrimaryTextColor}" />
+                                                                 FontAttributes="Bold"
+                                                                 FontSize="14"
+                                                                 TextColor="{DynamicResource PrimaryTextColor}" />
                                                     </VerticalStackLayout>
                                                 </Grid>
 
                                                 <!-- Team -->
                                                 <VerticalStackLayout Spacing="6">
                                                     <Label Text="Team"
-                                                         FontSize="13"
-                                                         TextColor="{DynamicResource SecondaryTextColor}" />
+                                                             FontSize="13"
+                                                             TextColor="{DynamicResource SecondaryTextColor}" />
                                                     <Label Text="{Binding Team}"
-                                                         FontSize="14"
-                                                         TextColor="{DynamicResource PrimaryTextColor}" />
+                                                             FontSize="14"
+                                                             TextColor="{DynamicResource PrimaryTextColor}" />
                                                 </VerticalStackLayout>
 
                                                 <!-- View Details - Fixed Command Binding -->
                                                 <Button Text="View Details"
-                                                      FontSize="14"
-                                                      TextColor="White"
-                                                      BackgroundColor="#5C6BC0"
-                                                      CornerRadius="8"
-                                                      HeightRequest="40"
-                                                      Margin="0,8,0,0"
-                                                      Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ProjectsViewModel}}, Path=ViewDetailsCommand}"
-                                                      CommandParameter="{Binding .}" />
+                                                          FontSize="14"
+                                                          TextColor="White"
+                                                          BackgroundColor="#5C6BC0"
+                                                          CornerRadius="8"
+                                                          HeightRequest="40"
+                                                          Margin="0,8,0,0"
+                                                          Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ProjectsViewModel}}, Path=ViewDetailsCommand}"
+                                                          CommandParameter="{Binding .}" />
                                             </VerticalStackLayout>
                                         </Grid>
                                     </Frame>

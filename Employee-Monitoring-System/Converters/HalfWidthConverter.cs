@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
+using Microsoft.Maui.Controls;
 
 namespace Employee_Monitoring_System.Converters
 {
@@ -8,9 +10,13 @@ namespace Employee_Monitoring_System.Converters
         {
             if (value is double width)
             {
-                // Calculate half width minus margins
-                return (width / 2) - 16; // 16px is the margin between items
+                // Get half the width minus spacing for 2 columns
+                // Account for horizontal spacing (16) and container padding (48 = 24 left + 24 right)
+                double availableWidth = width - 48;
+                double itemWidth = (availableWidth - 16) / 2;
+                return itemWidth;
             }
+
             return 0;
         }
 
