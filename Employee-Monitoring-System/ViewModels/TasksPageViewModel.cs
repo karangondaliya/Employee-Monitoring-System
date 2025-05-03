@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Employee_Monitoring_System.Models;
 using TaskStatus = Employee_Monitoring_System.Models.TaskStatus;
 using Microsoft.Maui.Storage;
+using Employee_Monitoring_System.Views;
 
 namespace Employee_Monitoring_System.ViewModels
 {
@@ -33,7 +34,7 @@ namespace Employee_Monitoring_System.ViewModels
             SearchCommand = new Command(ExecuteSearch);
             FilterCommand = new Command<string>(ExecuteFilter);
             TaskSelectedCommand = new Command<TaskModel>(OnTaskSelected);
-            AddTaskCommand = new Command(async () => await OnAddTaskAsync());
+            AddTaskCommand = new Command(async () => await Shell.Current.GoToAsync(nameof(AddTaskPage)));
 
             // Load tasks when the ViewModel is created
             MainThread.BeginInvokeOnMainThread(async () => await LoadTasksAsync());

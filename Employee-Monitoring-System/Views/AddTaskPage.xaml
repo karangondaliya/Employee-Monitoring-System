@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Employee_Monitoring_System.Views.Components"
+             x:Class="Employee_Monitoring_System.Views.AddTaskPage"
+             xmlns:viewmodels="clr-namespace:Employee_Monitoring_System.ViewModels"
+             BackgroundColor="#F5F7FA">
+
+    <ContentPage.BindingContext>
+        <viewmodels:AddTaskPageViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid ColumnDefinitions="250, *" RowDefinitions="*">
+        <!-- Sidebar (FULL HEIGHT) -->
+        <ContentView Grid.Row="0" Grid.Column="0" BackgroundColor="#1A2035">
+            <local:Sidebar />
+        </ContentView>
+
+        <!-- Right Side: Contains Navbar at Top, Body Below -->
+        <Grid Grid.Row="0" Grid.Column="1" RowDefinitions="Auto, *">
+            <!-- Navbar at Top -->
+            <ContentView Grid.Row="0" BackgroundColor="White">
+                <local:Navbar />
+            </ContentView>
+
+            <!-- Main Content -->
+            <ScrollView Grid.Row="1" Padding="25">
+                <Grid RowDefinitions="Auto,*">
+                    <!-- Header -->
+                    <VerticalStackLayout Grid.Row="0" Spacing="5" Margin="0,0,0,20">
+                        <Label Text="Add New Task" FontSize="28" FontAttributes="Bold" TextColor="#333" HorizontalOptions="Start"/>
+                        <Label Text="Create and assign tasks to team members" HorizontalOptions="Start" FontSize="14" TextColor="#666"/>
+                    </VerticalStackLayout>
+
+                    <!-- Form -->
+                    <Frame Grid.Row="1" BorderColor="#E0E0E0" Padding="25" HasShadow="False" 
+                           CornerRadius="10" BackgroundColor="White" Margin="0,0,0,20">
+                        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="20">
+                            <!-- Task Title -->
+                            <VerticalStackLayout Grid.Row="0" Spacing="5">
+                                <Label Text="Task Title *" FontAttributes="Bold" TextColor="#333"/>
+                                <Entry Text="{Binding Title}" Placeholder="Enter task title" PlaceholderColor="#AAA"
+                                       BackgroundColor="#F5F7FA" Margin="0,5,0,0" HeightRequest="45"/>
+                                <Label Text="{Binding TitleError}" IsVisible="{Binding HasTitleError}" 
+                                       TextColor="Red" FontSize="12"/>
+                            </VerticalStackLayout>
+
+                            <!-- Task Description -->
+                            <VerticalStackLayout Grid.Row="1" Spacing="5">
+                                <Label Text="Description *" FontAttributes="Bold" TextColor="#333"/>
+                                <Editor Text="{Binding Description}" Placeholder="Enter task description" PlaceholderColor="#AAA"
+                                        BackgroundColor="#F5F7FA" HeightRequest="120" Margin="0,5,0,0"/>
+                                <Label Text="{Binding DescriptionError}" IsVisible="{Binding HasDescriptionError}" 
+                                       TextColor="Red" FontSize="12"/>
+                            </VerticalStackLayout>
+
+                            <!-- Due Date and Priority -->
+                            <Grid Grid.Row="2" ColumnDefinitions="*, *" ColumnSpacing="15">
+                                <!-- Due Date -->
+                                <VerticalStackLayout Grid.Column="0" Spacing="5">
+                                    <Label Text="Due Date *" FontAttributes="Bold" TextColor="#333"/>
+                                    <DatePicker Date="{Binding DueDate}" Format="MMM dd, yyyy"
+                                                BackgroundColor="#F5F7FA" Margin="0,5,0,0" HeightRequest="45"/>
+                                    <Label Text="{Binding DueDateError}" IsVisible="{Binding HasDueDateError}" 
+                                           TextColor="Red" FontSize="12"/>
+                                </VerticalStackLayout>
+
+                                <!-- Priority -->
+                                <VerticalStackLayout Grid.Column="1" Spacing="5">
+                                    <Label Text="Priority *" FontAttributes="Bold" TextColor="#333"/>
+                                    <Picker ItemsSource="{Binding PriorityOptions}" SelectedItem="{Binding SelectedPriority}"
+                                            BackgroundColor="#F5F7FA" Margin="0,5,0,0" HeightRequest="45"/>
+                                </VerticalStackLayout>
+                            </Grid>
+
+                            <!-- Assign To and Status -->
+                            <Grid Grid.Row="3" ColumnDefinitions="*, *" ColumnSpacing="15">
+                                <!-- Assign To -->
+                                <VerticalStackLayout Grid.Column="0" Spacing="5">
+                                    <Label Text="Assign To *" FontAttributes="Bold" TextColor="#333"/>
+                                    <Picker ItemsSource="{Binding TeamMembers}" SelectedItem="{Binding SelectedTeamMember}"
+                                            BackgroundColor="#F5F7FA" Margin="0,5,0,0" HeightRequest="45"/>
+                                </VerticalStackLayout>
+
+                                <!-- Status -->
+                                <VerticalStackLayout Grid.Column="1" Spacing="5">
+                                    <Label Text="Status *" FontAttributes="Bold" TextColor="#333"/>
+                                    <Picker ItemsSource="{Binding StatusOptions}" SelectedItem="{Binding SelectedStatus}"
+                                            BackgroundColor="#F5F7FA" Margin="0,5,0,0" HeightRequest="45"/>
+                                </VerticalStackLayout>
+                            </Grid>
+
+                            <!-- Start Date -->
+                            <VerticalStackLayout Grid.Row="4" Spacing="5">
+                                <Label Text="Start Date *" FontAttributes="Bold" TextColor="#333"/>
+                                <DatePicker Date="{Binding StartDate}" Format="MMM dd, yyyy"
+                                            BackgroundColor="#F5F7FA" Margin="0,5,0,0" HeightRequest="45"/>
+                                <Label Text="{Binding StartDateError}" IsVisible="{Binding HasStartDateError}" 
+                                       TextColor="Red" FontSize="12"/>
+                            </VerticalStackLayout>
+
+                            <!-- Additional Notes -->
+                            <VerticalStackLayout Grid.Row="5" Spacing="5">
+                                <Label Text="Additional Notes" FontAttributes="Bold" TextColor="#333"/>
+                                <Editor Text="{Binding Notes}" Placeholder="Add any additional details or notes" PlaceholderColor="#AAA"
+                                        BackgroundColor="#F5F7FA" HeightRequest="80" Margin="0,5,0,0"/>
+                            </VerticalStackLayout>
+
+                            <!-- Error Message -->
+                            <Label Grid.Row="6" Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" 
+                                   TextColor="Red" HorizontalOptions="Center" FontSize="14"/>
+
+                            <!-- Buttons -->
+                            <Grid Grid.Row="7" ColumnDefinitions="*, *" ColumnSpacing="15">
+                                <Button Text="Cancel" Command="{Binding CancelCommand}" Grid.Column="0"
+                                        BackgroundColor="#E0E0E0" TextColor="#333" CornerRadius="6"
+                                        HeightRequest="50" FontAttributes="Bold"/>
+
+                                <Button Text="Create Task" Command="{Binding SaveTaskCommand}" Grid.Column="1"
+                                        BackgroundColor="Green" TextColor="White" CornerRadius="6"
+                                        HeightRequest="50" FontAttributes="Bold"/>
+                            </Grid>
+                        </Grid>
+                    </Frame>
+                </Grid>
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>

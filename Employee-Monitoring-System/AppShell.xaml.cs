@@ -3,6 +3,7 @@ using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
 using Employee_Monitoring_System.ViewModels;
 using Employee_Monitoring_System.Views.Components;
+using Employee_Monitoring_System.Views;
 
 namespace Employee_Monitoring_System
 {
@@ -28,6 +29,7 @@ namespace Employee_Monitoring_System
             Routing.RegisterRoute("EmployeesPage", typeof(Views.EmployeesPage));
             Routing.RegisterRoute("AdminSettingsPage", typeof(Views.AdminSettingsPage));
             Routing.RegisterRoute("AddEmployeePage", typeof(Views.AddEmployeePage));
+            Routing.RegisterRoute("AddTaskPage", typeof(Views.AddTaskPage));
 
             // Store reference to sidebar
             sidebarInstance = this.sidebar;
