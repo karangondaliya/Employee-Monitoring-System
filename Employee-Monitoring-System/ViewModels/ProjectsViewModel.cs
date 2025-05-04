@@ -174,9 +174,8 @@ namespace Employee_Monitoring_System.ViewModels
         {
             try
             {
-                // Navigate to new project page or show modal
-                await Application.Current.MainPage.DisplayAlert("New Project",
-                    "Navigate to new project form", "OK");
+                // Navigate to the AddProjectPage
+                await Shell.Current.GoToAsync("AddProjectPage");
             }
             catch (Exception ex)
             {
