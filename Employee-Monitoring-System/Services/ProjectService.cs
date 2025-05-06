@@ -77,8 +77,32 @@ namespace Employee_Monitoring_System.Services
 
         public async Task<Project> GetProjectByIdAsync(int id)
         {
-            await SetAuthorizationHeader();
-            return await _httpClient.GetFromJsonAsync<Project>($"Projects/{id}");
+            try
+            {
+                await SetAuthorizationHeader();
+
+                System.Diagnostics.Debug.WriteLine($"Fetching project details for ID: {id}");
+
+                var response = await _httpClient.GetAsync($"Projects/{id}");
+                response.EnsureSuccessStatusCode();
+
+                // Read the raw JSON response for debugging
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                System.Diagnostics.Debug.WriteLine($"Raw project details response: {jsonResponse}");
+
+                var project = await response.Content.ReadFromJsonAsync<Project>();
+                return project;
+            }
+            catch (HttpRequestException ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error fetching project details: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Unexpected error in GetProjectByIdAsync: {ex.Message}");
+                throw;
+            }
         }
 
         public async Task<Project> CreateProjectAsync(Project project)
@@ -95,6 +119,37 @@ namespace Employee_Monitoring_System.Services
             var response = await _httpClient.PutAsJsonAsync($"Projects/{id}", project);
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<Project>();
+        }
+
+        public async Task<bool> UpdateProjectProgressAsync(int projectId, double progress)
+        {
+            try
+            {
+                await SetAuthorizationHeader();
+
+                System.Diagnostics.Debug.WriteLine($"Updating progress for project ID {projectId} to {progress}%");
+
+                // Create a simple object with just the progress field
+                var progressUpdate = new { completionPercentage = progress };
+
+                // Use PATCH or PUT based on your API design
+                // Assuming your API has an endpoint for updating just the progress
+                var response = await _httpClient.PutAsJsonAsync($"Projects/{projectId}/progress", progressUpdate);
+
+                // If your API doesn't have a specific endpoint for progress updates,
+                // you can use the regular update endpoint with a partial object
+                // var response = await _httpClient.PutAsJsonAsync($"Projects/{projectId}", progressUpdate);
+
+                response.EnsureSuccessStatusCode();
+
+                System.Diagnostics.Debug.WriteLine($"Progress update response: {response.StatusCode}");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error updating project progress: {ex.Message}");
+                return false;
+            }
         }
 
         public async Task DeleteProjectAsync(int id)

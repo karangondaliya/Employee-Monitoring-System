@@ -190,12 +190,12 @@ namespace Employee_Monitoring_System.ViewModels
             {
                 try
                 {
-                    // Navigate to project details page
-                    await Application.Current.MainPage.DisplayAlert("Project Details",
-                        $"Viewing details for {project.Title}", "OK");
+                    // Navigate to project details page with the project ID
+                    await Shell.Current.GoToAsync($"ProjectDetailsPage?id={project.Id}");
                 }
                 catch (Exception ex)
                 {
+                    System.Diagnostics.Debug.WriteLine($"Navigation error: {ex.Message}");
                     await Application.Current.MainPage.DisplayAlert("Error",
                         "Unable to load project details.", "OK");
                 }

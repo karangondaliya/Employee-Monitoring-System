@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Employee_Monitoring_System.Views.Components"
+             xmlns:vm="clr-namespace:Employee_Monitoring_System.ViewModels"
+             xmlns:converters="clr-namespace:Employee_Monitoring_System.Converters"
+             x:Class="Employee_Monitoring_System.Views.ProjectDetailsPage"
+             BackgroundColor="{DynamicResource PageBackgroundColor}">
+
+    <ContentPage.Resources>
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+    </ContentPage.Resources>
+
+    <ContentPage.BindingContext>
+        <vm:ProjectDetailsViewModel/>
+    </ContentPage.BindingContext>
+
+    <Grid ColumnDefinitions="250, *" RowDefinitions="*">
+        <!-- Sidebar -->
+        <ContentView Grid.Row="0" Grid.Column="0" BackgroundColor="{DynamicResource SidebarBackgroundColor}">
+            <local:Sidebar />
+        </ContentView>
+
+        <!-- Right Side: Navbar and Main Content -->
+        <Grid Grid.Row="0" Grid.Column="1" RowDefinitions="Auto, *">
+            <!-- Navbar -->
+            <ContentView Grid.Row="0">
+                <local:Navbar />
+            </ContentView>
+
+            <!-- Main Content -->
+            <ScrollView Grid.Row="1">
+                <Grid Padding="24" RowDefinitions="Auto, Auto, *">
+                    <!-- Activity indicator -->
+                    <ActivityIndicator Grid.RowSpan="3" 
+                                      IsVisible="{Binding IsLoading}"
+                                      IsRunning="{Binding IsLoading}"
+                                      HorizontalOptions="Center"
+                                      VerticalOptions="Center" />
+
+                    <!-- Page Content (visible when not loading) -->
+                    <VerticalStackLayout Grid.RowSpan="3" 
+                                         IsVisible="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}"
+                                         Spacing="24">
+
+                        <!-- Header Section with Back Button -->
+                        <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto" Margin="0,0,0,10">
+                            <Button Grid.Column="0"
+                                    Text="← Back"
+                                    FontSize="14"
+                                    BackgroundColor="Transparent"
+                                    TextColor="{DynamicResource PrimaryColor}"
+                                    Padding="0"
+                                    Command="{Binding GoBackCommand}" />
+
+                            <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center">
+                                <Label Text="{Binding Project.Title}"
+                                       FontSize="32"
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                       HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <!-- Status Indicator -->
+                        <Border BackgroundColor="{Binding StatusColor}"
+                                Stroke="Transparent"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 8"
+                                HeightRequest="40"
+                                HorizontalOptions="Center"
+                                WidthRequest="140">
+                            <Label Text="{Binding Project.Status}"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center" />
+                        </Border>
+
+                        <!-- Project Basic Info Card -->
+                        <Frame Padding="20" 
+                               CornerRadius="12" 
+                               BorderColor="#EAEAEA"
+                               BackgroundColor="{DynamicResource CardBackgroundColor}"
+                               HasShadow="True">
+                            <Grid RowDefinitions="Auto, Auto, Auto, Auto"
+                                  ColumnDefinitions="Auto, *, Auto, *"
+                                  RowSpacing="20"
+                                  ColumnSpacing="16">
+
+                                <!-- Start Date -->
+                                <Label Grid.Row="0" Grid.Column="0" 
+                                       Text="Start Date:" 
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource SecondaryTextColor}" />
+                                <Label Grid.Row="0" Grid.Column="1" 
+                                       Text="{Binding Project.CreatedAt, StringFormat='{0:MMM dd, yyyy}'}" 
+                                       TextColor="{DynamicResource PrimaryTextColor}" />
+
+                                <!-- Deadline -->
+                                <Label Grid.Row="0" Grid.Column="2" 
+                                       Text="Deadline:" 
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource SecondaryTextColor}" />
+                                <Label Grid.Row="0" Grid.Column="3" 
+                                       Text="{Binding Project.Deadline, StringFormat='{0:MMM dd, yyyy}'}" 
+                                       TextColor="{Binding DeadlineColor}" />
+
+                                <!-- Branch -->
+                                <Label Grid.Row="1" Grid.Column="0" 
+                                       Text="Branch:" 
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource SecondaryTextColor}" />
+                                <Label Grid.Row="1" Grid.Column="1" 
+                                       Text="{Binding Project.BranchName}" 
+                                       TextColor="{DynamicResource PrimaryTextColor}" />
+
+                                <!-- Budget -->
+                                <Label Grid.Row="1" Grid.Column="2" 
+                                       Text="Budget:" 
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource SecondaryTextColor}" />
+                                <Label Grid.Row="1" Grid.Column="3" 
+                                       Text="{Binding Project.Budget, StringFormat='${0:#,##0.00}'}" 
+                                       TextColor="{DynamicResource PrimaryTextColor}" />
+
+                                <!-- Created By -->
+                                <Label Grid.Row="2" Grid.Column="0" 
+                                       Text="Created By:" 
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource SecondaryTextColor}" />
+                                <Label Grid.Row="2" Grid.Column="1" 
+                                       Text="{Binding Project.CreatedBy}" 
+                                       TextColor="{DynamicResource PrimaryTextColor}" />
+
+                                <!-- Days Remaining -->
+                                <Label Grid.Row="2" Grid.Column="2" 
+                                       Text="Days Remaining:" 
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource SecondaryTextColor}" />
+                                <Label Grid.Row="2" Grid.Column="3" 
+                                       Text="{Binding DaysRemaining}" 
+                                       TextColor="{Binding DeadlineColor}" />
+
+                                <!-- Project ID -->
+                                <Label Grid.Row="3" Grid.Column="0" 
+                                       Text="Project ID:" 
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource SecondaryTextColor}" />
+                                <Label Grid.Row="3" Grid.Column="1" 
+                                       Text="{Binding Project.Id}" 
+                                       TextColor="{DynamicResource PrimaryTextColor}" />
+                            </Grid>
+                        </Frame>
+
+                        <!-- Project Description -->
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="Project Description"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryTextColor}" />
+                            <Frame Padding="20" 
+                                   CornerRadius="12" 
+                                   BorderColor="#EAEAEA"
+                                   BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                   HasShadow="True">
+                                <Label Text="{Binding Project.Description}"
+                                       TextColor="{DynamicResource PrimaryTextColor}"
+                                       LineBreakMode="WordWrap" />
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <!-- Progress Section -->
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="Project Progress"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryTextColor}" />
+                            <Frame Padding="20" 
+                                   CornerRadius="12" 
+                                   BorderColor="#EAEAEA"
+                                   BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                   HasShadow="True">
+                                <VerticalStackLayout Spacing="16">
+                                    <Grid ColumnDefinitions="*, Auto">
+                                        <Label Grid.Column="0"
+                                               Text="Completion Progress"
+                                               FontSize="16"
+                                               TextColor="{DynamicResource SecondaryTextColor}" />
+                                        <Label Grid.Column="1"
+                                               Text="{Binding Project.ProgressPercentage, StringFormat='{0:P0}'}"
+                                               FontAttributes="Bold"
+                                               FontSize="16"
+                                               TextColor="{DynamicResource PrimaryTextColor}" />
+                                    </Grid>
+                                    <Frame Padding="0" 
+                                           BorderColor="Transparent"
+                                           BackgroundColor="#F0F0F0"
+                                           CornerRadius="4"
+                                           HeightRequest="12"
+                                           HasShadow="False">
+                                        <ProgressBar Progress="{Binding Project.ProgressPercentage}"
+                                                     HeightRequest="12"
+                                                     BackgroundColor="Transparent"
+                                                     ProgressColor="#4CAF50" />
+                                    </Frame>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <!-- Team Members -->
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="Team Members"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource PrimaryTextColor}" />
+                            <Frame Padding="20" 
+                                   CornerRadius="12" 
+                                   BorderColor="#EAEAEA"
+                                   BackgroundColor="{DynamicResource CardBackgroundColor}"
+                                   HasShadow="True">
+                                <CollectionView ItemsSource="{Binding Project.TeamMembers}"
+                                               EmptyView="No team members assigned to this project">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Padding="0,8">
+                                                <Frame Padding="12" 
+                                                       CornerRadius="8" 
+                                                       BackgroundColor="#F5F5F5"
+                                                       HasShadow="False">
+                                                    <Label Text="{Binding .}"
+                                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                                           FontSize="14" />
+                                                </Frame>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <!-- Action Buttons (Admin Only) -->
+                        <Grid ColumnDefinitions="*, *" 
+                              ColumnSpacing="16"
+                              IsVisible="{Binding IsAdmin}">
+                            <Button Grid.Column="0" 
+                                    Text="Edit Project"
+                                    FontSize="16"
+                                    FontAttributes="Bold"
+                                    BackgroundColor="#5C6BC0"
+                                    TextColor="White"
+                                    CornerRadius="8"
+                                    HeightRequest="50"
+                                    Command="{Binding EditProjectCommand}" />
+                            <Button Grid.Column="1" 
+                                    Text="Update Progress"
+                                    FontSize="16"
+                                    FontAttributes="Bold"
+                                    BackgroundColor="#4CAF50"
+                                    TextColor="White"
+                                    CornerRadius="8"
+                                    HeightRequest="50"
+                                    Command="{Binding UpdateProgressCommand}" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Grid>
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>

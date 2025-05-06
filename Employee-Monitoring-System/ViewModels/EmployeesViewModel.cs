@@ -191,14 +191,15 @@ namespace Employee_Monitoring_System.ViewModels
             }
         }
 
+        // In EmployeesViewModel.cs - OnViewDetails method
         private async Task OnViewDetails(Employee employee)
         {
             if (employee != null)
             {
                 try
                 {
-                    // Navigate to employee details page
-                    await Shell.Current.GoToAsync($"//EmployeeDetailsPage?id={employee.Id}");
+                    // Changed from "//EmployeeDetailsPage?id={employee.Id}" to this:
+                    await Shell.Current.GoToAsync($"EmployeeDetailsPage?id={employee.Id}");
                 }
                 catch (Exception ex)
                 {

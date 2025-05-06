@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Employee_Monitoring_System.Views.Components"
+             xmlns:vm="clr-namespace:Employee_Monitoring_System.ViewModels"
+             xmlns:converters="clr-namespace:Employee_Monitoring_System.Converters"
+             x:Class="Employee_Monitoring_System.Views.EmployeeDetailsPage"
+             BackgroundColor="#F8F9FB">
+
+    <ContentPage.Resources>
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+    </ContentPage.Resources>
+
+    <ContentPage.BindingContext>
+        <vm:EmployeeDetailsViewModel/>
+    </ContentPage.BindingContext>
+
+    <Grid ColumnDefinitions="250, *" RowDefinitions="*">
+        <!-- Sidebar -->
+        <ContentView Grid.Row="0" Grid.Column="0" BackgroundColor="#1A2033">
+            <local:Sidebar />
+        </ContentView>
+
+        <!-- Right Side: Navbar and Main Content -->
+        <Grid Grid.Row="0" Grid.Column="1" RowDefinitions="Auto, *">
+            <!-- Navbar -->
+            <ContentView Grid.Row="0" BackgroundColor="White">
+                <local:Navbar />
+            </ContentView>
+
+            <!-- Main Content -->
+            <ScrollView Grid.Row="1">
+                <Grid Padding="24" RowDefinitions="Auto, *">
+                    <!-- Activity indicator -->
+                    <ActivityIndicator Grid.RowSpan="2" 
+                                      IsVisible="{Binding IsLoading}"
+                                      IsRunning="{Binding IsLoading}"
+                                      HorizontalOptions="Center"
+                                      VerticalOptions="Center" />
+
+                    <!-- Page Content (visible when not loading) -->
+                    <VerticalStackLayout Grid.RowSpan="2" 
+                                         IsVisible="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}"
+                                         Spacing="24">
+
+                        <!-- Header Section with Back Button -->
+                        <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto" Margin="0,0,0,10">
+                            <Button Grid.Column="0"
+                                    Text="← Back"
+                                    FontSize="14"
+                                    BackgroundColor="Transparent"
+                                    TextColor="#5B6AF0"
+                                    Padding="0"
+                                    Command="{Binding GoBackCommand}" />
+
+                            <Label Grid.Column="1"
+                                   Text="Employee Details"
+                                   FontSize="28"
+                                   FontAttributes="Bold"
+                                   TextColor="#333333"
+                                   HorizontalOptions="Center" />
+                        </Grid>
+
+                        <!-- Employee Profile Card -->
+                        <Frame Padding="20" 
+                               CornerRadius="12" 
+                               BorderColor="#E5E8ED"
+                               BackgroundColor="White"
+                               HasShadow="True">
+                            <Grid RowDefinitions="Auto, Auto" RowSpacing="24">
+                                <!-- Profile Header -->
+                                <Grid Grid.Row="0" ColumnDefinitions="Auto, *" ColumnSpacing="20">
+                                    <!-- Profile Image or Initial -->
+                                    <Border Grid.Column="0"
+                                            WidthRequest="100"
+                                            HeightRequest="100"
+                                            StrokeShape="RoundRectangle 50"
+                                            BackgroundColor="#E8E8E8"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center">
+                                        <!-- Show image if available, otherwise show initial -->
+                                        <Grid>
+                                            <Label Text="{Binding Employee.FirstLetter}"
+                                                   FontSize="42" 
+                                                   FontAttributes="Bold"
+                                                   TextColor="#666666"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center"
+                                                   IsVisible="{Binding HasImage, Converter={StaticResource InverseBooleanConverter}}" />
+
+                                            <Image Source="{Binding ProfileImage}"
+                                                   Aspect="AspectFill"
+                                                   IsVisible="{Binding HasImage}"
+                                                   WidthRequest="100"
+                                                   HeightRequest="100" />
+                                        </Grid>
+                                    </Border>
+
+                                    <!-- Profile Info -->
+                                    <VerticalStackLayout Grid.Column="1" 
+                                                         Spacing="8"
+                                                         VerticalOptions="Center">
+                                        <Label Text="{Binding Employee.FullName}"
+                                               FontSize="24"
+                                               FontAttributes="Bold"
+                                               TextColor="#333333" />
+
+                                        <Label Text="{Binding Employee.JobTitle}"
+                                               FontSize="18"
+                                               TextColor="#666666" />
+
+                                        <!-- Status Label -->
+                                        <Border BackgroundColor="{Binding StatusColor}"
+                                                Stroke="Transparent"
+                                                StrokeThickness="0"
+                                                StrokeShape="RoundRectangle 4"
+                                                HeightRequest="28"
+                                                HorizontalOptions="Start"
+                                                WidthRequest="100"
+                                                Margin="0,4,0,0">
+                                            <Label Text="{Binding StatusText}"
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"
+                                                   TextColor="White"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center" />
+                                        </Border>
+                                    </VerticalStackLayout>
+                                </Grid>
+
+                                <!-- Contact Information -->
+                                <Grid Grid.Row="1" 
+                                      RowDefinitions="Auto, Auto, Auto, Auto"
+                                      ColumnDefinitions="Auto, *"
+                                      RowSpacing="16"
+                                      ColumnSpacing="20">
+
+                                    <!-- Email -->
+                                    <Label Grid.Row="0" Grid.Column="0" 
+                                           Text="Email:" 
+                                           FontAttributes="Bold"
+                                           TextColor="#666666" />
+                                    <Label Grid.Row="0" Grid.Column="1" 
+                                           Text="{Binding Employee.Email}" 
+                                           TextColor="#333333" />
+
+                                    <!-- Phone -->
+                                    <Label Grid.Row="1" Grid.Column="0" 
+                                           Text="Phone:" 
+                                           FontAttributes="Bold"
+                                           TextColor="#666666" />
+                                    <Label Grid.Row="1" Grid.Column="1" 
+                                           Text="{Binding Employee.Phone}" 
+                                           TextColor="#333333" />
+
+                                    <!-- Branch -->
+                                    <Label Grid.Row="2" Grid.Column="0" 
+                                           Text="Branch:" 
+                                           FontAttributes="Bold"
+                                           TextColor="#666666" />
+                                    <Label Grid.Row="2" Grid.Column="1" 
+                                           Text="{Binding Employee.BranchName}" 
+                                           TextColor="#333333" />
+
+                                    <!-- Role -->
+                                    <Label Grid.Row="3" Grid.Column="0" 
+                                           Text="Role:" 
+                                           FontAttributes="Bold"
+                                           TextColor="#666666" />
+                                    <Label Grid.Row="3" Grid.Column="1" 
+                                           Text="{Binding Employee.Role}" 
+                                           TextColor="#333333" />
+                                </Grid>
+                            </Grid>
+                        </Frame>
+
+                        <!-- Additional Information -->
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="Additional Information"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="#333333" />
+                            <Frame Padding="20" 
+                                   CornerRadius="12" 
+                                   BorderColor="#E5E8ED"
+                                   BackgroundColor="White"
+                                   HasShadow="True">
+                                <Grid RowDefinitions="Auto, Auto, Auto" 
+                                      ColumnDefinitions="Auto, *"
+                                      RowSpacing="16"
+                                      ColumnSpacing="20">
+
+                                    <!-- Address -->
+                                    <Label Grid.Row="0" Grid.Column="0" 
+                                           Text="Address:" 
+                                           FontAttributes="Bold"
+                                           TextColor="#666666" />
+                                    <Label Grid.Row="0" Grid.Column="1" 
+                                           Text="{Binding Employee.Address}" 
+                                           TextColor="#333333" />
+
+                                    <!-- Employee ID -->
+                                    <Label Grid.Row="1" Grid.Column="0" 
+                                           Text="Employee ID:" 
+                                           FontAttributes="Bold"
+                                           TextColor="#666666" />
+                                    <Label Grid.Row="1" Grid.Column="1" 
+                                           Text="{Binding Employee.Id}" 
+                                           TextColor="#333333" />
+
+                                    <!-- Last Login -->
+                                    <Label Grid.Row="2" Grid.Column="0" 
+                                           Text="Last Login:" 
+                                           FontAttributes="Bold"
+                                           TextColor="#666666" />
+                                    <Label Grid.Row="2" Grid.Column="1" 
+                                           Text="{Binding Employee.LastLogin, StringFormat='{0:MMM dd, yyyy HH:mm}'}" 
+                                           TextColor="#333333" />
+                                </Grid>
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <!-- Technical Skills Section -->
+                        <VerticalStackLayout Spacing="10" IsVisible="{Binding HasSkills}">
+                            <Label Text="Technical Skills"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="#333333" />
+                            <Frame Padding="20" 
+                                   CornerRadius="12" 
+                                   BorderColor="#E5E8ED"
+                                   BackgroundColor="White"
+                                   HasShadow="True">
+                                <CollectionView ItemsSource="{Binding Employee.TechnicalSkills}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Padding="0,8" ColumnDefinitions="*, Auto">
+                                                <Label Grid.Column="0" 
+                                                       Text="{Binding Key}"
+                                                       FontSize="16"
+                                                       TextColor="#333333" />
+                                                <Label Grid.Column="1" 
+                                                       Text="{Binding Value}"
+                                                       FontSize="16"
+                                                       TextColor="#5B6AF0" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <!-- Certifications Section -->
+                        <VerticalStackLayout Spacing="10" IsVisible="{Binding HasCertifications}">
+                            <Label Text="Certifications"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="#333333" />
+                            <Frame Padding="20" 
+                                   CornerRadius="12" 
+                                   BorderColor="#E5E8ED"
+                                   BackgroundColor="White"
+                                   HasShadow="True">
+                                <CollectionView ItemsSource="{Binding Employee.Certifications}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Padding="0,8">
+                                                <Frame Padding="12" 
+                                                       CornerRadius="8" 
+                                                       BackgroundColor="#F5F5F5"
+                                                       HasShadow="False">
+                                                    <Label Text="{Binding .}"
+                                                           TextColor="#333333"
+                                                           FontSize="16" />
+                                                </Frame>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <!-- Tasks Section -->
+                        <VerticalStackLayout Spacing="10" IsVisible="{Binding HasTasks}">
+                            <Label Text="Current Tasks"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="#333333" />
+                            <Frame Padding="20" 
+                                   CornerRadius="12" 
+                                   BorderColor="#E5E8ED"
+                                   BackgroundColor="White"
+                                   HasShadow="True">
+                                <CollectionView ItemsSource="{Binding Employee.Tasks}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Padding="0,8" ColumnDefinitions="*, Auto, Auto">
+                                                <Label Grid.Column="0" 
+                                                       Text="{Binding TaskName}"
+                                                       FontSize="16"
+                                                       TextColor="#333333" />
+                                                <Border Grid.Column="1"
+                                                        BackgroundColor="{Binding Status, Converter={StaticResource TaskStatusColorConverter}}"
+                                                        Stroke="Transparent"
+                                                        StrokeThickness="0"
+                                                        StrokeShape="RoundRectangle 4"
+                                                        HeightRequest="28"
+                                                        HorizontalOptions="Center"
+                                                        WidthRequest="100"
+                                                        Margin="8,0">
+                                                    <Label Text="{Binding Status}"
+                                                           FontSize="14"
+                                                           FontAttributes="Bold"
+                                                           TextColor="White"
+                                                           HorizontalOptions="Center"
+                                                           VerticalOptions="Center" />
+                                                </Border>
+                                                <Button Grid.Column="2"
+                                                        Text="Details"
+                                                        FontSize="14"
+                                                        TextColor="White"
+                                                        BackgroundColor="#5B6AF0"
+                                                        CornerRadius="4"
+                                                        HeightRequest="28"
+                                                        WidthRequest="80"
+                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:EmployeeDetailsViewModel}}, Path=ViewTaskDetailsCommand}"
+                                                        CommandParameter="{Binding .}" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <!-- Projects Section -->
+                        <VerticalStackLayout Spacing="10" IsVisible="{Binding HasProjects}">
+                            <Label Text="Projects"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="#333333" />
+                            <Frame Padding="20" 
+                                   CornerRadius="12" 
+                                   BorderColor="#E5E8ED"
+                                   BackgroundColor="White"
+                                   HasShadow="True">
+                                <CollectionView ItemsSource="{Binding Employee.Projects}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Padding="0,8" ColumnDefinitions="*, Auto, Auto">
+                                                <Label Grid.Column="0" 
+                                                       Text="{Binding ProjectName}"
+                                                       FontSize="16"
+                                                       TextColor="#333333" />
+                                                <Border Grid.Column="1"
+                                                        BackgroundColor="{Binding Status, Converter={StaticResource ProjectStatusColorConverter}}"
+                                                        Stroke="Transparent"
+                                                        StrokeThickness="0"
+                                                        StrokeShape="RoundRectangle 4"
+                                                        HeightRequest="28"
+                                                        HorizontalOptions="Center"
+                                                        WidthRequest="100"
+                                                        Margin="8,0">
+                                                    <Label Text="{Binding Status}"
+                                                           FontSize="14"
+                                                           FontAttributes="Bold"
+                                                           TextColor="White"
+                                                           HorizontalOptions="Center"
+                                                           VerticalOptions="Center" />
+                                                </Border>
+                                                <Button Grid.Column="2"
+                                                        Text="View"
+                                                        FontSize="14"
+                                                        TextColor="White"
+                                                        BackgroundColor="#5B6AF0"
+                                                        CornerRadius="4"
+                                                        HeightRequest="28"
+                                                        WidthRequest="80"
+                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:EmployeeDetailsViewModel}}, Path=ViewProjectDetailsCommand}"
+                                                        CommandParameter="{Binding .}" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <!-- Action Buttons (Admin Only) -->
+                        <Grid ColumnDefinitions="*, *" 
+                              ColumnSpacing="16"
+                              IsVisible="{Binding IsAdmin}"
+                              Margin="0,10,0,20">
+                            <Button Grid.Column="0" 
+                                    Text="Edit Employee"
+                                    FontSize="16"
+                                    FontAttributes="Bold"
+                                    BackgroundColor="#5B6AF0"
+                                    TextColor="White"
+                                    CornerRadius="4"
+                                    HeightRequest="50"
+                                    Command="{Binding EditEmployeeCommand}" />
+                            <Button Grid.Column="1" 
+                                    Text="{Binding ActivationButtonText}"
+                                    FontSize="16"
+                                    FontAttributes="Bold"
+                                    BackgroundColor="{Binding ActivationButtonColor}"
+                                    TextColor="White"
+                                    CornerRadius="4"
+                                    HeightRequest="50"
+                                    Command="{Binding ToggleActivationCommand}" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Grid>
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>
